@@ -1,0 +1,28 @@
+############################################################################
+# Multipartite Graph from the collection<name of mongo Db database>
+# Extraction started10/21/2020 14:46:33
+############################################################################
+# OPTION - maximum distance in sentences for edge creation: 5
+# Number of pages with annotations: 100
+# Number of sentences: 0
+# Number of sentences with annotations: 543
+# Number of annotations: 0
+# Number of valid annotations: 649
+# Number of unaggregated edges: 2191
+# Valid annotations of type DAT :0
+# Valid annotations of type LOC :649
+# Valid annotations of type ACT :0
+# Valid annotations of type ORG :0
+############################################################################
+# Contents of this file: number of vertices for the different vertex sets
+# vertex files: labels of each vertex, followed by degrees with:
+#   dates, locations, actors, organizations, terms, pages, sentences
+# edge files: blocks of 7 lines each (one line per vertex set). Per line:
+#   <neighbour type> <target node 1> <edge weight 1> <target node 2> ...
+DAT	0 
+LOC	165 
+ACT	0 
+ORG	0 
+TER	1664 
+PAG	90 
+SEN	123 
