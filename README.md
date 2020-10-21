@@ -2,9 +2,9 @@
 
 ### Basic information
 
-- Student : Isabelle Pumford
-- Supervisors : Maud Ehrmann and Matteo Romanello
-- Academic year : 2019-2020 (spring semester)
+- Student : Julien Salomon
+- Supervisors : Maud Ehrmann, Matteo Romanello, Andreas Spitz
+- Academic year : 2020-2021 (autumn semester)
 
 ### Introduction
 
@@ -13,6 +13,6 @@ The goal of this project is to apply the  [LOAD](https://dbs.ifi.uni-heidelberg.
 This adaptation includes the following changes: the addition of different entity types, sources of different languages(German, French and Luxembourgish), changing the context weight relation from sentence based to word distance based and adapting the database from MongoDB to Solr/MySQL.
 
 ### License  
-**Impresso LOAD** - Isabelle Pumford
+**Impresso LOAD** - Julien Salomon
 Copyright (c) 2020 EPFL
 This program is licensed under the terms of the MIT license. 
