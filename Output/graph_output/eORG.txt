@@ -1,8 +1,0 @@
-0
-DAT
-LOC
-ACT
-ORG
-TER
-PAG
-SEN

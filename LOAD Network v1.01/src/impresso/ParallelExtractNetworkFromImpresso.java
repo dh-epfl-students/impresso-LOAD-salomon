@@ -19,7 +19,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 // mongoDB imports
-import org.bson.Document;
 import org.json.JSONObject;
 
 import com.amazonaws.ClientConfiguration;
@@ -32,19 +31,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 // trove library imports
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TObjectIntHashMap;
-import gnu.trove.set.hash.TIntHashSet;
 
 /**
  * Creation of a LOAD network from a document collection with named entity annotations stored in a Solr DB 
@@ -165,7 +156,7 @@ public class ParallelExtractNetworkFromImpresso {
     
     // read the list of all page IDs from an input file that are used to build the network
     //NOTE: what local files and what structure
-    public int[][] readContentIDs(HashMap<Integer, String> contentIdtoPageId) {
+    public int[][] readLocalContentIDs(HashMap<Integer, String> contentIdtoPageId) {
         ArrayList<int[]> pageIDs = new ArrayList<>();
         //int[][] pageIDs = new int[0][];
         try {
@@ -209,12 +200,47 @@ public class ParallelExtractNetworkFromImpresso {
         return pageIDs.toArray(output);
     }
 
+    public int[][] readContentIDs(HashMap<Integer, String> contentIdtoPageId, String[] newspapers, String[][] years, SolrReader reader) {
+        ArrayList<int[]> pageIDs = new ArrayList<>();
+
+        if(VERBOSE)
+            System.out.println("Reading page IDs (for each newspaper and for each year) from Solr index");
+
+        int id_cnt = 0;
+        for(int i=0; i < newspapers.length; i++){
+            if(DEBUG_PROMPT)
+                System.out.println("Newspaper : " + newspapers[i]);
+            String paper = newspapers[i];
+            TIntArrayList ids = new TIntArrayList();
+            for(int j=0; j < years[i].length; j++){
+                if(DEBUG_PROMPT)
+                    System.out.println("\tYear : " + years[i][j]);
+                String year = years[i][j];
+                List<String> paper_year_ids = reader.getContentItemIDs(paper, year, true);
+                for(String id : paper_year_ids){
+                    contentIdtoPageId.put(id_cnt, id);
+                    ids.add(id_cnt);
+                    id_cnt++;
+                }
+            }
+            pageIDs.add(ids.toArray());
+            if(DEBUG_PROMPT)
+                System.out.println("Newspaper done");
+        }
+
+        int[][] output = new int[pageIDs.size()][];
+
+        return pageIDs.toArray(output);
+    }
+
+
+
 
     
     /* Main Routine
      * Extraction of co-occurrences from the documents and building of nodes and (unaggregated) edges
      */
-    public ParallelExtractNetworkFromImpresso() {
+    public ParallelExtractNetworkFromImpresso(String[] newspapers, String[][] years) {
         try {
             BufferedWriter ew = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfile),"UTF-8"), bufferSize);
             
@@ -279,17 +305,17 @@ public class ParallelExtractNetworkFromImpresso {
 
             int[][] pageIDs;
 
-            pageIDs = readContentIDs(contentIdtoPageId);
-            /*//List<String> solrIDs = solrReader.getContentItemIDs(id, year, true);
             if (readIDsFromFile) {
                 System.out.println("Reading page IDs from file.");
-                pageIDs = readContentIDs(contentIdtoPageId);
+                pageIDs = readLocalContentIDs(contentIdtoPageId);
             } else {
                 System.out.println("Generating page IDs from database.");
-                pageIDs = generatePageIDs();
-            }*/
+                pageIDs = readContentIDs(contentIdtoPageId, newspapers, years, solrReader);
+            }
+
 
             count_Articles = contentIdtoPageId.size();
+
             if(VERBOSE)
                 System.out.println("Number of pages with annotations (i.e number of articles):"  + contentIdtoPageId.size());
             System.gc();
@@ -701,7 +727,17 @@ public class ParallelExtractNetworkFromImpresso {
     
     public static void main(String[] args) {
         try {
-            
+            String[] newspapers = args[0].split(",");
+            String[][] years = new String[newspapers.length][];
+
+            if(args.length != newspapers.length + 1){
+                throw new IllegalArgumentException();
+            }
+
+            for(int i = 1; i < args.length; i++){
+                years[i - 1] = args[i].split(",");
+            }
+
             // make sure that working folders are up and clean
             if(VERBOSE)
                 System.out.println("\nSETTING UP THE FOLDERS FOR THE ENVIRONMENT\n");
@@ -714,7 +750,7 @@ public class ParallelExtractNetworkFromImpresso {
             // read the input data from DB and write temporary edge information of unaggregated edge lists
             if(VERBOSE)
                 System.out.println("\nIMPORT THE DATA FROM IMPRESSO AND S3\n");
-            ParallelExtractNetworkFromImpresso enfm = new ParallelExtractNetworkFromImpresso();
+            ParallelExtractNetworkFromImpresso enfm = new ParallelExtractNetworkFromImpresso(newspapers, years);
             System.gc();
 
             if(VERBOSE)

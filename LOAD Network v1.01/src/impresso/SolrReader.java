@@ -20,6 +20,7 @@ import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.CursorMarkParams;
 
+import static settings.SystemSettings.DEBUG_PROMPT;
 import static settings.SystemSettings.ID_FOLDER;
 
 
@@ -41,7 +42,7 @@ public class SolrReader {
 	
 	public List<String> getContentItemIDs(String newspaperID,String year, boolean firstRead) {
 		List<String> solrIds = new ArrayList<>();
-	    String fileFolder = String.format(ID_FOLDER +" %s-ids",  newspaperID);
+	    String fileFolder = String.format(ID_FOLDER +"%s-ids",  newspaperID);
 		
 		if(firstRead) {
 			HttpSolrClient client = new HttpSolrClient.Builder(solrDBName).build();
@@ -95,11 +96,13 @@ public class SolrReader {
 		    		  String curYear = id.split("-")[1]; //When file is in the format Newspaperid-year, finds second element as year
 		    		  if(!curYear.equals(prevYear)) {
 		    			  if(writer != null) {
-						      System.out.println("Successfully wrote to the file.");
+		    			  	  if(DEBUG_PROMPT)
+							      System.out.println("Successfully wrote to the file.");
 			    			  writer.close();
-						      System.out.println("Beginning to write to file");
+			    			  if(DEBUG_PROMPT)
+							      System.out.println("Beginning to write to file");
 		    			  }
-		    			  file = String.format("%s/%s.txt",   fileFolder, curYear);
+		    			  file = String.format("%s/%s.txt", fileFolder, curYear);
 		    			  writer = new FileWriter(file, true);
 		    		  }
 		    		  writer.write(id+ System.lineSeparator());
