@@ -236,8 +236,156 @@ public class ParallelExtractNetworkFromImpresso {
 
 
 
-    
-    /* Main Routine
+    /* Main Routine (if readIdsFromFile = true)
+     * Extraction of co-occurrences from the documents and building of nodes and (unaggregated) edges
+     */
+    public ParallelExtractNetworkFromImpresso() {
+        try {
+            BufferedWriter ew = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfile),"UTF-8"), bufferSize);
+
+            //Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+            //mongoLogger.setLevel(Level.WARNING);
+
+            //Loads the property file
+            Properties prop = new Properties();
+            FileInputStream inputStream;
+            if(VERBOSE)
+                System.out.println("Loading properties file :"  + PROP_PATH);
+            try {
+                //NOTE: Input stream best solution?
+                inputStream = new FileInputStream(PROP_PATH);
+                prop.load(inputStream);
+                inputStream.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if(VERBOSE)
+                System.out.println("File was read and is now closed");
+
+            String accessKey = System.getenv("S3_ACCESS_KEY");
+            String secretKey = System.getenv("S3_SECRET_KEY");
+
+            AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+
+            // Set S3 Client Endpoint
+            AwsClientBuilder.EndpointConfiguration switchEndpoint = new AwsClientBuilder.EndpointConfiguration(
+                    prop.getProperty("s3BaseName"),"");
+            if(DEBUG_PROMPT)
+                System.out.println("S3 endpoint setup for the S3 base :"  + prop.getProperty("s3BaseName"));
+
+            // Set signer type and http scheme
+            ClientConfiguration conf = new ClientConfiguration();
+            conf.setSignerOverride("S3SignerType");
+            conf.setSocketTimeout(TIMEOUT); //doubles default timeout
+            conf.setProtocol(Protocol.HTTPS);
+
+            AmazonS3 S3Client = AmazonS3ClientBuilder.standard()
+                    .withEndpointConfiguration(switchEndpoint)
+                    .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                    .withClientConfiguration(conf)
+                    .withPathStyleAccessEnabled(true)
+                    .build();
+
+            if(VERBOSE)
+                System.out.println("S3 client created");
+
+            //Instantiating SolrReader
+            SolrReader solrReader = new SolrReader(prop);
+            if(VERBOSE)
+                System.out.println("Solr reader created");
+
+            if(VERBOSE)
+                System.out.println("\nGET ID OF ALL ARTICLES\n");
+
+            // get the IDs of all pages of interest
+            HashMap<Integer, String> contentIdtoPageId = new HashMap<Integer, String>();
+
+            int[][] pageIDs;
+
+            System.out.println("Reading page IDs from file.");
+            pageIDs = readLocalContentIDs(contentIdtoPageId);
+
+
+
+            count_Articles = contentIdtoPageId.size();
+
+            if(VERBOSE)
+                System.out.println("Number of pages with annotations (i.e number of articles):"  + contentIdtoPageId.size());
+            System.gc();
+
+            //Create HashMap based on known number of annotations
+            valueToIdMaps = new ArrayList<TObjectIntHashMap<String>>();
+            for (int i=0; i<nANNOTATIONS; i++) {
+                valueToIdMaps.add(new TObjectIntHashMap<String>());
+            }
+            currentIDs = new int[nANNOTATIONS];
+
+            //Caches of tokens and entities created with size limits
+            Cache<String, JSONObject> newspaperCache = CacheBuilder.newBuilder().build(); //NOTE: Add max if necessary
+            Cache<String, JSONObject> entityCache = CacheBuilder.newBuilder().build();
+
+            if(VERBOSE) {
+                System.out.println("Newspaper cache and Entity cache created");
+                if (DEBUG_PROMPT)
+                    System.out.println("Cache max size ="  + MAX_CACHE_SIZE);
+            }
+            if(VERBOSE)
+                System.out.println("\nPARSING ANNOTATIONS AND EXTRACTING NETWORK\n");
+
+            HashSet<String> invalidTypes = new HashSet<>();
+
+            MultiThreadHubImpresso hub = new MultiThreadHubImpresso(pageIDs, valueToIdMaps, currentIDs, S3Client, newspaperCache, entityCache, prop, contentIdtoPageId, ew, nThreads);
+            if(DEBUG_PROMPT)
+                System.out.println(String.format("Multi thread hub created for %s threads",  nThreads));
+
+            ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+            for (int i=0; i<nThreads; i++) {
+                MultiThreadWorkerImpresso w = new MultiThreadWorkerImpresso(hub, prop, solrReader, newspaperCache, entityCache, contentIdtoPageId, i);
+                executor.execute(w);
+                if(DEBUG_PROMPT)
+                    System.out.println(String.format("Thread %d executed",  i));
+            }
+            executor.shutdown();
+
+            while (true) {
+                try {
+                    hub.latch.await();
+                    break;
+                } catch (InterruptedException e) {
+                    System.out.println();
+                    System.out.println("Waiting was interrupted (main)");
+                }
+            }
+
+            ew.close();
+            System.out.println();
+
+            count_ValidAnnotations = hub.getValidAnnotations();
+            int failedSentences = hub.getFailedSentences();
+            int invalidAnnotationCount = hub.getAnnotationsWithInvalidType();
+            invalidTypes = hub.getInvalidTypes();
+            count_unaggregatedEdges = hub.getUnaggregatedEdges();
+            count_ValidAnnotationsByType = hub.getValidAnnotationsByType();
+            int negativeOffsetCount = hub.getNegativeOffsetCount();
+
+            System.out.println("Number of unaggregated edges:"  + count_unaggregatedEdges);
+            System.out.println("Errors occurred for"  + failedSentences +"  sentences.");
+            System.out.println("Found"  + count_ValidAnnotations +"  valid annotations.");
+            System.out.println("Found"  + invalidAnnotationCount +"  annotations with invalid type.");
+            System.out.println("Found"  + negativeOffsetCount +"  annotations with negative offset.");
+            System.out.print("  Invalid Types:");
+            for (String s : invalidTypes) {
+                System.out.print(""  + s);
+            }
+            System.out.println();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /* Main Routine: if readIdsFromFile = false;
      * Extraction of co-occurrences from the documents and building of nodes and (unaggregated) edges
      */
     public ParallelExtractNetworkFromImpresso(String[] newspapers, String[][] years) {
@@ -249,14 +397,12 @@ public class ParallelExtractNetworkFromImpresso {
 
           //Loads the property file
     		Properties prop = new Properties();
-    		String propFilePath ="LOAD Network v1.01/resources/config.properties";
-    		
     		FileInputStream inputStream;
     		if(VERBOSE)
-    		    System.out.println("Loading properties file :"  + propFilePath);
+    		    System.out.println("Loading properties file :"  + PROP_PATH);
     		try {
     		    //NOTE: Input stream best solution?
-    			inputStream = new FileInputStream(propFilePath);
+    			inputStream = new FileInputStream(PROP_PATH);
     			prop.load(inputStream);
     			inputStream.close();
     		} catch (IOException e1) {
@@ -304,18 +450,10 @@ public class ParallelExtractNetworkFromImpresso {
             HashMap<Integer, String> contentIdtoPageId = new HashMap<Integer, String>();
 
             int[][] pageIDs;
-
-            if (readIDsFromFile) {
-                System.out.println("Reading page IDs from file.");
-                pageIDs = readLocalContentIDs(contentIdtoPageId);
-            } else {
-                System.out.println("Generating page IDs from database.");
-                pageIDs = readContentIDs(contentIdtoPageId, newspapers, years, solrReader);
-            }
-
+            System.out.println("Generating page IDs from database.");
+            pageIDs = readContentIDs(contentIdtoPageId, newspapers, years, solrReader);
 
             count_Articles = contentIdtoPageId.size();
-
             if(VERBOSE)
                 System.out.println("Number of pages with annotations (i.e number of articles):"  + contentIdtoPageId.size());
             System.gc();
@@ -727,17 +865,6 @@ public class ParallelExtractNetworkFromImpresso {
     
     public static void main(String[] args) {
         try {
-            String[] newspapers = args[0].split(",");
-            String[][] years = new String[newspapers.length][];
-
-            if(args.length != newspapers.length + 1){
-                throw new IllegalArgumentException();
-            }
-
-            for(int i = 1; i < args.length; i++){
-                years[i - 1] = args[i].split(",");
-            }
-
             // make sure that working folders are up and clean
             if(VERBOSE)
                 System.out.println("\nSETTING UP THE FOLDERS FOR THE ENVIRONMENT\n");
@@ -750,8 +877,27 @@ public class ParallelExtractNetworkFromImpresso {
             // read the input data from DB and write temporary edge information of unaggregated edge lists
             if(VERBOSE)
                 System.out.println("\nIMPORT THE DATA FROM IMPRESSO AND S3\n");
-            ParallelExtractNetworkFromImpresso enfm = new ParallelExtractNetworkFromImpresso(newspapers, years);
+            ParallelExtractNetworkFromImpresso enfm;
+
+
+            if(!readIDsFromFile){
+                String[] newspapers = args[0].split(",");
+                String[][] years = new String[newspapers.length][];
+
+                if(args.length != newspapers.length + 1){
+                    throw new IllegalArgumentException("You must have as many year lists as you have newspapers");
+                }
+
+                for(int i = 1; i < args.length; i++)
+                    years[i - 1] = args[i].split(",");
+                enfm = new ParallelExtractNetworkFromImpresso(newspapers, years);
+            } else {
+                enfm = new ParallelExtractNetworkFromImpresso();
+
+            }
             System.gc();
+
+
 
             if(VERBOSE)
                 System.out.println("Data imported, entities extracted, edges created.");

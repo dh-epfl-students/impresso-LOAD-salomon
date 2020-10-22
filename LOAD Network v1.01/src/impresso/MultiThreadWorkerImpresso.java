@@ -22,8 +22,8 @@ import construction.Annotation;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
-import static settings.SystemSettingsImpresso.act;
-import static settings.SystemSettingsImpresso.loc;
+import static settings.SystemSettings.act;
+import static settings.SystemSettings.loc;
 
 
 /**

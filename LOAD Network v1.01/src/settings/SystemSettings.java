@@ -30,7 +30,7 @@ public class SystemSettings {
     // To do this, it will scan all annotations and extract the IDs of pages. They will also be stored
     // in a file so that this process does not have to be repeated when the program is run again on
     // the same data. In this case, set the parameter to TRUE.
-    public static boolean readIDsFromFile = false;
+    public static boolean readIDsFromFile = true;
     
     // number of threads that are used for network construction
     // since the program is bounded by the speed of the database, setting this above the number
@@ -103,4 +103,7 @@ public class SystemSettings {
     public static String ID_FOLDER ="local_files/";
     public static int MAX_CACHE_SIZE = 10000;
     public static int TIMEOUT = 1000000000;
+
+    public static String PROP_PATH = "LOAD Network v1.01/resources/config.properties";
+
 }
