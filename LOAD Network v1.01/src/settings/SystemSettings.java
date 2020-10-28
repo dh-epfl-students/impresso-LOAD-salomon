@@ -59,7 +59,7 @@ public class SystemSettings {
     // For the impresso DB we will be using PER and LOC
     public static final String dat ="TIM";
     public static final String loc ="LOC";
-    public static final String act ="PER";
+    public static final String act ="PERS";
     public static final String org ="ORG";
         
     // mongoDB collection value identifiers in collection sentences
@@ -99,7 +99,7 @@ public class SystemSettings {
     // the maximum number of allowed open files on your machine.
     public static int maxTempFiles = 50;
     public static boolean VERBOSE = true;
-    public static boolean DEBUG_PROMPT = false;
+    public static boolean DEBUG_PROMPT = true;
     public static String ID_FOLDER ="local_files/";
     public static int MAX_CACHE_SIZE = 10000;
     public static int TIMEOUT = 1000000000;

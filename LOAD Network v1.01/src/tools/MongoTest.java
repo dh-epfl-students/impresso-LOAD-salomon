@@ -50,7 +50,7 @@ public class MongoTest {
             for (Document d : dl) {
                 System.out.println(d.toString());
             }
-            System.out.println();
+            //System.out.println();
             
             // connect to the specified database and list all collections
             MongoDatabase db = mongoClient.getDatabase(MongoDBname);
@@ -59,13 +59,13 @@ public class MongoTest {
             for (Document c : cl) {
                 System.out.println(c.toString());
             }
-            System.out.println();
+            //System.out.println();
             
             // print an item from the collection sentences
             MongoCollection<Document> collS = db.getCollection(MongoCollectionSentences);
             System.out.println("One item from collection sentences:");
             System.out.println(collS.find().skip(1).first());
-            System.out.println();
+            //System.out.println();
             
             // list indexes for collection sentences
             ListIndexesIterable<Document> indexS = collS.listIndexes();
@@ -73,13 +73,13 @@ public class MongoTest {
             for (Document i : indexS) {
                 System.out.println(i.toString());
             }
-            System.out.println();
+            //System.out.println();
             
             // print an item from the collection annotations
             MongoCollection<Document> collA = db.getCollection(MongoCollectionAnnotations);
             System.out.println("One item from collection annotations:");
             System.out.println(collA.find().skip(1).first());
-            System.out.println();
+            //System.out.println();
             
             // list indexes for collection sentences
             ListIndexesIterable<Document> indexA = collA.listIndexes();

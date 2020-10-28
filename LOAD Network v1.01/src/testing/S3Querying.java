@@ -166,7 +166,7 @@ public class S3Querying {
                 System.out.println(" ---"  + objectSummary.getKey() +""
                 +" (size ="  + objectSummary.getSize() +" )" +""
                 +" (eTag ="  + objectSummary.getETag() +" )");
-                System.out.println();
+                //System.out.println();
               }*/
           }
           catch (AmazonServiceException ase)

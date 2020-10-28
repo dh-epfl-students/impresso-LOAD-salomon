@@ -15,7 +15,7 @@ import org.tartarus.snowball.ext.englishStemmer;
  * http://dbs.ifi.uni-heidelberg.de/?id=load
  * (c) 2016 Andreas Spitz (spitz@informatik.uni-heidelberg.de)
  */
-public class LOADmodelSettings {
+public class LOADmodelSettings{
     
     /* Internal settings for the LOAD model
      * PROCEED WITH CAUTION! It is unlikely that these settings have to be adapted.
@@ -32,7 +32,7 @@ public class LOADmodelSettings {
     public static final char SEN = 6;                // sentences
     
     // type abbreviations (in an ordering that corresponds to the IDs assigned above)
-    public static String[] setNames = {"DAT", "LOC", "ACT", "ORG", "TER", "PAG", "SEN"};
+    public static String[] setNames = {"DAT", "LOC", "PERS", "ORG", "TER", "PAG", "SEN"};
     
     // filenames and settings (inside the working folder) 
     public static String outfolder = SystemSettings.folder +"graph_output/";

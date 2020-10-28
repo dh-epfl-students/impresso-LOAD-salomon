@@ -352,13 +352,13 @@ public class ParallelExtractNetworkFromImpresso {
                     hub.latch.await();
                     break;
                 } catch (InterruptedException e) {
-                    System.out.println();
+                    ////System.out.println();
                     System.out.println("Waiting was interrupted (main)");
                 }
             }
 
             ew.close();
-            System.out.println();
+            ////System.out.println();
 
             count_ValidAnnotations = hub.getValidAnnotations();
             int failedSentences = hub.getFailedSentences();
@@ -377,7 +377,7 @@ public class ParallelExtractNetworkFromImpresso {
             for (String s : invalidTypes) {
                 System.out.print(""  + s);
             }
-            System.out.println();
+            ////System.out.println();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -497,13 +497,13 @@ public class ParallelExtractNetworkFromImpresso {
                     hub.latch.await();
                     break;
                 } catch (InterruptedException e) {
-                    System.out.println();
+                    //System.out.println();
                     System.out.println("Waiting was interrupted (main)");
                 }
             }
 
             ew.close();
-            System.out.println();
+            //System.out.println();
             
             count_ValidAnnotations = hub.getValidAnnotations();
             int failedSentences = hub.getFailedSentences();
@@ -522,7 +522,7 @@ public class ParallelExtractNetworkFromImpresso {
             for (String s : invalidTypes) {
                 System.out.print(""  + s);
             }
-            System.out.println();
+            //System.out.println();
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -685,7 +685,7 @@ public class ParallelExtractNetworkFromImpresso {
                     weight = weight2;
                 }
             }
-            System.out.println();
+            //System.out.println();
             
             // write last active edge
             if (targetType >= TER) {

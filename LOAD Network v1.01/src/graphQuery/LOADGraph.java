@@ -162,9 +162,9 @@ public class LOADGraph {
                         System.out.println("->"  + nodeLists[j][currentNode.adjacency[j][iter]].value +"  w=" + currentNode.weights[j][iter]);
                     }
                 }
-                System.out.println();
+                //System.out.println();
             }
-            System.out.println();
+            //System.out.println();
         }
     }
     
@@ -184,7 +184,7 @@ public class LOADGraph {
             for (int j=0; j < nANNOTATIONS; j++) {
                 System.out.print(String.format("%1$14s",  Long.toString(edgeCounts[j])));
             }
-            System.out.println();
+            //System.out.println();
         }
     }
 }

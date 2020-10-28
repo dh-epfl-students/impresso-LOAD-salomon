@@ -116,7 +116,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
                     System.out.println("Tokens for item:");
                     for(Token tok: contentItem.getTokens())
                         System.out.println(tok);
-                    System.out.println();
+                    ////System.out.println();
                 }
 
                 List<Token> tokens = contentItem.getTokens();
@@ -278,7 +278,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
                 }
                 sentence_id ++;
             }
-                System.out.println();
+                //System.out.println();
             } catch (Exception e) {
                 e.printStackTrace();
                 failedCount++;

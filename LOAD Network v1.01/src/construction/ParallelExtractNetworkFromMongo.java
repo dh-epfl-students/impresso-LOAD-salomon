@@ -208,7 +208,7 @@ public class ParallelExtractNetworkFromMongo {
                 Document obj = annotationCursor.next();
                 ids.add(obj.getInteger(mongoIdentAnnotation_pageId));
             }
-            System.out.println();
+            //System.out.println();
             annotationCursor.close();
             
             // convert to list, make sure its (deterministically) shuffled and convert to array
@@ -301,14 +301,14 @@ public class ParallelExtractNetworkFromMongo {
                     hub.latch.await();
                     break;
                 } catch (InterruptedException e) {
-                    System.out.println();
+                    //System.out.println();
                     System.out.println("Waiting was interrupted (main)");
                 }
             }
                         
             ew.close();
             mongoClient.close();
-            System.out.println();
+            //System.out.println();
             
             count_ValidAnnotations = hub.getValidAnnotations();
             int failedSentences = hub.getFailedSentences();
@@ -327,7 +327,7 @@ public class ParallelExtractNetworkFromMongo {
             for (String s : invalidTypes) {
                 System.out.print(""  + s);
             }
-            System.out.println();
+            //System.out.println();
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -493,7 +493,7 @@ public class ParallelExtractNetworkFromMongo {
                     weight = weight2;
                 }
             }
-            System.out.println();
+            //System.out.println();
             
             // write last active edge
             if (targetType >= TER) {

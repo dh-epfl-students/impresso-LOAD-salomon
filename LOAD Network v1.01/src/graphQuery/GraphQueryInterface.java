@@ -551,7 +551,7 @@ public class GraphQueryInterface {
                                         System.out.print(String.format("%1$-" + (maxlength+2) +" s", pageURL + s.target.value));
                                         System.out.println(String.format("%1$" + 9 +" s", doubleformat.format(s.weight)));
                                     }
-                                    System.out.println();
+                                    //System.out.println();
                                 }
                             
                             // if the target of the query is a sentence, apply sentence method
@@ -607,7 +607,7 @@ public class GraphQueryInterface {
                                         System.out.print(String.format("%1$-" + (maxlength+2) +" s", s.target.value));
                                         System.out.println(String.format("%1$" + 9 +" s", doubleformat.format(s.weight)));
                                     }
-                                    System.out.println();
+                                    //System.out.println();
                                 }
                             }
                             

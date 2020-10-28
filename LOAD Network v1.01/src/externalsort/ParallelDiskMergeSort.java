@@ -108,7 +108,7 @@ public class ParallelDiskMergeSort {
             for (FileBuffer bfb : pq) {
                   bfb.close();
             }
-            System.out.println();
+            //System.out.println();
         }
         
         // clean up temporary files
@@ -199,7 +199,7 @@ public class ParallelDiskMergeSort {
             }
         } finally {
             fbr.close();
-            System.out.println();
+            //System.out.println();
         }
         
         return files;
