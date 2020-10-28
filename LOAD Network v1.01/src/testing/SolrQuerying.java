@@ -31,7 +31,7 @@ public class SolrQuerying {
 	    System.out.println(prop.getProperty("solrDBName"));
 		HttpSolrClient client = new HttpSolrClient.Builder(prop.getProperty("solrDBName")).build();
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setQuery("*:*");
+		solrQuery.setQuery("GDL:*");
 		solrQuery.set("fl","*");
 		solrQuery.setRows(10);
 		

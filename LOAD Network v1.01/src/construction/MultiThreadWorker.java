@@ -233,7 +233,7 @@ public class MultiThreadWorker implements Runnable {
                                 
                             // turn list of annotations into edges by pairwise comparison
                             // add edge between sentence and page
-                            edges.add(PAG + sepChar + SEN + sepChar + pageId + sepChar + sentenceId + sepChar + 0 +" \n");
+                            edges.add(PAG + sepChar + SEN + sepChar + pageId + sepChar + sentenceId + sepChar + 0 +"\n");
                             count_unaggregatedEdges++;
                                 
                             for (int i=0; i<annotationsSentence.size(); i++) {
@@ -241,11 +241,11 @@ public class MultiThreadWorker implements Runnable {
                                     
                                 // NOTE connecting entities to the sentence is enough (sentences are connected to pages)
                                 // add edge between annotation and page
-                                // ew.append(an.type + sepChar + PAG + sepChar + an.id + sepChar + pageId + sepChar + 0 +" \n");
+                                // ew.append(an.type + sepChar + PAG + sepChar + an.id + sepChar + pageId + sepChar + 0 +"\n");
                                 // count_unaggregatedEdges++;
                                 
                                 // add edge between annotation and sentence
-                                edges.add(an.type + sepChar + SEN + sepChar + an.id + sepChar + sentenceId + sepChar + 0 +" \n");
+                                edges.add(an.type + sepChar + SEN + sepChar + an.id + sepChar + sentenceId + sepChar + 0 +"\n");
                                 count_unaggregatedEdges++;
                                     
                                 annotationsPage.add(an);
@@ -256,17 +256,17 @@ public class MultiThreadWorker implements Runnable {
                                     
                                 // NOTE connecting terms to the sentence is enough (sentences are connected to pages)
                                 // add edge between term and page
-                                // ew.append(t.type + sepChar + PAG + sepChar + t.id + sepChar + pageId + sepChar + 0 +" \n");
+                                // ew.append(t.type + sepChar + PAG + sepChar + t.id + sepChar + pageId + sepChar + 0 +"\n");
                                 // count_unaggregatedEdges++;
                                     
                                 // add edge between term and sentence
-                                edges.add(t.type + sepChar + SEN + sepChar + t.id + sepChar + sentenceId + sepChar + 0 +" \n");
+                                edges.add(t.type + sepChar + SEN + sepChar + t.id + sepChar + sentenceId + sepChar + 0 +"\n");
                                 count_unaggregatedEdges++;
                                     
                                 // add pairwise edges between terms and annotations in the same sentence (but only in one direction) 
                                 for (int j=0; j<annotationsSentence.size(); j++) {
                                     Annotation an = annotationsSentence.get(j);
-                                    edges.add(an.type + sepChar + t.type + sepChar + an.id + sepChar + t.id + sepChar + 0 +" \n");
+                                    edges.add(an.type + sepChar + t.type + sepChar + an.id + sepChar + t.id + sepChar + 0 +"\n");
                                     count_unaggregatedEdges++;
                                 }
                                     
@@ -304,18 +304,18 @@ public class MultiThreadWorker implements Runnable {
                         
                     if (an1.type != an2.type) { // connections between entity types
                         if (an1.type < an2.type) {
-                            edges.add(an1.type + sepChar + an2.type + sepChar + an1.id + sepChar + an2.id + sepChar + weight +" \n");
+                            edges.add(an1.type + sepChar + an2.type + sepChar + an1.id + sepChar + an2.id + sepChar + weight +"\n");
                             count_unaggregatedEdges++;
                         } else {
-                            edges.add(an2.type + sepChar + an1.type + sepChar + an2.id + sepChar + an1.id + sepChar + weight +" \n");
+                            edges.add(an2.type + sepChar + an1.type + sepChar + an2.id + sepChar + an1.id + sepChar + weight +"\n");
                             count_unaggregatedEdges++;
                         }
                     } else if (an1.type == LOC || an1.type == ACT || an1.type == ORG) { // connections within entity types
                         if (an1.id < an2.id) {
-                            edges.add(an1.type + sepChar + an2.type + sepChar + an1.id + sepChar + an2.id + sepChar + weight +" \n");
+                            edges.add(an1.type + sepChar + an2.type + sepChar + an1.id + sepChar + an2.id + sepChar + weight +"\n");
                             count_unaggregatedEdges++;
                         } else if (an1.id > an2.id) {
-                            edges.add(an2.type + sepChar + an1.type + sepChar + an2.id + sepChar + an1.id + sepChar + weight +" \n");
+                            edges.add(an2.type + sepChar + an1.type + sepChar + an2.id + sepChar + an1.id + sepChar + weight +"\n");
                             count_unaggregatedEdges++;
                         }
                         // the case where an1.id == an2.id is ignored since we do not want self loops in the network

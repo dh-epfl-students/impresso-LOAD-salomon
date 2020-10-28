@@ -48,7 +48,9 @@ public class LOADGraph {
             while ((line = br.readLine()) != null) {
                 if (line.startsWith(commentChar)) continue;
                 
-                String[] splitline = line.split(sepChar); 
+                String[] splitline = line.split(sepChar);
+                for(String s: splitline)
+                    System.out.println(s);
                 Integer set = setNamesToIndexMap.get(splitline[0]);
                 if (set != null) {
                     nNodes[set] = Integer.parseInt(splitline[1]);
@@ -62,7 +64,7 @@ public class LOADGraph {
             // sanity check: are any vertex sets of size 0?
             for (int i=0; i < nANNOTATIONS; i++) {
                 if (nNodes[i] == 0) {
-                    System.out.println("Warning! Number of nodes is 0 for"  + setNames[i]);
+                    System.out.println("Warning! Number of nodes is 0 for "  + setNames[i]);
                 }
             }
             
@@ -86,7 +88,7 @@ public class LOADGraph {
                 while ((line = br.readLine()) != null) {
                     if (index % steps == 0) {
                         int progress = (int) (100.0*index/nNodes[i]);
-                        System.out.print("\rReading nodes of type"  + setNames[i] +" :" + String.format("%1$" + 3 +" s",  progress) +"%");
+                        System.out.print("\rReading nodes of type"  + setNames[i] +" :" + String.format("%1$" + 3 +"s",  progress) +"%");
                     }
                     String[] splitline = line.split(sepChar);
                     String value = splitline[0];
@@ -102,7 +104,7 @@ public class LOADGraph {
                     idmap.put(value, index);
                     ++index;
                 }
-                System.out.println("\rReading nodes of type"  + setNames[i] +" : done");
+                System.out.println("\rReading nodes of type "  + setNames[i] +" : done");
                 br.close();
             }
             
@@ -110,7 +112,7 @@ public class LOADGraph {
             for (int i=0; i < nANNOTATIONS; i++) {
                 filename = inputFolderPath + edgeFileNames[i];
                 //System.out.println("Reading edge information from:"  + filename);
-                System.out.print("Reading edges of type"  + setNames[i]);
+                System.out.print("Reading edges of type "  + setNames[i]);
                 int index = 0;
                 int steps = nNodes[i]/100;
                 if (steps == 0) steps = 1;
@@ -119,7 +121,7 @@ public class LOADGraph {
                 do {
                     if (index % steps == 0) {
                         int progress = (int) (100.0*index/nNodes[i]);
-                        System.out.print("\rReading edges of type"  + setNames[i] +" :" + String.format("%1$" + 3 +" s",  progress) +"%");
+                        System.out.print("\rReading edges of type "  + setNames[i] +" :" + String.format("%1$" + 3 +"s",  progress) +"%");
                     }
                     line = br.readLine();
                     GraphNode node = nodes[index];
@@ -134,12 +136,12 @@ public class LOADGraph {
                     }
                     ++index;
                 } while ((line = br.readLine()) != null);
-                System.out.println("\rReading edges of type"  + setNames[i] +" : done");
+                System.out.println("\rReading edges of type "  + setNames[i] +" : done");
                 br.close();
             }
             
             time = System.currentTimeMillis() - time;
-            System.out.println("Done reading graph. Time needed:"  + String.format("%.3f",  time / (1000 * 60.0)) +"  minutes.");
+            System.out.println("Done reading graph. Time needed:"  + String.format("%.3f",  time / (1000 * 60.0)) +" minutes.");
             
         } catch (Exception e) {
             System.out.println("Unable to read graph from files");
@@ -155,7 +157,7 @@ public class LOADGraph {
                 GraphNode currentNode = currentList[s];
                 System.out.println("ID:" + currentNode.id +" , label:"  + currentNode.value);
                 for (int j=0; j < nANNOTATIONS; j++) {
-                    System.out.println("Degrees for"  + setNames[j] +" :" + currentNode.degrees[j]);
+                    System.out.println("Degrees for "  + setNames[j] +" :" + currentNode.degrees[j]);
                     for (int iter=0; iter<currentNode.adjacency[j].length; iter++) {
                         System.out.println("->"  + nodeLists[j][currentNode.adjacency[j][iter]].value +"  w=" + currentNode.weights[j][iter]);
                     }

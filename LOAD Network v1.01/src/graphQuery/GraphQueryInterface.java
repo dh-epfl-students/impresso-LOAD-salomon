@@ -534,7 +534,7 @@ public class GraphQueryInterface {
                             } else if (q.targetSet == PAG) {
                                 ArrayList<RankItem> list = pageQuery(q, numberOfResults);
                                 
-                                System.out.println("Top"  + list.size() +" "  + setNames[PAG] +"  for:"  + input.substring(4) +" \n");
+                                System.out.println("Top"  + list.size() +" "  + setNames[PAG] +"  for:"  + input.substring(4) +"\n");
                                 if (list.size() > 0) {
                                     String pageURL =" https://en.wikipedia.org/?curid=";
                                     // find length of longest result string
@@ -592,7 +592,7 @@ public class GraphQueryInterface {
                                 } else {
                                     list = multiSetQuery(q, numberOfResults, datePrecision, density);
                                 }
-                                System.out.println("Top"  + list.size() +" "  + setNames[q.targetSet] +"  for:"  + input.substring(4) +" \n");
+                                System.out.println("Top"  + list.size() +" "  + setNames[q.targetSet] +"  for:"  + input.substring(4) +"\n");
                                 if (list.size() > 0) {
                                     // find length of longest result string
                                     int maxlength = 0;

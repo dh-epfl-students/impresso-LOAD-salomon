@@ -189,7 +189,7 @@ public class ParallelExtractNetworkFromMongo {
             // getting IDs from annotations
             MongoCollection<Document> cANN = db.getCollection(MongoCollectionAnnotations);
             long nAnnotations = cANN.count();
-            System.out.println("Found"  + nAnnotations +"  annotations. Searching for page IDs.");
+            System.out.println("Found"  + nAnnotations +" annotations. Searching for page IDs.");
             long nextpercent = nAnnotations / 1000;
             long currentAnnotation = 0;
             double percentcount = 0.1;
@@ -202,7 +202,7 @@ public class ParallelExtractNetworkFromMongo {
                 if (++currentAnnotation == nextpercent) {
                     nextpercent += nAnnotations / 1000;
                     percentcount += 0.1;
-                    System.out.print("\rSearched"  + dform.format(percentcount) +" % of annotations.    " );
+                    System.out.print("\rSearched"  + dform.format(percentcount) +"% of annotations." );
                 }
                 
                 Document obj = annotationCursor.next();
@@ -224,7 +224,7 @@ public class ParallelExtractNetworkFromMongo {
             // write list to file for later use in re-runs
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pageIDList),"UTF-8"), bufferSize);
             for (int pid : pageIDs) {
-                bw.append(pid +" \n");
+                bw.append(pid +"\n");
             }
             bw.close();
             mongoClient.close();
@@ -319,11 +319,11 @@ public class ParallelExtractNetworkFromMongo {
             int negativeOffsetCount = hub.getNegativeOffsetCount();
             
             System.out.println("Number of unaggregated edges:"  + count_unaggregatedEdges);
-            System.out.println("Errors occurred for"  + failedSentences +"  sentences.");
-            System.out.println("Found"  + count_ValidAnnotations +"  valid annotations.");
-            System.out.println("Found"  + invalidAnnotationCount +"  annotations with invalid type.");
-            System.out.println("Found"  + negativeOffsetCount +"  annotations with negative offset.");
-            System.out.print(" Invalid Types:");
+            System.out.println("Errors occurred for"  + failedSentences +" sentences.");
+            System.out.println("Found"  + count_ValidAnnotations +" valid annotations.");
+            System.out.println("Found"  + invalidAnnotationCount +" annotations with invalid type.");
+            System.out.println("Found"  + negativeOffsetCount +" annotations with negative offset.");
+            System.out.print("Invalid Types:");
             for (String s : invalidTypes) {
                 System.out.print(""  + s);
             }
@@ -358,17 +358,17 @@ public class ParallelExtractNetworkFromMongo {
 
             w.append(metaHeader);
             for (int i=0; i<nANNOTATIONS; i++) {
-                w.append(setNames[i] + sepChar + valueToIdMaps.get(i).size() +" \n");
+                w.append(setNames[i] + sepChar + valueToIdMaps.get(i).size() +"\n");
             }
             w.close();
             
             // write temporary node data to get rid of the valueToIdMaps
             System.out.println("Writing temporary node data");
             for (int i=0; i<nANNOTATIONS; i++) {
-                w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfolder +" tmp_" + vertexFileNames[i]),"UTF-8"), bufferSize);
+                w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfolder +"tmp_" + vertexFileNames[i]),"UTF-8"), bufferSize);
                 for (TObjectIntIterator<String> it = valueToIdMaps.get(i).iterator(); it.hasNext(); ) {
                     it.advance();
-                    w.append(it.value() + sepChar + it.key() +" \n");
+                    w.append(it.value() + sepChar + it.key() +"\n");
                 }
                 w.close();
             }
@@ -418,7 +418,7 @@ public class ParallelExtractNetworkFromMongo {
             
             ArrayList<BufferedWriter> out = new ArrayList<BufferedWriter>();
             for (int i=0; i<nANNOTATIONS; i++) {
-                BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfolder +" tmp_" + edgeFileNames[i]),"UTF-8"), bufferSize);
+                BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfolder +"tmp_" + edgeFileNames[i]),"UTF-8"), bufferSize);
                 out.add(w);
             }
             
@@ -454,7 +454,7 @@ public class ParallelExtractNetworkFromMongo {
                 if (++linecount == nextpromille) {
                     nextpromille += count_unaggregatedEdges / 1000;
                     promillecount += 0.1;
-                    System.out.print("\rRead"  + dform.format(promillecount) +" % of unaggregated edges.  " );
+                    System.out.print("\rRead"  + dform.format(promillecount) +"% of unaggregated edges." );
                 }
                 
                 splitline = line.split(sepChar);
@@ -475,11 +475,11 @@ public class ParallelExtractNetworkFromMongo {
                     weight += weight2;
                 } else {
                     if (targetType >= TER) {
-                        out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + (int)weight +" \n");
-                        out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + (int)weight +" \n");
+                        out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + (int)weight +"\n");
+                        out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + (int)weight +"\n");
                     } else {
-                        out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + df.format(weight) +" \n");
-                        out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + df.format(weight) +" \n");
+                        out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + df.format(weight) +"\n");
+                        out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + df.format(weight) +"\n");
                     }
                     
                     // increase edge counts
@@ -497,11 +497,11 @@ public class ParallelExtractNetworkFromMongo {
             
             // write last active edge
             if (targetType >= TER) {
-                out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + (int)weight +" \n");
-                out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + (int)weight +" \n");
+                out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + (int)weight +"\n");
+                out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + (int)weight +"\n");
             } else {
-                out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + df.format(weight) +" \n");
-                out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + df.format(weight) +" \n");
+                out.get(sourceType).append(sourceType + sepChar + targetType + sepChar + sourceId + sepChar + targetId + sepChar + df.format(weight) +"\n");
+                out.get(targetType).append(targetType + sepChar + sourceType + sepChar + targetId + sepChar + sourceId + sepChar + df.format(weight) +"\n");
             }
             
             // increase edge counts
@@ -541,8 +541,8 @@ public class ParallelExtractNetworkFromMongo {
             // initialize sorter
             ParallelDiskMergeSort dms = new ParallelDiskMergeSort(aggregatedEdgeCounts[i], nLinesPerFile, bufferSize, edgecomparator);
             
-            String inputfile = tmpfolder +" tmp_" + edgeFileNames[i];
-            String outputfile = tmpfolder +" tmp_sorted_" + edgeFileNames[i];
+            String inputfile = tmpfolder +"tmp_" + edgeFileNames[i];
+            String outputfile = tmpfolder +"tmp_sorted_" + edgeFileNames[i];
             dms.sortFile(new File(inputfile), new File(outputfile), tempFileStore);
         }
         
@@ -565,7 +565,7 @@ public class ParallelExtractNetworkFromMongo {
             for (char type=0; type<nANNOTATIONS; type++) {
                 System.out.println("Processing edges for"  + setNames[type]);
                 
-                String inFile = tmpfolder +" tmp_sorted_" + edgeFileNames[type];
+                String inFile = tmpfolder +"tmp_sorted_" + edgeFileNames[type];
                 BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(inFile),"UTF-8"));
                 String outFile = outfolder + edgeFileNames[type];
                 BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile),"UTF-8"), bufferSize);
@@ -574,7 +574,7 @@ public class ParallelExtractNetworkFromMongo {
                 
                 int currentSource = 0;
                 char targetType = 0;
-                w.append(0 +" \n");
+                w.append(0 +"\n");
                 w.append(setNames[0]);
 
                 char edge_sourceType;
@@ -601,7 +601,7 @@ public class ParallelExtractNetworkFromMongo {
                         targetType = 0;
                         // then end the block
                         currentSource = edge_sourceId;
-                        w.append("\n\n" + currentSource +" \n");
+                        w.append("\n\n" + currentSource +"\n");
                         w.append(setNames[0]);
                         
                     // if a new target type comes up, this is the end of a current line
@@ -634,15 +634,15 @@ public class ParallelExtractNetworkFromMongo {
             // rewrite nodes and include degrees
             for (int i=0; i<nANNOTATIONS; i++) {
                 int emptyNameCount = 0;
-                System.out.print("Rewriting nodes for"  + setNames[i] +" .");
+                System.out.print("Rewriting nodes for"  + setNames[i] +".");
                 String[] nodeNames = new String[setSizes[i]];
-                String inFile = tmpfolder +" tmp_" + vertexFileNames[i];
+                String inFile = tmpfolder +"tmp_" + vertexFileNames[i];
                 BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(inFile),"UTF-8"));
                 String line;
                 while ((line = bf.readLine()) != null) {
                     String[] splitline = line.split(sepChar);
                     int id = Integer.parseInt(splitline[0]);
-                    String name =" " ;
+                    String name ="" ;
                     if (splitline.length > 1) {
                         name = splitline[1];
                     } else {
@@ -662,7 +662,7 @@ public class ParallelExtractNetworkFromMongo {
                     w.append("\n");
                 }
                 w.close();
-                System.out.println(" (Nodes with no name:"  + emptyNameCount +" )");
+                System.out.println("(Nodes with no name:"  + emptyNameCount +")");
             }
         } catch (Exception e) {
             e.printStackTrace();

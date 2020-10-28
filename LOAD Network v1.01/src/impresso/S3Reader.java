@@ -75,7 +75,7 @@ public class S3Reader {
         }
 
 	}
-	
+/*
 	public ImpressoContentItem injectLingusticAnnotations(ImpressoContentItem contentItem, Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache) {
 		String tempId = contentItem.getId();
 
@@ -88,11 +88,6 @@ public class S3Reader {
     	    //This is where the injectTokens of a ImpressoContentItem
     	    totalOffset += contentItem.injectTokens(sentence.getJSONArray("tok"), sentence.getString("lg"), true, totalOffset);
     	}
-
-		/*
-		 * WHILE THE ENTITIES ARE BEING DUMPED TO THE S3 BUCKET
-		 * SHOULD NOT EXIST IN THE FINAL IMPLEMENTATION
-		 */
     	
     	jsonObj = entityCache.getIfPresent(tempId);
     	JSONArray mentions = jsonObj.getJSONArray("mentions");
@@ -101,7 +96,7 @@ public class S3Reader {
     	
 		return contentItem;
 	}
-
+*/
 	
 	private static void populateCache(String newspaperKey, String entityKey, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache) throws IOException {
 
@@ -129,7 +124,6 @@ public class S3Reader {
 		 * WHILE THE ENTITIES ARE BEING DUMPED TO THE S3 BUCKET
 		 * SHOULD NOT EXIST IN THE FINAL IMPLEMENTATION
 		 */
-		
 		if(entityKey != null) {
 			mentions = false;
 	  	    /*object_request = new GetObjectRequest("TRANSFER", entityKey);

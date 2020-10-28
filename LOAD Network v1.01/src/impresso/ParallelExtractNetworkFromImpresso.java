@@ -459,9 +459,9 @@ public class ParallelExtractNetworkFromImpresso {
             System.gc();
 
             //Create HashMap based on known number of annotations
-            valueToIdMaps = new ArrayList<TObjectIntHashMap<String>>();
+            valueToIdMaps = new ArrayList<>();
             for (int i=0; i<nANNOTATIONS; i++) {
-                valueToIdMaps.add(new TObjectIntHashMap<String>());
+                valueToIdMaps.add(new TObjectIntHashMap<>());
             }
             currentIDs = new int[nANNOTATIONS];
 
@@ -471,14 +471,14 @@ public class ParallelExtractNetworkFromImpresso {
 
         	if(VERBOSE) {
                 System.out.println("Newspaper cache and Entity cache created");
-                if (DEBUG_PROMPT)
+/*                if (DEBUG_PROMPT)
                     System.out.println("Cache max size ="  + MAX_CACHE_SIZE);
-            }
+*/          }
+
             if(VERBOSE)
                 System.out.println("\nPARSING ANNOTATIONS AND EXTRACTING NETWORK\n");
 
-            HashSet<String> invalidTypes = new HashSet<>();
-            
+            HashSet<String> invalidTypes;
             MultiThreadHubImpresso hub = new MultiThreadHubImpresso(pageIDs, valueToIdMaps, currentIDs, S3Client, newspaperCache, entityCache, prop, contentIdtoPageId, ew, nThreads);
             if(DEBUG_PROMPT)
                 System.out.println(String.format("Multi thread hub created for %s threads",  nThreads));
@@ -553,7 +553,7 @@ public class ParallelExtractNetworkFromImpresso {
 
             w.append(metaHeader);
             for (int i=0; i<nANNOTATIONS; i++) {
-                w.append(setNames[i] + sepChar + valueToIdMaps.get(i).size() +" \n");
+                w.append(setNames[i] + sepChar + valueToIdMaps.get(i).size() +"\n");
             }
             w.close();
             
@@ -629,7 +629,7 @@ public class ParallelExtractNetworkFromImpresso {
             char targetType = splitline[1].charAt(0);
             int sourceId = Integer.parseInt(splitline[2]);
             int targetId = Integer.parseInt(splitline[3]);
-            int weight_int = Integer.parseInt(splitline[4].replace(" ", ""));
+            int weight_int = Integer.parseInt(splitline[4]);
             
             float weight;
             if (targetType >= TER) {
@@ -646,7 +646,7 @@ public class ParallelExtractNetworkFromImpresso {
                 if (++linecount == nextpromille) {
                     nextpromille += count_unaggregatedEdges / 1000;
                     promillecount += 0.1;
-                    System.out.print("\rRead"  + dform.format(promillecount) +"% of unaggregated edges.  " );
+                    System.out.print("\rRead"  + dform.format(promillecount) +"% of unaggregated edges." );
                 }
                 
                 splitline = line.split(sepChar);
@@ -654,7 +654,7 @@ public class ParallelExtractNetworkFromImpresso {
                 char n2 = splitline[1].charAt(0);
                 int n3 = Integer.parseInt(splitline[2]);
                 int n4 = Integer.parseInt(splitline[3]);
-                weight_int = Integer.parseInt(splitline[4].replace(" ", ""));
+                weight_int = Integer.parseInt(splitline[4]);
                 
                 float weight2;
                 if (n2 >= TER) {
@@ -878,7 +878,6 @@ public class ParallelExtractNetworkFromImpresso {
             if(VERBOSE)
                 System.out.println("\nIMPORT THE DATA FROM IMPRESSO AND S3\n");
             ParallelExtractNetworkFromImpresso enfm;
-
 
             if(!readIDsFromFile){
                 String[] newspapers = args[0].split(",");

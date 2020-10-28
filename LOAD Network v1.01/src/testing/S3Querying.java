@@ -100,11 +100,13 @@ public class S3Querying {
 	          String prefix ="linguistic-processing/2020-03-11/";
 	          
 	          ListObjectsV2Request req = new
-	          ListObjectsV2Request().withBucketName(bucketName).withPrefix(prefix).withDelimiter("/").withMaxKeys(1);
+	          ListObjectsV2Request().withBucketName(bucketName).withPrefix(prefix).withDelimiter("/").withMaxKeys(10);
 	          ListObjectsV2Result result = S3Client.listObjectsV2(req);
-	          String key = result.getObjectSummaries().get(0).getKey();
-	          
-	          //Testing selecting the object's content of a particular bucket 
+
+	          List<S3ObjectSummary> res = result.getObjectSummaries();
+	          String key = res.get(0).getKey();
+
+	          //Testing selecting the object's content of a particular bucket
 	          SelectObjectContentRequest request = new SelectObjectContentRequest();
 	          request.setBucketName(bucketName);
 	          request.setKey(key);

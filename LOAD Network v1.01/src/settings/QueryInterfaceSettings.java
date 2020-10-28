@@ -64,5 +64,5 @@ public class QueryInterfaceSettings {
            +" Type <exit> or <quit> or <q> to quit.";
 
     // console string
-    public static String consoleString =" LOAD>";
+    public static String consoleString ="LOAD>";
 }
