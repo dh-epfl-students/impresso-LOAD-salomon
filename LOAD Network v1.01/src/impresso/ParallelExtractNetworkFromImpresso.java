@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 // mongoDB imports
+import org.apache.solr.common.SolrDocument;
 import org.json.JSONObject;
 
 import com.amazonaws.ClientConfiguration;
@@ -322,7 +323,8 @@ public class ParallelExtractNetworkFromImpresso {
 
             //Caches of tokens and entities created with size limits
             Cache<String, JSONObject> newspaperCache = CacheBuilder.newBuilder().build(); //NOTE: Add max if necessary
-            Cache<String, JSONObject> entityCache = CacheBuilder.newBuilder().build();
+            Cache<String, JSONObject> entityCache_old = CacheBuilder.newBuilder().build();
+            Cache<String, SolrDocument> entityCache = CacheBuilder.newBuilder().build();
 
             if(VERBOSE) {
                 System.out.println("Newspaper cache and Entity cache created");
@@ -334,12 +336,13 @@ public class ParallelExtractNetworkFromImpresso {
 
             HashSet<String> invalidTypes = new HashSet<>();
 
-            MultiThreadHubImpresso hub = new MultiThreadHubImpresso(pageIDs, valueToIdMaps, currentIDs, S3Client, newspaperCache, entityCache, prop, contentIdtoPageId, ew, nThreads);
+            MultiThreadHubImpresso hub = new MultiThreadHubImpresso(pageIDs, valueToIdMaps, currentIDs, S3Client, newspaperCache, entityCache_old, prop, contentIdtoPageId, ew, nThreads);
             if(DEBUG_PROMPT)
                 System.out.println(String.format("Multi thread hub created for %s threads",  nThreads));
 
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             for (int i=0; i<nThreads; i++) {
+
                 MultiThreadWorkerImpresso w = new MultiThreadWorkerImpresso(hub, prop, solrReader, newspaperCache, entityCache, contentIdtoPageId, i);
                 executor.execute(w);
                 if(DEBUG_PROMPT)
@@ -485,7 +488,7 @@ public class ParallelExtractNetworkFromImpresso {
 
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             for (int i=0; i<nThreads; i++) {
-                MultiThreadWorkerImpresso w = new MultiThreadWorkerImpresso(hub, prop, solrReader, newspaperCache, entityCache, contentIdtoPageId, i);
+                MultiThreadWorkerImpresso w = new MultiThreadWorkerImpresso(hub, prop, solrReader, newspaperCache, null, contentIdtoPageId, i); //NOTE: DO NOT FORGET
                 executor.execute(w);
                 if(DEBUG_PROMPT)
                     System.out.println(String.format("Thread %d executed",  i));

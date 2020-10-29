@@ -12,6 +12,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.solr.common.SolrDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,7 +38,8 @@ public class MultiThreadWorkerImpresso implements Runnable {
     
     private MultiThreadHubImpresso hub;
     private Cache<String, JSONObject> newspaperCache;
-    private Cache<String, JSONObject> entityCache;
+    private Cache<String, SolrDocument> entityCache;
+    private Cache<String, JSONObject> entityCache_old;
     private HashMap<Integer, String> contentIdtoPageId;
     private Properties prop;
     private SolrReader solrReader;
@@ -52,12 +54,13 @@ public class MultiThreadWorkerImpresso implements Runnable {
     private Integer threadNum;
 
     public MultiThreadWorkerImpresso(MultiThreadHubImpresso hub, Properties prop, SolrReader solrReader,
-                                     Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache,
+                                     Cache<String, JSONObject> newspaperCache, Cache<String, SolrDocument> entityCache,
                                      HashMap<Integer, String> contentIdtoPageId, int threadNum) {
         this.hub = hub;
         this.prop = prop;
         this.newspaperCache = newspaperCache;
         this.entityCache = entityCache;
+        this.entityCache_old = null;
         this.contentIdtoPageId = contentIdtoPageId;
         this.solrReader = solrReader;
         // internal variables
@@ -373,11 +376,14 @@ public class MultiThreadWorkerImpresso implements Runnable {
 		 * SHOULD NOT EXIST IN THE FINAL IMPLEMENTATION
 		 */
 		
-		newspaperJson = entityCache.getIfPresent(tempId);
-		if(newspaperJson != null){
-            JSONArray mentions = newspaperJson.getJSONArray("mentions");
+		SolrDocument entity = entityCache.getIfPresent(tempId);
+		if(entity != null){
+		    ArrayList<String> persMentions = (ArrayList<String>) entity.get("pers_mentions");
+            ArrayList<String> locMentions = (ArrayList<String>) entity.get("loc_mentions");
+            //persMentions.addAll()
+            //JSONArray mentions = entity.getJSONArray("mentions");
             //This is where the injectAnnotations of a ImpressoContentItem
-            contentItem.injectTokens(mentions, null, false, 0);
+            //contentItem.injectTokens(mentions, null, false, 0);
         } else {
 		    inEnt = false;
         }

@@ -11,14 +11,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.io.FileWriter;
 
+import com.google.common.cache.Cache;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.CursorMarkParams;
+import org.json.JSONObject;
 
 import static settings.SystemSettings.DEBUG_PROMPT;
 import static settings.SystemSettings.ID_FOLDER;
@@ -39,7 +42,28 @@ public class SolrReader {
 		solrUserName = properties.getProperty("solrUserName");
 		clientTest = new HttpSolrClient.Builder(properties.getProperty("solrDBName")).build();
 	}
-	
+
+
+	public static void populateCache(String contentID, Cache<String, SolrDocument> entityCache){
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setQuery("id:"+contentID);
+		solrQuery.set("fl","*");
+		solrQuery.setRows(1);
+
+		ImpressoContentItem impressoItem = null;
+		try {
+			HttpSolrClient client = new HttpSolrClient.Builder(solrDBName).build();
+			QueryRequest queryRequest = new QueryRequest(solrQuery);
+			queryRequest.setBasicAuthCredentials(solrUserName,System.getenv("SOLR_PASSWORD"));
+			SolrDocument solrResponse = queryRequest.process(client).getResults().get(0);
+			entityCache.put(solrResponse.get("id").toString() , solrResponse);
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public List<String> getContentItemIDs(String newspaperID,String year, boolean firstRead) {
 		List<String> solrIds = new ArrayList<>();
 	    String fileFolder = String.format(ID_FOLDER +"%s-ids",  newspaperID);
@@ -126,6 +150,28 @@ public class SolrReader {
 			
 		return solrIds;
 
+	}
+
+	public SolrDocument getSolrDocument(String solrId){
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setQuery("id:"+solrId);
+		solrQuery.set("fl","*");
+		solrQuery.setRows(1);
+
+		ImpressoContentItem impressoItem = null;
+		try {
+			HttpSolrClient client = new HttpSolrClient.Builder(solrDBName).build();
+			QueryRequest queryRequest = new QueryRequest(solrQuery);
+			queryRequest.setBasicAuthCredentials(solrUserName,System.getenv("SOLR_PASSWORD"));
+			SolrDocument solrResponse = queryRequest.process(client).getResults().get(0);
+
+			return solrResponse;
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public ImpressoContentItem getContentItem(String solrId) {
