@@ -133,76 +133,76 @@ public class MultiThreadWorkerImpresso implements Runnable {
 
                     for(Token token : sentence) { // if there are annotations in the sentence
                         if(token instanceof Entity){
-                        // DATES:
-                        // iterate over temporal annotations and extract them to create nodes
-                        String annotationType_str = ((Entity) token).getType();
+                            // DATES:
+                            // iterate over temporal annotations and extract them to create nodes
+                            String annotationType_str = ((Entity) token).getType();
 
-                        char annotationType;
-                        if (annotationType_str.equalsIgnoreCase(loc)) {
-                            if(DEBUG_PROMPT)
-                                System.out.println(String.format("Token %s is a LOC entity", token));
-                            annotationType = LOC;
-                        } else if (annotationType_str.equalsIgnoreCase(act)) {
-                            if(DEBUG_PROMPT)
-                                System.out.println(String.format("Token %s is an ACT entity", token));
-                            annotationType = ACT;
-                        } else {
-                            if(DEBUG_PROMPT)
-                                System.out.println(String.format("Token %s is an invalid entity", token));
-                            invalidTypes.add(annotationType_str);
-                            invalidAnnotationCount++;
-                            continue;
-                        }
+                            char annotationType;
+                            if (annotationType_str.equalsIgnoreCase(loc)) {
+                                if(DEBUG_PROMPT)
+                                    System.out.println(String.format("Token %s is a LOC entity", token));
+                                annotationType = LOC;
+                            } else if (annotationType_str.equalsIgnoreCase(act)) {
+                                if(DEBUG_PROMPT)
+                                    System.out.println(String.format("Token %s is an ACT entity", token));
+                                annotationType = ACT;
+                            } else {
+                                if(DEBUG_PROMPT)
+                                    System.out.println(String.format("Token %s is an invalid entity", token));
+                                invalidTypes.add(annotationType_str);
+                                invalidAnnotationCount++;
+                                continue;
+                            }
 
-                        /* Dates are not part of our data set
-                        if (annotationType == DAT) {
-                            String timexValue = obj.getString(mongoIdentAnnotation_normalized);
-                            Matcher m = pattern.matcher(timexValue);
-                            if (m.matches()) {
-                                count_ValidAnnotationsByType[DAT]++;
+                            /* Dates are not part of our data set
+                            if (annotationType == DAT) {
+                                String timexValue = obj.getString(mongoIdentAnnotation_normalized);
+                                Matcher m = pattern.matcher(timexValue);
+                                if (m.matches()) {
+                                    count_ValidAnnotationsByType[DAT]++;
 
-                                // mark portion of the sentence that is covered by the date for deletion
-                                int begin = (Integer) obj.get(mongoIdentAnnotation_start);
-                                int end = (Integer) obj.get(mongoIdentAnnotation_end);
-                                for (int p=begin; p<end; p++) {
-                                    mask[p] = replaceableChar;
-                                }
-
-                                // extract dates and make sure the completeness condition is satisfied
-                                // i.e. for dates YYYY-MM-DD also include YYYY-MM and YYYY, ...
-                                String date =" ";
-                                for (int i=1; i<=m.groupCount(); i++) {
-                                    if (m.group(i) != null) {
-                                        date += m.group(i);
-                                        int annId = hub.getAnnotationID(annotationType, date);
-
-                                        // add annotation to list for later edge creation
-                                        Annotation ann = new Annotation(date, annId, annotationType, sentence_id);
-                                        annotationsSentence.add(ann);
+                                    // mark portion of the sentence that is covered by the date for deletion
+                                    int begin = (Integer) obj.get(mongoIdentAnnotation_start);
+                                    int end = (Integer) obj.get(mongoIdentAnnotation_end);
+                                    for (int p=begin; p<end; p++) {
+                                        mask[p] = replaceableChar;
                                     }
-                                }
+
+                                    // extract dates and make sure the completeness condition is satisfied
+                                    // i.e. for dates YYYY-MM-DD also include YYYY-MM and YYYY, ...
+                                    String date =" ";
+                                    for (int i=1; i<=m.groupCount(); i++) {
+                                        if (m.group(i) != null) {
+                                            date += m.group(i);
+                                            int annId = hub.getAnnotationID(annotationType, date);
+
+                                            // add annotation to list for later edge creation
+                                            Annotation ann = new Annotation(date, annId, annotationType, sentence_id);
+                                            annotationsSentence.add(ann);
+                                        }
+                                    }
+
+                                    hasAnnotations = true;
+                                    annotationCounter++;
+                                } */
+
+                            if (annotationType == LOC || annotationType == ACT) {
+
+                                String value = token.getLemma();
+                                // get an id
+                                int annId = hub.getAnnotationID(annotationType, value);
+
+                                // add annotation to list for later edge creation
+                                Annotation ann = new Annotation(value, annId, annotationType, sentence_id);
+                                if(DEBUG_PROMPT)
+                                    System.out.println("Annotation created from valid entity.");
+                                annotationsSentence.add(ann);
 
                                 hasAnnotations = true;
                                 annotationCounter++;
-                            } */
+                                count_ValidAnnotationsByType[annotationType]++;
 
-                        if (annotationType == LOC || annotationType == ACT) {
-
-                            String value = token.getLemma();
-                            // get an id
-                            int annId = hub.getAnnotationID(annotationType, value);
-
-                            // add annotation to list for later edge creation
-                            Annotation ann = new Annotation(value, annId, annotationType, sentence_id);
-                            if(DEBUG_PROMPT)
-                                System.out.println("Annotation created from valid entity.");
-                            annotationsSentence.add(ann);
-
-                            hasAnnotations = true;
-                            annotationCounter++;
-                            count_ValidAnnotationsByType[annotationType]++;
-
-                        }
+                            }
                     }
                  }
                 // add this sentence and the corresponding page to the graph if it had valid annotations
