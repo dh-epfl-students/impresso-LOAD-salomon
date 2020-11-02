@@ -40,11 +40,11 @@ public class S3Reader {
 		bucketName = prop.getProperty("s3BucketName"); //Name of the bucket
         String prefix = prop.getProperty("s3Prefix"); //Name of prefix for S3
         String keySuffix = prop.getProperty("s3KeySuffix"); //Suffix of each BZIP2 
-        
+
         try{
         	if(year != null) {	
     	        String newspaperKey = prefix + newspaperID +"-" + year + keySuffix;
-    	        String entityKey ="mysql-mention-dumps/NZZ/" + newspaperID +"-"+ year +"-mentions.jsonl.bz2";
+    	        String entityKey ="mysql-mention-dumps/" + newspaperID + "/" + newspaperID + "-" + year +"-mentions.jsonl.bz2";
                 populateCache(newspaperKey, entityKey, S3Client, newspaperCache, entityCache);
         	} else {
         		String curPrefix = prefix+newspaperID; //Creates the prefix to search for
@@ -109,7 +109,8 @@ public class S3Reader {
 				  String line = fileIn.nextLine();
 				  try {
 					  JSONObject jsonObj = new JSONObject(line);
-					  newspaperCache.put(jsonObj.getString("id"), jsonObj);
+					  if(jsonObj.getString("id").split("-")[2].equals("04"))
+						  newspaperCache.put(jsonObj.getString("id"), jsonObj);
 				  } catch (Exception e){
 				  	System.out.println(line);
 				  }
@@ -143,8 +144,12 @@ public class S3Reader {
 				// Read the text input stream one line at a as a json object and parse this object into contentitems
 				if (null != fileIn) {
 					while (fileIn.hasNext()) {
-						JSONObject jsonObj = new JSONObject(fileIn.nextLine());
-						entityCache.put(jsonObj.getString("id"), jsonObj);
+						try {
+							JSONObject jsonObj = new JSONObject(fileIn.nextLine());
+							entityCache.put(jsonObj.getString("id"), jsonObj);
+						} catch (Exception e){
+							System.out.println(e);
+						}
 					}
 				}
 	  	    }
