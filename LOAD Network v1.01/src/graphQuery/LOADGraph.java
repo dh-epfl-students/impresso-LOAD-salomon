@@ -110,34 +110,37 @@ public class LOADGraph {
             
             // read edge information
             for (int i=0; i < nANNOTATIONS; i++) {
-                filename = inputFolderPath + edgeFileNames[i];
-                //System.out.println("Reading edge information from:"  + filename);
-                System.out.print("Reading edges of type "  + setNames[i]);
-                int index = 0;
-                int steps = nNodes[i]/100;
-                if (steps == 0) steps = 1;
-                GraphNode[] nodes = nodeLists[i];
-                br = new BufferedReader(new FileReader(new File(filename)));
-                do {
-                    if (index % steps == 0) {
-                        int progress = (int) (100.0*index/nNodes[i]);
-                        System.out.print("\rReading edges of type "  + setNames[i] +" :" + String.format("%1$" + 3 +"s",  progress) +"%");
-                    }
-                    line = br.readLine();
-                    GraphNode node = nodes[index];
-                    for (int k=0; k < nANNOTATIONS; k++) {
-                        String[] splitline = br.readLine().split(sepChar);
-                        int arrayIndex = 0;
-                        for (int lineIndex=1; lineIndex<splitline.length; ) {
-                            node.adjacency[k][arrayIndex] = Integer.parseInt(splitline[lineIndex++]);
-                            node.weights[k][arrayIndex] = Float.parseFloat(splitline[lineIndex++]);
-                            ++arrayIndex;
+                if (nodeLists[i].length > 0) {
+                    filename = inputFolderPath + edgeFileNames[i];
+                    //System.out.println("Reading edge information from:"  + filename);
+                    System.out.print("Reading edges of type " + setNames[i]);
+                    int index = 0;
+                    int steps = nNodes[i] / 100;
+                    if (steps == 0) steps = 1;
+                    GraphNode[] nodes = nodeLists[i];
+                    br = new BufferedReader(new FileReader(new File(filename)));
+                    do {
+                        if (index % steps == 0) {
+                            int progress = (int) (100.0 * index / nNodes[i]);
+                            System.out.print("\rReading edges of type " + setNames[i] + " :" + String.format("%1$" + 3 + "s", progress) + "%");
                         }
-                    }
-                    ++index;
-                } while ((line = br.readLine()) != null);
-                System.out.println("\rReading edges of type "  + setNames[i] +" : done");
-                br.close();
+                        line = br.readLine();
+                        GraphNode node = nodes[index];
+                        for (int k = 0; k < nANNOTATIONS; k++) {
+                            String[] splitline = br.readLine().split(sepChar);
+                            int arrayIndex = 0;
+                            for (int lineIndex = 1; lineIndex < splitline.length; ) {
+                                node.adjacency[k][arrayIndex] = Integer.parseInt(splitline[lineIndex++]);
+                                node.weights[k][arrayIndex] = Float.parseFloat(splitline[lineIndex++]);
+                                ++arrayIndex;
+                            }
+                        }
+                        ++index;
+                    } while ((line = br.readLine()) != null);
+                    System.out.println("\rReading edges of type " + setNames[i] + " : done");
+                    br.close();
+
+                }
             }
             
             time = System.currentTimeMillis() - time;

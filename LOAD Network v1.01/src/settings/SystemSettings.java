@@ -105,5 +105,5 @@ public class SystemSettings {
     public static int TIMEOUT = 1000000000;
 
     public static String PROP_PATH = "LOAD Network v1.01/resources/config.properties";
-
+    public static boolean TRANSFER_AVAILABLE = false;
 }

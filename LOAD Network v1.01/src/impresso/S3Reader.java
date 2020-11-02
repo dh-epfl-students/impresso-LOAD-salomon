@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import com.amazonaws.services.s3.model.*;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,12 +25,10 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+
+import static settings.SystemSettings.TRANSFER_AVAILABLE;
 
 public class S3Reader {
 	private static Properties prop;
@@ -57,8 +56,7 @@ public class S3Reader {
                     populateCache(key, null, S3Client, newspaperCache, entityCache);
         		}
         	}
-        }
-        catch (AmazonServiceException ase)
+        }catch (AmazonServiceException ase)
         {
           System.out.println("Caught an AmazonServiceException, which means your request made it to S3, but was rejected with an error response for some reason.");
           System.out.println("Error Message:   " + ase.getMessage());
@@ -108,8 +106,13 @@ public class S3Reader {
 		  // Read the text input stream one line at a as a json object and parse this object into contentitems	      
 		  if (null != fileIn) {
 			  while (fileIn.hasNext()) {
-			      JSONObject jsonObj = new JSONObject(fileIn.nextLine());
-			      newspaperCache.put(jsonObj.getString("id"), jsonObj);
+				  String line = fileIn.nextLine();
+				  try {
+					  JSONObject jsonObj = new JSONObject(line);
+					  newspaperCache.put(jsonObj.getString("id"), jsonObj);
+				  } catch (Exception e){
+				  	System.out.println(line);
+				  }
 			    }
 			}
 		}
@@ -126,20 +129,25 @@ public class S3Reader {
 		 */
 		if(entityKey != null) {
 			mentions = false;
-	  	    /*object_request = new GetObjectRequest("TRANSFER", entityKey);
-		    fullObject = S3Client.getObject(object_request);
-			try (Scanner fileIn = new Scanner(new  BZip2CompressorInputStream(fullObject.getObjectContent()))) {*/
-			FileInputStream fin = new FileInputStream("GDL-mentions/GDL-1890-mentions.jsonl.bz2");
-			try (Scanner fileIn = new Scanner(new  BZip2CompressorInputStream(fin))) {
-				//First download the key
-				  // Read the text input stream one line at a as a json object and parse this object into contentitems	      
-				  if (null != fileIn) {
-					  while (fileIn.hasNext()) {
-					      JSONObject jsonObj = new JSONObject(fileIn.nextLine());
-					      entityCache.put(jsonObj.getString("id"), jsonObj);
-					    }
+			FileInputStream fin =  null;
+			S3ObjectInputStream S3fin = null;
+	  	    if(TRANSFER_AVAILABLE){
+				object_request = new GetObjectRequest("TRANSFER", entityKey);
+			    fullObject = S3Client.getObject(object_request);
+			    S3fin = fullObject.getObjectContent();
+	  	    } else {
+	  	    	fin = new FileInputStream("GDL-mentions/GDL-1890-mentions.jsonl.bz2");
+			}
+	  	    try (Scanner fileIn = new Scanner(new  BZip2CompressorInputStream(TRANSFER_AVAILABLE ? S3fin : fin))) {
+	  	    	//First download the key
+				// Read the text input stream one line at a as a json object and parse this object into contentitems
+				if (null != fileIn) {
+					while (fileIn.hasNext()) {
+						JSONObject jsonObj = new JSONObject(fileIn.nextLine());
+						entityCache.put(jsonObj.getString("id"), jsonObj);
 					}
 				}
+	  	    }
 		        /*finally {
 		            // To ensure that the network connection doesn't remain open, close any open input streams.
 		            if (fullObject != null) {
