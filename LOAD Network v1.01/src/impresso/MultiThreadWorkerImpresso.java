@@ -187,7 +187,6 @@ public class MultiThreadWorkerImpresso implements Runnable {
                                 } */
 
                             if (annotationType == LOC || annotationType == ACT) {
-
                                 String value = token.getLemma();
                                 // get an id
                                 int annId = hub.getAnnotationID(annotationType, value);
@@ -220,7 +219,8 @@ public class MultiThreadWorkerImpresso implements Runnable {
                     for(Token term: sentence) {
                         if(!(term instanceof Entity)) {
                             int annId = hub.getAnnotationID(TER, term.getLemma());
-                            Annotation ann = new Annotation(term.getLemma(), annId, TER, sentence_id); //NOTE: ??
+                            Annotation ann = new Annotation(term.getLemma(), annId, TER, sentence_id);
+                            annotationsSentence.add(ann);
                         }
 
                     }

@@ -99,7 +99,7 @@ public class SystemSettings {
     // the maximum number of allowed open files on your machine.
     public static int maxTempFiles = 50;
     public static boolean VERBOSE = true;
-    public static boolean DEBUG_PROMPT = true;
+    public static boolean DEBUG_PROMPT = false;
     public static String ID_FOLDER ="local_files/";
     public static int MAX_CACHE_SIZE = 10000;
     public static int TIMEOUT = 1000000000;

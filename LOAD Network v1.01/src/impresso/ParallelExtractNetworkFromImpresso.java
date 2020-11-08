@@ -239,7 +239,7 @@ public class ParallelExtractNetworkFromImpresso {
     /* Main Routine (if readIdsFromFile = true)
      * Extraction of co-occurrences from the documents and building of nodes and (unaggregated) edges
      */
-    public ParallelExtractNetworkFromImpresso() {
+    /*public ParallelExtractNetworkFromImpresso() {
         try {
             BufferedWriter ew = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfile),"UTF-8"), bufferSize);
 
@@ -384,10 +384,14 @@ public class ParallelExtractNetworkFromImpresso {
         }
     }
 
+*/
 
     /* Main Routine: if readIdsFromFile = false;
      * Extraction of co-occurrences from the documents and building of nodes and (unaggregated) edges
      */
+    public ParallelExtractNetworkFromImpresso(){
+       this(new String[0], new String[0][]);
+    }
     public ParallelExtractNetworkFromImpresso(String[] newspapers, String[][] years) {
         try {
             BufferedWriter ew = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfile),"UTF-8"), bufferSize);
@@ -451,7 +455,10 @@ public class ParallelExtractNetworkFromImpresso {
 
             int[][] pageIDs;
             System.out.println("Generating page IDs from database.");
-            pageIDs = readContentIDs(contentIdtoPageId, newspapers, years, solrReader);
+            if(newspapers.length == 0)
+                pageIDs = readLocalContentIDs(contentIdtoPageId);
+            else
+                pageIDs = readContentIDs(contentIdtoPageId, newspapers, years, solrReader);
 
             count_Articles = contentIdtoPageId.size();
             if(VERBOSE)

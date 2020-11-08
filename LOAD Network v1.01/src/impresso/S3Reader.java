@@ -44,7 +44,7 @@ public class S3Reader {
         try{
         	if(year != null) {	
     	        String newspaperKey = prefix + newspaperID +"-" + year + keySuffix;
-    	        String entityKey ="mysql-mention-dumps/NZZ/" + newspaperID +"-"+ year +"-mentions.jsonl.bz2";
+    	        String entityKey ="mysql-mention-dumps/" + newspaperID + "/" + newspaperID + "-"+ year +"-mentions.jsonl.bz2";
                 populateCache(newspaperKey, entityKey, S3Client, newspaperCache, entityCache);
         	} else {
         		String curPrefix = prefix+newspaperID; //Creates the prefix to search for
@@ -107,12 +107,8 @@ public class S3Reader {
 		  if (null != fileIn) {
 			  while (fileIn.hasNext()) {
 				  String line = fileIn.nextLine();
-				  try {
-					  JSONObject jsonObj = new JSONObject(line);
-					  newspaperCache.put(jsonObj.getString("id"), jsonObj);
-				  } catch (Exception e){
-				  	System.out.println(line);
-				  }
+				  JSONObject jsonObj = new JSONObject(line);
+				  newspaperCache.put(jsonObj.getString("id"), jsonObj);
 			    }
 			}
 		}

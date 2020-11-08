@@ -44,7 +44,7 @@ public class ClassTester {
 		SolrReader reader = new SolrReader(prop);
 		
 		//reader.getEntityId("aida-0001-54-Italy");
-		List<String> luxwortIds = reader.getContentItemIDs("GDL","1891",  true);
+		List<String> luxwortIds = reader.getContentItemIDs("GDL","1890",  true);
 		System.out.println(luxwortIds.size());
 		/*
 		//Testing getting the contentId

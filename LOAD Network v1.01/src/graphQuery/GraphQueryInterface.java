@@ -440,7 +440,7 @@ public class GraphQueryInterface {
                     // otherwise: parse the input as a query
                     } else {
                         try {
-                            String[] splitline = input.split("" );
+                            String[] splitline = input.split(" " );
                             
                             int targetType = typeLookup.get(splitline[0]);
                             ArrayList<Integer> queryTypes = new ArrayList<Integer>();

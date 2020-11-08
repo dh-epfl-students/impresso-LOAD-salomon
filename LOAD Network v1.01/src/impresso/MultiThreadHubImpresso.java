@@ -164,7 +164,6 @@ public class MultiThreadHubImpresso {
     public int getAnnotationID(char type, String value) {
         int annotationID;
         TObjectIntHashMap<String> map = valueToIdMaps.get(type);
-        //NOTE: why this?
 
         synchronized (map) {
             if (map.containsKey(value)) {
