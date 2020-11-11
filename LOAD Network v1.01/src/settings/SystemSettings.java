@@ -30,12 +30,12 @@ public class SystemSettings {
     // To do this, it will scan all annotations and extract the IDs of pages. They will also be stored
     // in a file so that this process does not have to be repeated when the program is run again on
     // the same data. In this case, set the parameter to TRUE.
-    public static boolean readIDsFromFile = true;
+    public static boolean readIDsFromFile = false;
     
     // number of threads that are used for network construction
     // since the program is bounded by the speed of the database, setting this above the number
     // of cores on your system has no beneficial effect.
-    public static int nThreads = 1;//20;
+    public static int nThreads = 20;
     
     // mongoDB login settings. if your mongoDB has no authentication data, you can skip entering a password,
     // username and authentication DB and just set mongocred to NULL.
@@ -105,5 +105,5 @@ public class SystemSettings {
     public static int TIMEOUT = 1000000000;
 
     public static String PROP_PATH = "LOAD Network v1.01/resources/config.properties";
-    public static boolean TRANSFER_AVAILABLE = false;
+    public static boolean TRANSFER_AVAILABLE = true;
 }
