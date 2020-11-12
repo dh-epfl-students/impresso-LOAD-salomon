@@ -1,5 +1,6 @@
 package impresso;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -102,6 +103,9 @@ public class SolrReader {
 			    			  if(DEBUG_PROMPT)
 							      System.out.println("Beginning to write to file");
 		    			  }
+		    			  File directory = new File(fileFolder);
+		    			  if(!directory.exists())
+		    			  	directory.mkdir();
 		    			  file = String.format("%s/%s.txt", fileFolder, curYear);
 		    			  writer = new FileWriter(file, true);
 		    		  }
