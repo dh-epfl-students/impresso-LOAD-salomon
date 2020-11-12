@@ -3,8 +3,10 @@ package impresso;
 import static settings.LOADmodelSettings.*;
 import static settings.SystemSettings.*;
 
+import com.google.common.collect.Range;
 import externalsort.ParallelDiskMergeSort;
 
+import java.awt.font.NumericShaper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,8 +19,8 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.IntStream;
 
-// mongoDB imports
 import org.json.JSONObject;
 
 import com.amazonaws.ClientConfiguration;
@@ -474,8 +476,8 @@ public class ParallelExtractNetworkFromImpresso {
             currentIDs = new int[nANNOTATIONS];
 
             //Caches of tokens and entities created with size limits
-        	Cache<String, JSONObject> newspaperCache = CacheBuilder.newBuilder().build(); //NOTE: Add max if necessary
-        	Cache<String, JSONObject> entityCache = CacheBuilder.newBuilder().build();
+        	Cache<String, JSONObject> newspaperCache = CacheBuilder.newBuilder().maximumSize(MAX_CACHE_SIZE).build(); //NOTE: Add max if necessary
+        	Cache<String, JSONObject> entityCache = CacheBuilder.newBuilder().maximumSize(MAX_CACHE_SIZE).build();
 
         	if(VERBOSE) {
                 System.out.println("Newspaper cache and Entity cache created");
@@ -891,13 +893,16 @@ public class ParallelExtractNetworkFromImpresso {
                 String[] newspapers = args[0].split(",");
                 String[][] years = new String[newspapers.length][];
 
-                if(args.length != newspapers.length + 1){
+               if(args.length == 1){
+                    for(int i = 0; i < newspapers.length; i++)
+                        years[i] = IntStream.range(MIN_YEAR, MAX_YEAR).mapToObj(String::valueOf).toArray(String[]::new);
+                } else if(args.length != newspapers.length + 1){
                     throw new IllegalArgumentException("You must have as many year lists as you have newspapers");
-                }
-
-                for(int i = 1; i < args.length; i++)
-                    years[i - 1] = args[i].split(",");
-                enfm = new ParallelExtractNetworkFromImpresso(newspapers, years);
+                } else {
+                   for (int i = 1; i < args.length; i++)
+                       years[i - 1] = args[i].split(",");
+               }
+               enfm = new ParallelExtractNetworkFromImpresso(newspapers, years);
             } else {
                 enfm = new ParallelExtractNetworkFromImpresso();
 

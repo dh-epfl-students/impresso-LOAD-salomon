@@ -30,7 +30,9 @@ public class LOADmodelSettings{
     public static final char TER = 4;                // terms
     public static final char PAG = 5;                // pages (or documents)
     public static final char SEN = 6;                // sentences
-    
+    public static final int MIN_YEAR = 1738;
+    public static final int MAX_YEAR = 2018;
+
     // type abbreviations (in an ordering that corresponds to the IDs assigned above)
     public static String[] setNames = {"DAT", "LOC", "PERS", "ORG", "TER", "PAG", "SEN"};
     

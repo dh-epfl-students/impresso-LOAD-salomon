@@ -41,7 +41,7 @@ public class SolrReader {
 		clientTest = new HttpSolrClient.Builder(properties.getProperty("solrDBName")).build();
 	}
 	
-	public List<String> getContentItemIDs(String newspaperID,String year, boolean firstRead) {
+	public List<String> getContentItemIDs(String newspaperID, String year, boolean firstRead) {
 		List<String> solrIds = new ArrayList<>();
 	    String fileFolder = String.format(ID_FOLDER +"%s-ids",  newspaperID);
 		
