@@ -18,7 +18,7 @@ public class SystemSettings {
     
     // The program requires a working directory for writing temporary and final output
     public static boolean CLUSTER = true;
-    public static String folder = CLUSTER ? "../scratch/students/julien/Output/" : "Output/"; // e.g. /home/username/LOAD/
+    public static String folder = CLUSTER ? "../../../scratch/students/julien/Output/" : "Output/"; // e.g. /home/username/LOAD/
     
     // The program requires a list of stopwords that are removed from the set of term (TER)
     // the file should contain one word per line
