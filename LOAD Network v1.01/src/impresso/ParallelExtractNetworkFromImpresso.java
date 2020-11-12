@@ -392,6 +392,7 @@ public class ParallelExtractNetworkFromImpresso {
     public ParallelExtractNetworkFromImpresso(){
        this(new String[0], new String[0][]);
     }
+
     public ParallelExtractNetworkFromImpresso(String[] newspapers, String[][] years) {
         try {
             BufferedWriter ew = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfile),"UTF-8"), bufferSize);

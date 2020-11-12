@@ -15,10 +15,7 @@ public class QueryInterfaceSettings {
      * PROCEED WITH CAUTION! Except for the first value, it is unlikely that 
      * these settings have to be adapted.
      */
-    
-    // set a flag to determine whether the sentence collection is present in a mongoDB or not
-    public static boolean sentencesFromMongo = true;
-    
+
     // input folder containing the LOAD graph data (this is the construction output folder)
     public static String LOADGraphInputFolder  = LOADmodelSettings.outfolder;
     

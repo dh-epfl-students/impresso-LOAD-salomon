@@ -38,7 +38,7 @@ import graphQuery.LOADGraph;
  * (c) 2016 Andreas Spitz (spitz@informatik.uni-heidelberg.de)
  */
 public class GraphQueryInterface {
-    
+    public static boolean DEBUG_INTERFACE = true;
     // stemmer for terms. Note that this is NOT thread safe!
     public static SnowballStemmer stemmer = getStemmer(stemmerLanguage);
     
@@ -358,27 +358,6 @@ public class GraphQueryInterface {
             typeLookup.put(setNames[i], i);
         }
         
-        // database connection for sentence information
-        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
-        mongoLogger.setLevel(Level.WARNING);
-        
-        // MongoDb collection for the sentences that are stored externally
-        MongoCollection<Document> coll;
-        MongoClient mongoClient = null;
-        
-        if (sentencesFromMongo) { // if a database for sentences is available
-            ServerAddress address = new ServerAddress(MongoAdress, MongoPort);
-            if (mongocred != null) {
-                mongoClient = new MongoClient(address, Arrays.asList(mongocred));
-            } else {
-                mongoClient = new MongoClient(address);
-            }
-            MongoDatabase db = mongoClient.getDatabase(MongoDBname);
-            coll = db.getCollection(MongoCollectionSentences);
-        } else { // if no database for sentences is available
-            coll = null;
-        }
-        
         Scanner scanner = new Scanner(System.in);
         System.out.println(interfaceOptionsString);
         System.out.print(consoleString);
@@ -402,7 +381,7 @@ public class GraphQueryInterface {
                         try {
                             numberOfResults = Integer.parseInt(input);
                         } catch (Exception e) {
-                            System.out.println("unable to parse:"  + input +"  as an integer.");
+                            System.out.println("unable to parse: "  + input +"  as an integer.");
                         }
                         
                     // check if the date precision is changed
@@ -419,7 +398,7 @@ public class GraphQueryInterface {
                                 System.out.println("Unknown date precision specified:"  + input);
                             }
                         } catch (Exception e) {
-                            System.out.println("unable to parse:"  + input +"  as an integer.");
+                            System.out.println("unable to parse: "  + input +"  as an integer.");
                         }
                         
                     // check if subqueries are toggled on or off
@@ -468,7 +447,7 @@ public class GraphQueryInterface {
                                 if (queryTypesArray[i] == TER) {
                                     ArrayList<String> tmp = new ArrayList<String>();
                                     for (String s : queryValues.get(i)) {
-                                        s = s.toLowerCase().trim();
+                                        s = s.trim();//toLowerCase().trim();
                                         stemmer.setCurrent(s);
                                         stemmer.stem();
                                         s = stemmer.getCurrent().trim();
@@ -486,14 +465,14 @@ public class GraphQueryInterface {
                                 } else if (useSubQueries && (queryTypesArray[i] == LOC || queryTypesArray[i] == ACT)) {
                                     String st =" ";
                                     for (String s : queryValues.get(i)) {
-                                        st +=" "  + s.toLowerCase().trim();
+                                        st +=" "  + s.trim();//toLowerCase().trim();
                                     }
                                     st = st.trim();
                                     
                                     ArrayList<String> tmp = new ArrayList<String>();
                                     tmp.add(st);
                                     for (String s : queryValues.get(i)) {
-                                        s = s.toLowerCase().trim();
+                                        s = s.trim();//toLowerCase().trim();
                                         if (s.length() > 0) {
                                             tmp.add(s);
                                         }
@@ -507,7 +486,7 @@ public class GraphQueryInterface {
                                 } else {
                                     String st =" ";
                                     for (String s : queryValues.get(i)) {
-                                        st +=" "  + s.toLowerCase().trim();
+                                        st +=" "  + s.trim();//toLowerCase().trim();
                                     }
                                     st = st.trim();
                                     queryValueArray[i] = new String[1];
@@ -556,30 +535,6 @@ public class GraphQueryInterface {
                             
                             // if the target of the query is a sentence, apply sentence method
                             } else if (q.targetSet == SEN) {
-                                if (sentencesFromMongo) {  // if a mongoDB for the sentences exists
-                                    ArrayList<RankItem> list = sentenceQuery(q, numberOfResults);
-                                    RankItem top = list.get(0);
-                                
-                                    String sentenceId = top.target.value;
-                                    
-                                    // if the sentence collection is using mongoIDs as _id,
-                                    // convert the string representation to an ID object
-                                    //MongoCursor<Document> it = coll.find(new Document("_id" new ObjectId(sentenceId))).iterator();
-                                    
-                                    // if the sentence collection is using regular integers,
-                                    // cast the string representation to an integer
-                                    MongoCursor<Document> it = coll.find(new Document("_id", Integer.parseInt(sentenceId))).iterator();
-                                    
-                                    Document d = it.next();
-                                    String sentence = d.getString(mongoIdentSentence_content);
-                                    it.close();
-                                
-                                    System.out.println("Suggested sentence for:"  + input.substring(4) +"  (confidence:"  +doubleformat.format(top.weight)+" )\n");
-                                    System.out.println("\"" + sentence +" \"");
-                                } else { // otherwise, disallow sentence queries
-                                    System.out.println("Sentence queries are deactivated. No database for sentences available.");
-                                }    
-                                
                             // otherwise, apply default query method
                             } else {
                                 ArrayList<RankItem> list;
@@ -592,7 +547,7 @@ public class GraphQueryInterface {
                                 } else {
                                     list = multiSetQuery(q, numberOfResults, datePrecision, density);
                                 }
-                                System.out.println("Top"  + list.size() +" "  + setNames[q.targetSet] +"  for:"  + input.substring(4) +"\n");
+                                System.out.println("Top "  + list.size() +" "  + setNames[q.targetSet] +"  for: "  + input.substring(4) +"\n");
                                 if (list.size() > 0) {
                                     // find length of longest result string
                                     int maxlength = 0;
@@ -600,12 +555,12 @@ public class GraphQueryInterface {
                                         if (s.target.value.length() > maxlength) maxlength = s.target.value.length();
                                     }            
                                     
-                                    System.out.println("rank  "  + String.format("%1$-" + (maxlength) +" s", setNames[q.targetSet]) +"    weight\n");
+                                    System.out.println("rank  "  + String.format("%1$s " + maxlength +"s ", setNames[q.targetSet]) +"    weight\n");
                                     int counter = 1;
                                     for (RankItem s : list) {
-                                        System.out.print(String.format("%1$-" + 5 +" s", Integer.toString(counter++)));
-                                        System.out.print(String.format("%1$-" + (maxlength+2) +" s", s.target.value));
-                                        System.out.println(String.format("%1$" + 9 +" s", doubleformat.format(s.weight)));
+                                        System.out.print(String.format("%1$s " + 5 +"s ", Integer.toString(counter++)));
+                                        System.out.print(String.format("%1$s " + (maxlength+2) +"s ", s.target.value));
+                                        System.out.println(String.format("%1$s " + 9 +"s ", doubleformat.format(s.weight)));
                                     }
                                     //System.out.println();
                                 }
@@ -625,7 +580,6 @@ public class GraphQueryInterface {
                 Thread.sleep(500);
             } catch (Exception e){ }
         }
-        mongoClient.close();
     }
 
     public static void main(String[] args) {
