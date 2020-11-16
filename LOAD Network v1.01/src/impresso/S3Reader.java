@@ -46,6 +46,7 @@ public class S3Reader {
     	        String newspaperKey = prefix + newspaperID +"-" + year + keySuffix;
     	        String entityKey ="mysql-mention-dumps/" + newspaperID + "/" + newspaperID + "-"+ year +"-mentions.jsonl.bz2";
                 populateCache(newspaperKey, entityKey, S3Client, newspaperCache, entityCache);
+                System.out.println("DONE");
         	} else {
         		String curPrefix = prefix+newspaperID; //Creates the prefix to search for
         		ObjectListing listing = S3Client.listObjects(bucketName, curPrefix);
@@ -97,19 +98,18 @@ public class S3Reader {
 */
 	
 	private static void populateCache(String newspaperKey, String entityKey, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache) throws IOException {
-
 		GetObjectRequest object_request = new GetObjectRequest(bucketName, newspaperKey);
 	    S3Object fullObject = S3Client.getObject(object_request);
 		
 		try (Scanner fileIn = new Scanner(new BZip2CompressorInputStream(fullObject.getObjectContent()))) {
-    	  //First download the key
-		  // Read the text input stream one line at a as a json object and parse this object into contentitems	      
-		  if (null != fileIn) {
-			  while (fileIn.hasNext()) {
-				  String line = fileIn.nextLine();
-				  JSONObject jsonObj = new JSONObject(line);
-				  newspaperCache.put(jsonObj.getString("id"), jsonObj);
-			    }
+			//First download the key
+			// Read the text input stream one line at a as a json object and parse this object into contentitems
+			if (null != fileIn) {
+				while (fileIn.hasNext()) {
+					String line = fileIn.nextLine();
+					JSONObject jsonObj = new JSONObject(line);
+					newspaperCache.put(jsonObj.getString("id"), jsonObj);
+				}
 			}
 		}
         finally {

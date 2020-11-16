@@ -16,3 +16,33 @@ This adaptation includes the following changes: the addition of different entity
 **Impresso LOAD** - Julien Salomon
 Copyright (c) 2020 EPFL
 This program is licensed under the terms of the MIT license. 
+
+### Program in the cluster
+#### Run the program
+cd impresso-LOAD-salomon/
+
+(git checkout cluster)
+
+git pull
+
+screen -S impresso-LOAD -X nice -5 java -jar artifacts/impresso_LOAD_salomon_jar/impresso-LOAD-salomon.jar [args]
+
+args: 
+* "LIST OF NEWSPAPERS ACRONYMS" ==> get all issues for the listed newspapers
+* "LIST OF NEWSPAPERS ACRONYMS" "YEARS FOR NEWSPAPER 1" "YEARS FOR NEWSPAPER 2"....
+ex:
+* "GDL, luxwort" "1900,1902" "1870,1871"
+* "GDL"
+
+#### Generate python graphs
+*Output is required*
+
+cd impresso-LOAD-salomon
+
+python grapher/grapher.py
+
+#### Play with Output
+
+Output is in scratch/students/julien/Output
+
+
