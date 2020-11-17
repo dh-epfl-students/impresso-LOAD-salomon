@@ -15,12 +15,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.IntStream;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
 import com.amazonaws.ClientConfiguration;
@@ -202,7 +204,7 @@ public class ParallelExtractNetworkFromImpresso {
         return pageIDs.toArray(output);
     }
 
-    public int[][] readContentIDs(HashMap<Integer, String> contentIdtoPageId, String[] newspapers, String[][] years, SolrReader reader) {
+    public int[][] readContentIDs(HashMap<Integer, String> contentIdtoPageId, String[] newspapers, String[][] years, SolrReader reader) throws IOException {
         ArrayList<int[]> pageIDs = new ArrayList<>();
 
         if(VERBOSE)
@@ -218,7 +220,20 @@ public class ParallelExtractNetworkFromImpresso {
                 if(DEBUG_PROMPT)
                     System.out.println("\tYear : " + years[i][j]);
                 String year = years[i][j];
-                List<String> paper_year_ids = reader.getContentItemIDs(paper, year, true);
+                String folder_path = ID_FOLDER + paper + "-ids";
+                File newspaper_folder = new File(folder_path);
+                File year_file = new File(folder_path + "/" + year + ".txt");
+                List<String> paper_year_ids;
+                if (newspaper_folder.exists() && year_file.exists()) {
+                    if(DEBUG_PROMPT)
+                        System.out.println("IDS FOR " + year + "already exist. Reading from file");
+                    paper_year_ids = FileUtils.readLines(year_file, "UTF-8");
+                } else {
+                    if(DEBUG_PROMPT)
+                        System.out.println("Pulling ids from Solr for year " + year);
+                    paper_year_ids = reader.getContentItemIDs(paper, year, true);
+                }
+
                 for(String id : paper_year_ids){
                     contentIdtoPageId.put(id_cnt, id);
                     ids.add(id_cnt);
@@ -460,9 +475,9 @@ public class ParallelExtractNetworkFromImpresso {
             System.out.println("Generating page IDs from database.");
             if(newspapers.length == 0)
                 pageIDs = readLocalContentIDs(contentIdtoPageId);
-            else
-                pageIDs = readContentIDs(contentIdtoPageId, newspapers, years, solrReader);
-
+            else {
+                 pageIDs = readContentIDs(contentIdtoPageId, newspapers, years, solrReader);
+            }
             count_Articles = contentIdtoPageId.size();
             if(VERBOSE)
                 System.out.println("Number of pages with annotations (i.e number of articles):"  + contentIdtoPageId.size());
@@ -884,6 +899,7 @@ public class ParallelExtractNetworkFromImpresso {
                 System.out.println("Setting up the folders: DONE");
                 System.out.println("===============================");
             }
+
             // read the input data from DB and write temporary edge information of unaggregated edge lists
             if(VERBOSE)
                 System.out.println("\nIMPORT THE DATA FROM IMPRESSO AND S3\n");

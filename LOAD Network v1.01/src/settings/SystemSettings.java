@@ -101,7 +101,7 @@ public class SystemSettings {
     public static int maxTempFiles = 50;
     public static boolean VERBOSE = true;
     public static boolean DEBUG_PROMPT = false;
-    public static String ID_FOLDER = CLUSTER ? folder + "../local_files/" : "local/files";
+    public static String ID_FOLDER = CLUSTER ? folder + "../local_files/" : "local_files/";
     public static long MAX_CACHE_SIZE = 50000000;
     public static int TIMEOUT = 1000000000;
 
