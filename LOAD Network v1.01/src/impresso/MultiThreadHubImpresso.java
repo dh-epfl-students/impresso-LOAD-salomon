@@ -116,7 +116,7 @@ public class MultiThreadHubImpresso {
     	
     }
 
-    public synchronized Integer getPageID(){
+    public synchronized Integer getContentItemID(){
 
         if(currentPageID >= pageIDs[currentYearID].length && currentYearID + 1 >= pageIDs.length){
             if(VERBOSE)

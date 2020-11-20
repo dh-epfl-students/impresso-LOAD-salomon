@@ -1,5 +1,6 @@
 package impresso;
 
+import java.io.File;
 import java.util.List;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
+import static settings.SystemSettings.ID_FOLDER;
 import static settings.SystemSettings.TRANSFER_AVAILABLE;
 
 public class S3Reader {
@@ -42,7 +44,8 @@ public class S3Reader {
         String keySuffix = prop.getProperty("s3KeySuffix"); //Suffix of each BZIP2 
         
         try{
-        	if(year != null) {	
+        	File year_file = new File(ID_FOLDER + newspaperID + "-ids/" + year + ".txr");
+        	if(year != null && year_file.exists()) {
     	        String newspaperKey = prefix + newspaperID +"-" + year + keySuffix;
     	        String entityKey ="mysql-mention-dumps/" + newspaperID + "/" + newspaperID + "-"+ year +"-mentions.jsonl.bz2";
                 populateCache(newspaperKey, entityKey, S3Client, newspaperCache, entityCache);

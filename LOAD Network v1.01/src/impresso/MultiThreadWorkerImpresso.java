@@ -9,19 +9,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.google.common.cache.Cache;
 
 import construction.Annotation;
 
 import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
 import static settings.SystemSettings.act;
 import static settings.SystemSettings.loc;
 
@@ -84,7 +81,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
         int annotationCounter = 0;
         Integer newspaper_year_id;
 
-        while ( (newspaper_year_id = hub.getPageID()) != null) {
+        while ( (newspaper_year_id = hub.getContentItemID()) != null) {
         	//Get the pageId from the hashmap
             if(DEBUG_PROMPT)
                 System.out.println(String.format("Thread %d: got newspaper year id %d",  threadNum, newspaper_year_id));

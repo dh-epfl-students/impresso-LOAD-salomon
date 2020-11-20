@@ -48,7 +48,7 @@ public class SolrReader {
 		if(firstRead) {
 			HttpSolrClient client = new HttpSolrClient.Builder(solrDBName).build();
 			SolrQuery solrQuery = new SolrQuery();
-			solrQuery.setQuery("meta_journal_s:"+newspaperID +" AND item_type_s:(ar OR ob OR page) AND meta_year_i:"+ year); //Sets query for the newspaper and limits the item_type
+			solrQuery.setQuery("meta_journal_s:"+ newspaperID +" AND item_type_s:(ar OR ob OR page) AND meta_year_i:"+ year); //Sets query for the newspaper and limits the item_type
 			solrQuery.set("fl","id");
 			solrQuery.setSort("id",  ORDER.asc);
 			solrQuery.setRows(50000);
@@ -64,7 +64,7 @@ public class SolrReader {
 			try {
 				while(!done) {
 					counter += 50000;
-					LOGGER.log( Level.FINER," processing[{0}]",  new Object[]{counter} );
+					LOGGER.log( Level.FINER,"processing[{0}]",  new Object[]{counter} );
 					System.out.printf("processing %d%n cursor:%s%n",  counter, cursorMark);
 					
 				    solrQuery.set(CursorMarkParams.CURSOR_MARK_PARAM, cursorMark);
