@@ -1,10 +1,7 @@
 package impresso;
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -49,6 +46,7 @@ public class S3Reader {
     	        String newspaperKey = prefix + newspaperID +"-" + year + keySuffix;
     	        String entityKey ="mysql-mention-dumps/" + newspaperID + "/" + newspaperID + "-"+ year +"-mentions.jsonl.bz2";
                 populateCache(newspaperKey, entityKey, S3Client, newspaperCache, entityCache);
+
                 System.out.println("DONE");
         	} else {
         		String curPrefix = prefix+newspaperID; //Creates the prefix to search for
@@ -57,6 +55,15 @@ public class S3Reader {
         		for(S3ObjectSummary summary:summaries) {
         			String key = summary.getKey();
         			System.out.println(key);
+					try {
+						File last_key_read = new File("last_key.txt");
+						FileWriter myWriter = new FileWriter("last_key.txt");
+						myWriter.write(key + "\n");
+						myWriter.close();
+					} catch (IOException e) {
+						System.out.println("An error occurred.");
+						e.printStackTrace();
+					}
                     populateCache(key, null, S3Client, newspaperCache, entityCache);
         		}
         	}
