@@ -7,14 +7,7 @@ import com.google.common.collect.Range;
 import externalsort.ParallelDiskMergeSort;
 
 import java.awt.font.NumericShaper;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -411,7 +404,16 @@ public class ParallelExtractNetworkFromImpresso {
     }
 
     public ParallelExtractNetworkFromImpresso(String[] newspapers, String[][] years) {
+
         try {
+            if(PRINT_TO_FILE){
+                File file = new File("log.txt");
+                //Instantiating the PrintStream class
+                PrintStream stream = new PrintStream(file);
+                System.out.println("From now on "+file.getAbsolutePath()+" will be your console");
+                System.setOut(stream);
+            }
+
             BufferedWriter ew = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfile),"UTF-8"), bufferSize);
             
             //Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
