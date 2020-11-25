@@ -103,7 +103,7 @@ public class SystemSettings {
     public static boolean VERBOSE = true;
     public static boolean DEBUG_PROMPT = false;
     public static String ID_FOLDER = CLUSTER ? folder + "../local_files/" : "local_files/";
-    public static long MAX_CACHE_SIZE = 50000000;
+    public static long MAX_CACHE_SIZE = 500000;
     public static int TIMEOUT = 1000000000;
 
     public static String PROP_PATH = "LOAD Network v1.01/resources/config.properties";
