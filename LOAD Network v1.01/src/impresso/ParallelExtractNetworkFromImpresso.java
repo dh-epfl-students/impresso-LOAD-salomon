@@ -159,30 +159,33 @@ public class ParallelExtractNetworkFromImpresso {
         try {
             if(VERBOSE)
                 System.out.println("Reading page IDs (for each newspaper and for each year) from files in folder :"  + ID_FOLDER );
-        	final File fileFolder = new File(ID_FOLDER);
+            File fileFolder = new File(ID_FOLDER);
 
         	int contentItemCount = 0;
 
         	//For each newspaper in the file folder, loop through and create an array of ids for
-            for (final File newspaper: fileFolder.listFiles()) {
-	            TIntArrayList ids = new TIntArrayList();
+            for (File newspaper: fileFolder.listFiles()) {
         		if(newspaper.isDirectory()) { ;
-        			for(final File year: newspaper.listFiles()) {
-        			    if(DEBUG_PROMPT)
-        			        System.out.println("Reading file :"  +  year);
-                        BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(year),"UTF-8"));
-        	            String line;
-        	            while ((line = bf.readLine()) != null) {
-                            contentIdtoPageId.put(contentItemCount, line);
-        	                ids.add(contentItemCount);
-        	                contentItemCount ++;
-        	            }            
-        	            bf.close();
-        	            if(DEBUG_PROMPT)
-        	                System.out.println("File read and closed");
-        			}
+                    TIntArrayList ids = new TIntArrayList();
+                    for(File year: newspaper.listFiles()) {
+                        if(year.getName().endsWith(".txt")){
+                            if(DEBUG_PROMPT)
+                                System.out.println("Reading file :"  +  year);
+                            BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(year),"UTF-8"));
+
+                            String line;
+                            while ((line = bf.readLine()) != null) {
+                                contentIdtoPageId.put(contentItemCount, line);
+                                ids.add(contentItemCount);
+                                contentItemCount ++;
+                            }
+                            bf.close();
+                            if(DEBUG_PROMPT)
+                                System.out.println("File read and closed");
+                            pageIDs.add(ids.toArray());
+                        }
+                    }
         		}
-                pageIDs.add(ids.toArray());
         	}
             
             // convert to array of ints
@@ -193,7 +196,6 @@ public class ParallelExtractNetworkFromImpresso {
             System.out.println(e);
         }
         int[][] output = new int[pageIDs.size()][];
-
         return pageIDs.toArray(output);
     }
 
@@ -406,14 +408,6 @@ public class ParallelExtractNetworkFromImpresso {
     public ParallelExtractNetworkFromImpresso(String[] newspapers, String[][] years) {
 
         try {
-            if(PRINT_TO_FILE){
-                File file = new File("log.txt");
-                //Instantiating the PrintStream class
-                PrintStream stream = new PrintStream(file);
-                System.out.println("From now on "+file.getAbsolutePath()+" will be your console");
-                System.setOut(stream);
-            }
-
             BufferedWriter ew = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfile),"UTF-8"), bufferSize);
             
             //Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
@@ -892,6 +886,13 @@ public class ParallelExtractNetworkFromImpresso {
     
     public static void main(String[] args) {
         try {
+            if(PRINT_TO_FILE){
+                File file = new File("log.txt");
+                //Instantiating the PrintStream class
+                PrintStream stream = new PrintStream(file);
+                System.out.println("From now on "+file.getAbsolutePath()+" will be your console");
+                System.setOut(stream);
+            }
             // make sure that working folders are up and clean
             if(VERBOSE)
                 System.out.println("\nSETTING UP THE FOLDERS FOR THE ENVIRONMENT\n");

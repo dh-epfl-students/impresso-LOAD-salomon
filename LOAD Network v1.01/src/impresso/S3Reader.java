@@ -26,8 +26,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import static settings.SystemSettings.ID_FOLDER;
-import static settings.SystemSettings.TRANSFER_AVAILABLE;
+import static settings.SystemSettings.*;
 
 public class S3Reader {
 	private static Properties prop;
@@ -41,7 +40,7 @@ public class S3Reader {
         String keySuffix = prop.getProperty("s3KeySuffix"); //Suffix of each BZIP2 
         
         try{
-        	File year_file = new File(ID_FOLDER + newspaperID + "-ids/" + year + ".txr");
+        	File year_file = new File(ID_FOLDER + newspaperID + "-ids/" + year + ".txt");
         	if(year != null && year_file.exists()) {
     	        String newspaperKey = prefix + newspaperID +"-" + year + keySuffix;
     	        String entityKey ="mysql-mention-dumps/" + newspaperID + "/" + newspaperID + "-"+ year +"-mentions.jsonl.bz2";
@@ -114,11 +113,20 @@ public class S3Reader {
 		try (Scanner fileIn = new Scanner(new BZip2CompressorInputStream(fullObject.getObjectContent()))) {
 			//First download the key
 			// Read the text input stream one line at a as a json object and parse this object into contentitems
+			int cnt = 0;
 			if (null != fileIn) {
 				while (fileIn.hasNext()) {
+					cnt += 1;
+					if(cnt % 100 == 0 && DEBUG_PROMPT){
+						System.out.println(cnt + "id read");
+					}
 					String line = fileIn.nextLine();
-					JSONObject jsonObj = new JSONObject(line);
-					newspaperCache.put(jsonObj.getString("id"), jsonObj);
+					try {
+						JSONObject jsonObj = new JSONObject(line);
+						newspaperCache.put(jsonObj.getString("id"), jsonObj);
+					} catch (Exception e) {
+						System.out.println(line);
+					}
 				}
 			}
 		}
@@ -133,6 +141,7 @@ public class S3Reader {
 		 * WHILE THE ENTITIES ARE BEING DUMPED TO THE S3 BUCKET
 		 * SHOULD NOT EXIST IN THE FINAL IMPLEMENTATION
 		 */
+		System.out.println("DONE");
 		if(entityKey != null) {
 			mentions = false;
 			FileInputStream fin =  null;
@@ -149,7 +158,7 @@ public class S3Reader {
 				// Read the text input stream one line at a as a json object and parse this object into contentitems
 				if (null != fileIn) {
 					while (fileIn.hasNext()) {
-						JSONObject jsonObj = new JSONObject(fileIn.nextLine());
+						JSONObject jsonObj = new JSONObject(fileIn. nextLine());
 						entityCache.put(jsonObj.getString("id"), jsonObj);
 					}
 				}
