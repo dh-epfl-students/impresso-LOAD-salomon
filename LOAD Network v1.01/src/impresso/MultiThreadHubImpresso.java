@@ -108,7 +108,7 @@ public class MultiThreadHubImpresso {
     	String newspaperId = contentId.split("-")[0];
     	String year = contentId.split("-")[1];
     	try {
-			S3Reader reader = new S3Reader(newspaperId, year, prop, S3Client, newspaperCache, entityCache);
+			S3Reader reader = new S3Reader(newspaperId, year, prop, S3Client, newspaperCache, entityCache, contentIdtoInt.values());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
