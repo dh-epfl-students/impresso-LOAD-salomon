@@ -904,9 +904,9 @@ public class ParallelExtractNetworkFromImpresso {
         try {
             if(PRINT_TO_FILE){
                 File file = new File("log.txt");
+                System.out.println("From now on "+file.getAbsolutePath()+" will be your console");
                 //Instantiating the PrintStream class
                 PrintStream stream = new PrintStream(file);
-                System.out.println("From now on "+file.getAbsolutePath()+" will be your console");
                 System.setOut(stream);
             }
             // make sure that working folders are up and clean
