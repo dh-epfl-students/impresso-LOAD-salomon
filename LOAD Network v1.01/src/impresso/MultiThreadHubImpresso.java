@@ -118,7 +118,6 @@ public class MultiThreadHubImpresso {
     }
 
     public synchronized Integer getContentItemID(){
-
         if(currentPageID >= pageIDs[currentYearID].length && currentYearID + 1 >= pageIDs.length){
             if(VERBOSE)
                 System.out.println("All page ids have been read.");

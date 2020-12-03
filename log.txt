@@ -1,28 +1,29 @@
-Data imported, entities extracted, edges created.
 
-WRITING NODES TO FILE (to free up space)
+SETTING UP THE FOLDERS FOR THE ENVIRONMENT
 
+Setting up the folders: DONE
+===============================
 
-Writing data to file
-Writing metadata
+IMPORT THE DATA FROM IMPRESSO AND S3
 
-SORT EDGE LIST
+Loading properties file :LOAD Network v1.01/resources/config.properties
+File was read and is now closed
+S3 client created
+Solr reader created
 
+GET ID OF ALL ARTICLES
 
-AGGREGATE EDGES (remove parallel edges) SPLIT EDGES INTO FILES
+Generating page IDs from database.
+Reading page IDs (for each newspaper and for each year) from Solr index
+Cursor created
+processing 50000
+ cursor:*
+1207
+processing 100000
+ cursor:AoE2R0RMLTE4NDEtMTItMzEtYS1pMDAyMA==
+1207
+Number of pages with annotations (i.e number of articles):2500
+Newspaper cache and Entity cache created
 
+PARSING ANNOTATIONS AND EXTRACTING NETWORK
 
-SORT EDGE FILES
-
-Sorting individual edgelist files
-Sorting edges forDAT
-Sorting edges forLOC
-Sorting edges forPERS
-Sorting edges forORG
-Sorting edges forTER
-Sorting edges forPAG
-Sorting edges forSEN
-Allocating memory for degrees
-Rewriting Edges and counting degrees
-Processing edges forDAT
-Done.
