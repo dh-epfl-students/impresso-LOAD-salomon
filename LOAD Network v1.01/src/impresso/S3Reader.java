@@ -109,7 +109,6 @@ public class S3Reader {
 			// Read the text input stream one line at a as a json object and parse this object into contentitems
 			if(DEBUG_PROMPT)
 				System.out.println("Get all the annotated words for " + newspaperKey);
-			int cnt = 0;
 			if (null != fileIn) {
 				while (fileIn.hasNext()) {
 					String line = fileIn.nextLine();

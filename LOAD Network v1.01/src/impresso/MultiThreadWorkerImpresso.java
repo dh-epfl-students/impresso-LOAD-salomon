@@ -210,7 +210,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
                     // add sentence to the map
                     String sentenceId = articleID + idInfoSepChar + min_offset + idInfoSepChar + max_offset;
                     int annotationID = hub.getAnnotationID(SEN, sentenceId);
-                    sentenceId += "-" + annotationID;
+                    sentenceId += idInfoSepChar + annotationID;
                     count_ValidAnnotationsByType[SEN]++;
 
                     // add page / document to the map

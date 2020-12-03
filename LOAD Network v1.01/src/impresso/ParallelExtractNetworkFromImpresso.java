@@ -99,8 +99,8 @@ public class ParallelExtractNetworkFromImpresso {
                                 int targetId2 = Integer.parseInt(s2[3]);
                                 return targetId1 - targetId2;
                             } catch (NumberFormatException nfe) {
-                                int targetId1 = Integer.parseInt(s1[3].split("-")[8]);
-                                int targetId2 = Integer.parseInt(s2[3].split("-")[8]);
+                                int targetId1 = Integer.parseInt(s1[3].split(idInfoSepChar)[3]);
+                                int targetId2 = Integer.parseInt(s2[3].split(idInfoSepChar)[3]);
                                 return targetId1 - targetId2;
                             }
                         }
@@ -689,7 +689,7 @@ public class ParallelExtractNetworkFromImpresso {
                 try {
                     n4 = Integer.parseInt(splitline[3]);
                 } catch (NumberFormatException nfe){
-                    n4 = Integer.parseInt(splitline[3].split("-")[8]);
+                    n4 = Integer.parseInt(splitline[3].split(idInfoSepChar)[3]);
                 }
                 weight_int = Integer.parseInt(splitline[4]);
                 
