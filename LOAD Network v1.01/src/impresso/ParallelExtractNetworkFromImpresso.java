@@ -223,7 +223,6 @@ public class ParallelExtractNetworkFromImpresso {
             for(int j=0; j < years[i].length; j++){
                 if(DEBUG_PROMPT)
                     System.out.println(sepChar + "Year : " + years[i][j]);
-                TIntArrayList ids = new TIntArrayList();
                 String year = years[i][j];
                 String folder_path = ID_FOLDER + paper + "-ids";
                 File newspaper_folder = new File(folder_path);
@@ -238,13 +237,15 @@ public class ParallelExtractNetworkFromImpresso {
                         System.out.println("Pulling ids from Solr for year " + year);
                     paper_year_ids = reader.getContentItemIDs(paper, year, true);
                 }
-
-                for(String id : paper_year_ids){
-                    contentIdtoPageId.put(id_cnt, id);
-                    ids.add(id_cnt);
-                    id_cnt++;
+                if(paper_year_ids.size() > 0) {
+                    TIntArrayList ids = new TIntArrayList();
+                    for (String id : paper_year_ids) {
+                        contentIdtoPageId.put(id_cnt, id);
+                        ids.add(id_cnt);
+                        id_cnt++;
+                    }
+                    pageIDs.add(ids.toArray());
                 }
-                pageIDs.add(ids.toArray());
             }
             if(DEBUG_PROMPT)
                 System.out.println("Newspaper done");
