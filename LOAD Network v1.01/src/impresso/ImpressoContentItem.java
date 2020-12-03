@@ -14,6 +14,7 @@ import construction.Annotation;
 
 public class ImpressoContentItem {
 
+	private String title;
 	private String language;
 	private String id;
 	private String content_txt;
@@ -27,18 +28,20 @@ public class ImpressoContentItem {
 		language = (String) document.getFieldValue("lg_s");
 		
 		switch(language) {
-		case" fr":
+		case"fr":
 			content_txt = (String) document.getFieldValue("content_txt_fr");
+			title = (String) document.getFieldValue("title_txt_fr");
 			break;
-		case" de":
+		case"de":
 			content_txt = (String) document.getFieldValue("content_txt_de");
+			title = (String) document.getFieldValue("title_txt_de");
 			break;
-		case" lu":
+		case"lu":
 			content_txt = (String) document.getFieldValue("content_txt_lu");
+			title = (String) document.getFieldValue("title_txt_lu");
 			break;
 		}
-		//NOTE: cast to string not necessary
-		
+
 		year = (Integer) document.getFieldValue("meta_year_i");
 		tokens = new ArrayList<Token>();
 		posTypes = prop.get("PoSTypes").toString().split(",");;
@@ -90,7 +93,8 @@ public class ImpressoContentItem {
 	public void sortTokens() {
 		Collections.sort(tokens);
 	}
-	
+
+	public String getTitle(){ return title; }
 	public String getlanguage() {
 		return language;
 	}

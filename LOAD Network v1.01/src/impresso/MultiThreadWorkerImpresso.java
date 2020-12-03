@@ -113,18 +113,20 @@ public class MultiThreadWorkerImpresso implements Runnable {
                     System.out.println("Tokens for item:");
                     for(Token tok: contentItem.getTokens())
                         System.out.println(tok);
-                    ////System.out.println();
                 }
 
                 List<Token> tokens = contentItem.getTokens();
 
                 int sentence_id = 0; //Increments as the sentence increases
 
-                for(int i = 0; i <  tokens.size(); i+=7) {
+                for(int i = 0; i <  tokens.size(); i += SENTENCE_SIZE) {
                     annotationsSentence.clear();
                     annotationsTerms.clear();
                     //Create an artificial sentence composed of at most 7 tokens
-                    List<Token> sentence = tokens.subList(i, Math.min(tokens.size(),i+7));
+                    List<Token> sentence = tokens.subList(i, Math.min(tokens.size(), i + SENTENCE_SIZE));
+                    int min_offset = sentence.get(0).getOffset();
+                    Token last_word = sentence.get(sentence.size() - 1);
+                    int max_offset = last_word.getOffset() + last_word.getSurface().length();
 
                     boolean hasAnnotations = false;
 
@@ -184,7 +186,8 @@ public class MultiThreadWorkerImpresso implements Runnable {
                                 } */
 
                             if (annotationType == LOC || annotationType == ACT) {
-                                String value = token.getLemma();
+                                Entity ent = (Entity) token;
+                                String value = NODES_AS_IDS ? ent.getEntityId() : ent.getLemma();
                                 // get an id
                                 int annId = hub.getAnnotationID(annotationType, value);
 
@@ -205,11 +208,13 @@ public class MultiThreadWorkerImpresso implements Runnable {
                 if (hasAnnotations) {
 
                     // add sentence to the map
-                    int sentenceId = hub.getAnnotationID(SEN, String.valueOf(sentence_id));
+                    String sentenceId = articleID + idInfoSepChar + min_offset + idInfoSepChar + max_offset;
+                    int annotationID = hub.getAnnotationID(SEN, sentenceId);
+                    sentenceId += "-" + annotationID;
                     count_ValidAnnotationsByType[SEN]++;
 
                     // add page / document to the map
-                    int pageId = hub.getAnnotationID(PAG, articleID);
+                    int pageId = hub.getAnnotationID(PAG, articleID + idInfoSepChar + contentItem.getTitle());
                     count_ValidAnnotationsByType[PAG]++;
 
                     //If there are annotations in the sentence, turn all other tokens into term annotations

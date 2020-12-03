@@ -19,6 +19,7 @@ import com.google.common.cache.Cache;
 
 import settings.LOADmodelSettings;
 
+import static settings.LOADmodelSettings.SEN;
 import static settings.SystemSettings.DEBUG_PROMPT;
 import static settings.SystemSettings.VERBOSE;
 

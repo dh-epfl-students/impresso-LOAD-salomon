@@ -21,6 +21,8 @@ import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.CursorMarkParams;
 
+import static settings.LOADmodelSettings.SOLR_ARTICLES;
+import static settings.LOADmodelSettings.SOLR_ENTITIES;
 import static settings.SystemSettings.DEBUG_PROMPT;
 import static settings.SystemSettings.ID_FOLDER;
 
@@ -30,15 +32,20 @@ public class SolrReader {
 	private static final Logger LOGGER = Logger.getLogger(SolrReader.class.getName());
 	private static Properties prop;
 	private static String year = null;
-	private static HttpSolrClient clientTest;
+	private static HttpSolrClient client;
 	private static String solrDBName;
 	private static String solrUserName;
 	//NOTE: get only useful info from the properties component
-	public SolrReader(Properties properties) {
+	public SolrReader(Properties properties, String type) {
 		prop = properties;
-		solrDBName = properties.getProperty("solrDBName");
 		solrUserName = properties.getProperty("solrUserName");
-		clientTest = new HttpSolrClient.Builder(properties.getProperty("solrDBName")).build();
+		if(type.equals(SOLR_ENTITIES)){
+			solrDBName = properties.getProperty("solrEntityDBName");
+			client = new HttpSolrClient.Builder(properties.getProperty("solrEntityDBName")).build();
+		} else {
+			solrDBName = properties.getProperty("solrDBName");
+			client = new HttpSolrClient.Builder(properties.getProperty("solrDBName")).build();
+		}
 	}
 	
 	public List<String> getContentItemIDs(String newspaperID, String year, boolean firstRead) {
@@ -100,8 +107,6 @@ public class SolrReader {
 		    			  	  if(DEBUG_PROMPT)
 							      System.out.println("Successfully wrote to the file.");
 			    			  writer.close();
-			    			  if(DEBUG_PROMPT)
-							      System.out.println("Beginning to write to file");
 		    			  }
 		    			  File directory = new File(fileFolder);
 		    			  if(!directory.exists())
@@ -154,7 +159,7 @@ public class SolrReader {
 		return impressoItem;
 	}
 	
-	public void getEntityId(String entityId) {
+	/*public void getEntityId(String entityId) {
 		//Test to access entityId
 		HttpSolrClient client = new HttpSolrClient.Builder(solrDBName).build();
 		SolrQuery solrQuery = new SolrQuery();
@@ -174,6 +179,23 @@ public class SolrReader {
 		}
 		
 		return;
+	}*/
+
+	public void getEntityInfo(String entityId){
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setQuery("id:"+entityId);
+		solrQuery.set("fl","*");
+		solrQuery.setRows(1);
+		try {
+			HttpSolrClient client = new HttpSolrClient.Builder(solrDBName).build();
+			QueryRequest queryRequest = new QueryRequest(solrQuery);
+			queryRequest.setBasicAuthCredentials(solrUserName,System.getenv("SOLR_PASSWORD"));
+			SolrDocumentList solrResponse = queryRequest.process(client).getResults();
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 		
 }

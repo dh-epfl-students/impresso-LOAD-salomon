@@ -71,35 +71,45 @@ public class ParallelExtractNetworkFromImpresso {
     private static Comparator<String> edgecomparator = new Comparator<String>() {
         @Override
         public int compare(String r1, String r2) {
-            String[] s1 = r1.split(sepChar);
-            int sourceType1 = s1[0].charAt(0);
+            try {
+                String[] s1 = r1.split(sepChar);
+                int sourceType1 = s1[0].charAt(0);
 
-            String[] s2 = r2.split(sepChar);
-            int sourceType2 = s2[0].charAt(0);
+                String[] s2 = r2.split(sepChar);
+                int sourceType2 = s2[0].charAt(0);
 
-            int rv = sourceType1 - sourceType2;
-            if (rv != 0) {
-                return rv;
-            } else {
-                int sourceId1 = Integer.parseInt(s1[2]);
-                int sourceId2 = Integer.parseInt(s2[2]);
-                rv = sourceId1 - sourceId2;
+                int rv = sourceType1 - sourceType2;
                 if (rv != 0) {
                     return rv;
                 } else {
-                    int targetType1 = s1[1].charAt(0);
-                    int targetType2 = s2[1].charAt(0);
-                    rv = targetType1 - targetType2;
+                    int sourceId1 = Integer.parseInt(s1[2]);
+                    int sourceId2 = Integer.parseInt(s2[2]);
+                    rv = sourceId1 - sourceId2;
                     if (rv != 0) {
                         return rv;
                     } else {
-                        int targetId1 = Integer.parseInt(s1[3]);
-                        int targetId2 = Integer.parseInt(s2[3]);
-                        return targetId1 - targetId2;
+                        int targetType1 = s1[1].charAt(0);
+                        int targetType2 = s2[1].charAt(0);
+                        rv = targetType1 - targetType2;
+                        if (rv != 0) {
+                            return rv;
+                        } else {
+                            try {
+                                int targetId1 = Integer.parseInt(s1[3]);
+                                int targetId2 = Integer.parseInt(s2[3]);
+                                return targetId1 - targetId2;
+                            } catch (NumberFormatException nfe) {
+                                int targetId1 = Integer.parseInt(s1[3].split("-")[8]);
+                                int targetId2 = Integer.parseInt(s2[3].split("-")[8]);
+                                return targetId1 - targetId2;
+                            }
+                        }
                     }
                 }
+            } catch (Exception e){
+                System.out.println("Bla");
+                return -1;
             }
-            
         }
     };
     
@@ -213,7 +223,7 @@ public class ParallelExtractNetworkFromImpresso {
             TIntArrayList ids = new TIntArrayList();
             for(int j=0; j < years[i].length; j++){
                 if(DEBUG_PROMPT)
-                    System.out.println("\tYear : " + years[i][j]);
+                    System.out.println(sepChar + "Year : " + years[i][j]);
                 String year = years[i][j];
                 String folder_path = ID_FOLDER + paper + "-ids";
                 File newspaper_folder = new File(folder_path);
@@ -221,7 +231,7 @@ public class ParallelExtractNetworkFromImpresso {
                 List<String> paper_year_ids;
                 if (newspaper_folder.exists() && year_file.exists()) {
                     if(DEBUG_PROMPT)
-                        System.out.println("IDS FOR " + year + "already exist. Reading from file");
+                        System.out.println("IDS FOR " + year + " already exist. Reading from file");
                     paper_year_ids = FileUtils.readLines(year_file, "UTF-8");
                 } else {
                     if(DEBUG_PROMPT)
@@ -457,7 +467,7 @@ public class ParallelExtractNetworkFromImpresso {
                 System.out.println("S3 client created");
 
             //Instantiating SolrReader
-            SolrReader solrReader = new SolrReader(prop);
+            SolrReader solrReader = new SolrReader(prop, SOLR_ARTICLES);
             if(VERBOSE)
                 System.out.println("Solr reader created");
 
@@ -584,7 +594,8 @@ public class ParallelExtractNetworkFromImpresso {
                 w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpfolder +"tmp_" + vertexFileNames[i]),"UTF-8"), bufferSize);
                 for (TObjectIntIterator<String> it = valueToIdMaps.get(i).iterator(); it.hasNext(); ) {
                     it.advance();
-                    w.append(it.value() + sepChar + it.key() +"\n");
+                    String s = it.value() + sepChar + it.key() +"\n";
+                    w.append(s);
                 }
                 w.close();
             }
@@ -674,7 +685,12 @@ public class ParallelExtractNetworkFromImpresso {
                 char n1 = splitline[0].charAt(0);
                 char n2 = splitline[1].charAt(0);
                 int n3 = Integer.parseInt(splitline[2]);
-                int n4 = Integer.parseInt(splitline[3]);
+                int n4;
+                try {
+                    n4 = Integer.parseInt(splitline[3]);
+                } catch (NumberFormatException nfe){
+                    n4 = Integer.parseInt(splitline[3].split("-")[8]);
+                }
                 weight_int = Integer.parseInt(splitline[4]);
                 
                 float weight2;
@@ -906,6 +922,9 @@ public class ParallelExtractNetworkFromImpresso {
             // read the input data from DB and write temporary edge information of unaggregated edge lists
             if(VERBOSE)
                 System.out.println("\nIMPORT THE DATA FROM IMPRESSO AND S3\n");
+
+            System.gc();
+
             ParallelExtractNetworkFromImpresso enfm;
 
             if(!readIDsFromFile){

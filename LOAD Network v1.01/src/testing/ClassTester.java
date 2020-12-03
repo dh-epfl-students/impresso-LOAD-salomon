@@ -14,6 +14,8 @@ import impresso.Token;
 import impresso.ImpressoContentItem;
 import impresso.S3Reader;
 
+import static settings.LOADmodelSettings.SOLR_ARTICLES;
+
 
 public class ClassTester {
 
@@ -41,7 +43,7 @@ public class ClassTester {
 			e1.printStackTrace();
 		}
 			
-		SolrReader reader = new SolrReader(prop);
+		SolrReader reader = new SolrReader(prop, SOLR_ARTICLES);
 		
 		//reader.getEntityId("aida-0001-54-Italy");
 		List<String> luxwortIds = reader.getContentItemIDs("GDL","1500",  true);

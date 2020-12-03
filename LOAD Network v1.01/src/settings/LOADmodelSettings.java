@@ -32,10 +32,12 @@ public class LOADmodelSettings{
     public static final char SEN = 6;                // sentences
     public static final int MIN_YEAR = 1738;
     public static final int MAX_YEAR = 2018;
-
+    public static final int SENTENCE_SIZE = 7;
     // type abbreviations (in an ordering that corresponds to the IDs assigned above)
     public static String[] setNames = {"DAT", "LOC", "PERS", "ORG", "TER", "PAG", "SEN"};
-    
+    public static boolean NODES_AS_IDS = true;
+    public static String SOLR_ARTICLES = "articles";
+    public static String SOLR_ENTITIES = "entities";
     // filenames and settings (inside the working folder) 
     public static String outfolder = SystemSettings.folder +"graph_output/";
     public static String tmpfolder = outfolder +"temp/";
@@ -50,6 +52,7 @@ public class LOADmodelSettings{
     // encoding settings for the output data
     public static String commentChar ="#";            // char to signify comments
     public static String sepChar ="\t";            // column separator char
+    public static String idInfoSepChar = ";";
     public static String replaceableString ="@";    // deleteable character used for overwriting in bitmaps in term-detection
     public static char replaceableChar = replaceableString.charAt(0);
     public static String metaHeaderVersion ="############################################################################\n"

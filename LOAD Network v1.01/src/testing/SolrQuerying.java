@@ -28,10 +28,10 @@ public class SolrQuerying {
 			e1.printStackTrace();
 		}
 		 
-	    System.out.println(prop.getProperty("solrEntityDBName"));
-		HttpSolrClient client = new HttpSolrClient.Builder(prop.getProperty("solrEntityDBName")).build();
+	    System.out.println(prop.getProperty("solrDBName"));
+		HttpSolrClient client = new HttpSolrClient.Builder(prop.getProperty("solrDBName")).build();
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setQuery("*");
+		solrQuery.setQuery("*:*");
 		solrQuery.set("fl","*");
 		solrQuery.setRows(10);
 		
