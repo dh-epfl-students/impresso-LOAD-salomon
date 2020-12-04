@@ -17,8 +17,8 @@ public class SystemSettings {
      */
     
     // The program requires a working directory for writing temporary and final output
-    public static boolean PRINT_TO_FILE = false;
-    public static boolean CLUSTER = false;
+    public static boolean PRINT_TO_FILE = true;
+    public static boolean CLUSTER = true;
     public static String folder = CLUSTER ? "../../../scratch/students/julien/Output/" : "Output/"; // e.g. /home/username/LOAD/
     
     // The program requires a list of stopwords that are removed from the set of term (TER)
@@ -101,7 +101,7 @@ public class SystemSettings {
     // the maximum number of allowed open files on your machine.
     public static int maxTempFiles = 50;
     public static boolean VERBOSE = true;
-    public static boolean DEBUG_PROMPT = false;
+    public static boolean DEBUG_PROMPT = true;
     public static String ID_FOLDER = CLUSTER ? folder + "../local_files/" : "local_files/";
     public static long MAX_CACHE_SIZE = 500000;
     public static int TIMEOUT = 1000000000;
