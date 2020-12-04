@@ -98,6 +98,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
 
             try {
                 //For each id, create a content item
+                System.gc();
                 ImpressoContentItem contentItem = solrReader.getContentItem(articleID);
                 if(DEBUG_PROMPT)
                     System.out.println("Solr item created from pageID");

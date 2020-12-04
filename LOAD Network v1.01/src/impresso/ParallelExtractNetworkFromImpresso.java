@@ -249,7 +249,6 @@ public class ParallelExtractNetworkFromImpresso {
             }
             if(DEBUG_PROMPT)
                 System.out.println("Newspaper done");
-            System.out.println(contentIdtoPageId.size());
         }
 
         int[][] output = new int[pageIDs.size()][];
