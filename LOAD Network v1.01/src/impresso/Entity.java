@@ -14,11 +14,7 @@ public class Entity extends Token {
 	public Entity(JSONObject entity, String language) {
 		this.type = entity.getString("type");
 		this.system_id = entity.getString("system_id");
-		try {
-			this.entityId = entity.getString("entity_id");
-		} catch(JSONException e) {
-			this.entityId = "_" + entity.getString("name");
-		}
+		this.entityId = entity.getString("entity_id");
 
 		setLanguage(language);
 		setOffset(entity.getInt("start_offset"));

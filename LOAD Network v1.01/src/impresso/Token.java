@@ -14,6 +14,13 @@ public class Token implements Comparable<Token>{
 	
 	public Token() {}
 
+	public Token(JSONObject entity, String tokLanguage){
+		this.language = tokLanguage;
+		this.offset = entity.getInt("start_offset");
+		this.lemma = entity.getString("name");
+		this.surface = entity.getString("surface");
+	}
+
 	public Token(JSONObject token, String tokLanguage, int contentItemOffset) {
 		this.pos = token.getString("p");
 		this.lemma = token.getString("l");

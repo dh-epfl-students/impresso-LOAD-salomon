@@ -1,29 +1,38 @@
 
 SETTING UP THE FOLDERS FOR THE ENVIRONMENT
 
+Created folder:../../../scratch/students/julien/Output/graph_output/
+Created folder:../../../scratch/students/julien/Output/graph_output/temp/
 Setting up the folders: DONE
 ===============================
 
 IMPORT THE DATA FROM IMPRESSO AND S3
 
-Loading properties file :LOAD Network v1.01/resources/config.properties
-File was read and is now closed
-S3 client created
-Solr reader created
+Data imported, entities extracted, edges created.
 
-GET ID OF ALL ARTICLES
+WRITING NODES TO FILE (to free up space)
 
-Generating page IDs from database.
-Reading page IDs (for each newspaper and for each year) from Solr index
-Cursor created
-processing 50000
- cursor:*
-1207
-processing 100000
- cursor:AoE2R0RMLTE4NDEtMTItMzEtYS1pMDAyMA==
-1207
-Number of pages with annotations (i.e number of articles):2500
-Newspaper cache and Entity cache created
 
-PARSING ANNOTATIONS AND EXTRACTING NETWORK
+Writing data to file
+Writing metadata
 
+SORT EDGE LIST
+
+
+AGGREGATE EDGES (remove parallel edges) SPLIT EDGES INTO FILES
+
+
+SORT EDGE FILES
+
+Sorting individual edgelist files
+Sorting edges forDAT
+Sorting edges forLOC
+Sorting edges forPERS
+Sorting edges forORG
+Sorting edges forTER
+Sorting edges forPAG
+Sorting edges forSEN
+Allocating memory for degrees
+Rewriting Edges and counting degrees
+Processing edges forDAT
+Done.

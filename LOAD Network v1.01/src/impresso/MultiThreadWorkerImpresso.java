@@ -214,7 +214,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
                     count_ValidAnnotationsByType[SEN]++;
 
                     // add page / document to the map
-                    int pageId = hub.getAnnotationID(PAG, articleID + idInfoSepChar + contentItem.getTitle());
+                    int pageId = hub.getAnnotationID(PAG, articleID);
                     count_ValidAnnotationsByType[PAG]++;
 
                     //If there are annotations in the sentence, turn all other tokens into term annotations

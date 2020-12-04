@@ -82,8 +82,12 @@ public class ImpressoContentItem {
 				  if(tokLang == null) {
 					  tokLang = language;
 				  }
-				  tokens.add(new Entity(entity, tokLang));
-				 
+				  if(entity.isNull("entity_id"))
+					  tokens.add(new Token(entity, tokLang));
+				  else
+					  tokens.add(new Entity(entity, tokLang));
+
+
 			}
 			return 0;
 		}
