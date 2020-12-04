@@ -98,7 +98,6 @@ public class MultiThreadWorkerImpresso implements Runnable {
 
             try {
                 //For each id, create a content item
-                System.gc();
                 ImpressoContentItem contentItem = solrReader.getContentItem(articleID);
                 if(DEBUG_PROMPT)
                     System.out.println("Solr item created from pageID");
@@ -305,6 +304,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
                     // maximum distance, we can skip the rest of the list.
                     int weight = an2.sentenceID - an1.sentenceID;
                     if (weight > maxDistanceInSentences) {
+                        System.gc();
                         break;
                     }
                         
@@ -341,6 +341,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.gc();
         }
         
         // update the total statistics for summing up over all threads
