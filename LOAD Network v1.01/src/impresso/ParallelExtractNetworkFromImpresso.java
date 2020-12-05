@@ -143,24 +143,7 @@ public class ParallelExtractNetworkFromImpresso {
         }
     }
     
-    // read in and prepare the list of stop words in a hash set for look-up
-    public HashSet<String> readStopWords() {
-        HashSet<String> stopwords = new HashSet<String>();
-        try {
-            stopwords = new HashSet<String>();
-            BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(stopwordlist),"UTF-8"));
-            String line;
-            while ((line = bf.readLine()) != null) {
-                stopwords.add(line.toLowerCase().trim());
-            }            
-            bf.close();
-        } catch (Exception e) {
-            System.out.println("Problem reading stopwords. Using no stopwords.");
-            e.printStackTrace();
-        }
-        return stopwords;
-    }
-    
+
     // read the list of all page IDs from an input file that are used to build the network
     //NOTE: what local files and what structure
     public int[][] readLocalContentIDs(HashMap<Integer, String> contentIdtoPageId) {
@@ -910,6 +893,7 @@ public class ParallelExtractNetworkFromImpresso {
                 PrintStream stream = new PrintStream(file);
                 System.setOut(stream);
             }
+            long start_time = System.currentTimeMillis();
             // make sure that working folders are up and clean
             if(VERBOSE)
                 System.out.println("\nSETTING UP THE FOLDERS FOR THE ENVIRONMENT\n");
@@ -980,8 +964,8 @@ public class ParallelExtractNetworkFromImpresso {
             
             // compute degrees, then finalize nodes and edges
             enfm.finalizeNodesAndEdges();
-            
-            System.out.println("Done.");
+            long end_time = System.currentTimeMillis();
+            System.out.println("Done. Runtime: " + (end_time - start_time));
             
         } catch (Exception e) {
             e.printStackTrace();

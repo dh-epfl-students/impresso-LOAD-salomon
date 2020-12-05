@@ -17,17 +17,14 @@ public class SystemSettings {
      */
     
     // The program requires a working directory for writing temporary and final output
-    public static boolean CLUSTER = true;
+    public static boolean CLUSTER = false;
     public static boolean PRINT_TO_FILE = CLUSTER;
     public static String folder = CLUSTER ? "../../../scratch/students/julien/Output/" : "Output/"; // e.g. /home/username/LOAD/
     
     // The program requires a list of stopwords that are removed from the set of term (TER)
     // the file should contain one word per line
-    public static String stopwordlist = folder +"stopwords_english.txt";
-    
-    // Changing to add a stopwords list for each of the languages in impresso
-    public static String stopwordListFr, stopwordListDe, stopwordListLu;
-    
+    public static String stopwordlist = folder + "stopwords_english.txt";
+ 
     // The program is designed to only process pages (documents) that contain annotations.
     // To do this, it will scan all annotations and extract the IDs of pages. They will also be stored
     // in a file so that this process does not have to be repeated when the program is run again on
