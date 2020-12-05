@@ -49,7 +49,6 @@ public class S3Reader {
         			String key = summary.getKey();
         			System.out.println(key);
 					try {
-						File last_key_read = new File("last_key.txt");
 						FileWriter myWriter = new FileWriter("last_key.txt");
 						myWriter.write(key + "\n");
 						myWriter.close();
@@ -107,7 +106,7 @@ public class S3Reader {
 		try (Scanner fileIn = new Scanner(new BZip2CompressorInputStream(fullObject.getObjectContent()))) {
 			//First download the key
 			// Read the text input stream one line at a as a json object and parse this object into contentitems
-			if(DEBUG_PROMPT)
+			if(VERBOSE)
 				System.out.println("Get all the annotated words for " + newspaperKey);
 			if (null != fileIn) {
 				while (fileIn.hasNext()) {
@@ -135,7 +134,7 @@ public class S3Reader {
 		 * SHOULD NOT EXIST IN THE FINAL IMPLEMENTATION
 		 */
 		if(entityKey != null) {
-			if(DEBUG_PROMPT)
+			if(VERBOSE)
 				System.out.println("Get all the mentioned entities for " + newspaperKey);
 			mentions = false;
 			FileInputStream fin =  null;
