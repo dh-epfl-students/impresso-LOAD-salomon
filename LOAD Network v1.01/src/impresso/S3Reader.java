@@ -40,6 +40,7 @@ public class S3Reader {
         	if(year != null && year_file.exists()) {
     	        String newspaperKey = prefix + newspaperID +"-" + year + keySuffix;
     	        String entityKey ="mysql-mention-dumps/" + newspaperID + "/" + newspaperID + "-"+ year +"-mentions.jsonl.bz2";
+    	        System.gc();
                 populateCache(newspaperKey, entityKey, S3Client, newspaperCache, entityCache, ids);
         	} else {
         		String curPrefix = prefix+newspaperID; //Creates the prefix to search for
@@ -110,6 +111,7 @@ public class S3Reader {
 				System.out.println("Get all the annotated words for " + newspaperKey);
 			if (null != fileIn) {
 				while (fileIn.hasNext()) {
+					System.gc();
 					String line = fileIn.nextLine();
 					try {
 						JSONObject jsonObj = new JSONObject(line);

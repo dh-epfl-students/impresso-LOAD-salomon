@@ -1,7 +1,6 @@
 
 SETTING UP THE FOLDERS FOR THE ENVIRONMENT
 
-Created folder:../../../scratch/students/julien/Output/graph_output/
 Created folder:../../../scratch/students/julien/Output/graph_output/temp/
 Setting up the folders: DONE
 ===============================
@@ -35,4 +34,4 @@ Sorting edges forSEN
 Allocating memory for degrees
 Rewriting Edges and counting degrees
 Processing edges forDAT
-Done.
+Done. Runtime: 86
