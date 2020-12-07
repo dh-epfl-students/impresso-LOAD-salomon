@@ -26,6 +26,7 @@ public class ImpressoContentItem {
 	public ImpressoContentItem(String articleId, String language, Properties prop){
 		id = articleId;
 		this.language = language;
+		tokens = new ArrayList<Token>();
 		posTypes = prop.get("PoSTypes").toString().split(",");;
 
 	}
