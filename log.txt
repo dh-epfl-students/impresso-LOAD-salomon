@@ -17,21 +17,3 @@ Writing metadata
 
 SORT EDGE LIST
 
-
-AGGREGATE EDGES (remove parallel edges) SPLIT EDGES INTO FILES
-
-
-SORT EDGE FILES
-
-Sorting individual edgelist files
-Sorting edges forDAT
-Sorting edges forLOC
-Sorting edges forPERS
-Sorting edges forORG
-Sorting edges forTER
-Sorting edges forPAG
-Sorting edges forSEN
-Allocating memory for degrees
-Rewriting Edges and counting degrees
-Processing edges forDAT
-Done. Runtime: 125
