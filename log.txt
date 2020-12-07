@@ -34,4 +34,4 @@ Sorting edges forSEN
 Allocating memory for degrees
 Rewriting Edges and counting degrees
 Processing edges forDAT
-Done. Runtime: 86
+Done. Runtime: 95

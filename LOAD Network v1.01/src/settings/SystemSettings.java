@@ -40,20 +40,13 @@ public class SystemSettings {
     // username and authentication DB and just set mongocred to NULL.
     public static String MongoAdress ="<mongo Db server address>";        // server name or IP address of the mongo DB
     public static int MongoPort = 27017;                                // port of the mongoDB
-    public static String password ="password";
-    public static String username ="username";
-    public static String auth_db ="name of authentication DB";
-    //public static MongoCredential mongocred = MongoCredential.createCredential(username, auth_db, password.toCharArray());
     public static MongoCredential mongocred = null;
     
     // mongoDB database and collection names
     public static String MongoDBname ="<name of mongo Db database>";        // database that contains the annotation data
     public static String MongoCollectionSentences ="<sentences>";        // collection of sentences
     public static String MongoCollectionAnnotations ="<annotations>";    // collection of annotations
-    
-    // Solr database, single database with both the Words and Annotations
-    public static String SolrDBname ="<name of impresso database>";
-    
+
     // names of names entity classes in the mongoDB collection annotation
     // For the impresso DB we will be using PER and LOC
     public static final String dat ="TIM";
@@ -97,7 +90,7 @@ public class SystemSettings {
     // setting this too low may create memory problems. Setting it too high may collide with
     // the maximum number of allowed open files on your machine.
     public static int maxTempFiles = 50;
-    public static boolean VERBOSE = true;
+    public static boolean VERBOSE = false;
     public static boolean DEBUG_PROMPT = false;
     public static String ID_FOLDER = CLUSTER ? folder + "../local_files/" : "local_files/";
     public static long MAX_CACHE_SIZE = 500000;

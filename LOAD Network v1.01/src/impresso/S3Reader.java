@@ -103,7 +103,7 @@ public class S3Reader {
 	private static void populateCache(String newspaperKey, String entityKey, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache, Collection<String> ids) throws IOException {
 		GetObjectRequest object_request = new GetObjectRequest(bucketName, newspaperKey);
 	    S3Object fullObject = S3Client.getObject(object_request);
-		
+		S3ObjectInputStream stream = fullObject.getObjectContent();
 		try (Scanner fileIn = new Scanner(new BZip2CompressorInputStream(fullObject.getObjectContent()))) {
 			//First download the key
 			// Read the text input stream one line at a as a json object and parse this object into contentitems
@@ -153,18 +153,19 @@ public class S3Reader {
 				// Read the text input stream one line at a as a json object and parse this object into contentitems
 				if (null != fileIn) {
 					while (fileIn.hasNext()) {
+						System.gc();
 						JSONObject jsonObj = new JSONObject(fileIn.nextLine());
 						if(ids.contains(jsonObj.getString("id")))
 							entityCache.put(jsonObj.getString("id"), jsonObj);
 					}
 				}
 	  	    }
-		        /*finally {
+	  	    finally {
 		            // To ensure that the network connection doesn't remain open, close any open input streams.
 		            if (fullObject != null) {
 		                fullObject.close();
 		            }
-		        }*/
+	  	    }
 
 
 
