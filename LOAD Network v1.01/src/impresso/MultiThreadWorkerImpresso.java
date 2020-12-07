@@ -99,7 +99,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
 
             try {
                 //For each id, create a content item
-                ImpressoContentItem contentItem = solrReader.getContentItem(articleID);
+                ImpressoContentItem contentItem = new ImpressoContentItem(articleID, "fr", prop);//solrReader.getContentItem(articleID);
                 if(DEBUG_PROMPT)
                     System.out.println("Solr item created from pageID");
                 //Inject the tokens into the content item and create the sentences

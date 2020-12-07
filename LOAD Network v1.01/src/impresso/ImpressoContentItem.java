@@ -22,7 +22,13 @@ public class ImpressoContentItem {
 	private List<Token> tokens;
 	//private static Properties prop;
 	private static String[] posTypes;
-	
+
+	public ImpressoContentItem(String articleId, String language, Properties prop){
+		id = articleId;
+		this.language = language;
+		posTypes = prop.get("PoSTypes").toString().split(",");;
+
+	}
 	public ImpressoContentItem(SolrDocument document, Properties prop) {
 		id = (String) document.getFieldValue("id");
 		language = (String) document.getFieldValue("lg_s");
