@@ -1,19 +1,598 @@
 
 SETTING UP THE FOLDERS FOR THE ENVIRONMENT
 
-Created folder:../../../scratch/students/julien/Output/graph_output/temp/
 Setting up the folders: DONE
 ===============================
 
 IMPORT THE DATA FROM IMPRESSO AND S3
 
-Data imported, entities extracted, edges created.
+Loading properties file :LOAD Network v1.01/resources/config.properties
+File was read and is now closed
+S3 client created
+Solr reader created
 
-WRITING NODES TO FILE (to free up space)
+GET ID OF ALL ARTICLES
 
-
-Writing data to file
-Writing metadata
-
-SORT EDGE LIST
-
+Generating page IDs from database.
+Reading page IDs (for each newspaper and for each year) from Solr index
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+0
+Cursor created
+processing 50000
+ cursor:*
+2564
+processing 100000
+ cursor:AoE2R0RMLTE4NTgtMTItMzEtYS1pMDAyOA==
+2564
+Cursor created
+processing 50000
+ cursor:*
+2545
+processing 100000
+ cursor:AoE2R0RMLTE4NTktMTItMzEtYS1pMDAxNQ==
+2545
+Cursor created
+processing 50000
+ cursor:*
+2830
+processing 100000
+ cursor:AoE2R0RMLTE4NjAtMTItMzEtYS1pMDAxNg==
+2830
+Cursor created
+processing 50000
+ cursor:*
+2751
+processing 100000
+ cursor:AoE2R0RMLTE4NjEtMTItMzEtYS1pMDAxNQ==
+2751
+Cursor created
+processing 50000
+ cursor:*
+2883
+processing 100000
+ cursor:AoE2R0RMLTE4NjItMTItMzEtYS1pMDAxMg==
+2883
+Cursor created
+processing 50000
+ cursor:*
+3274
+processing 100000
+ cursor:AoE2R0RMLTE4NjMtMTItMzAtYS1pMDAyMQ==
+3274
+Cursor created
+processing 50000
+ cursor:*
+2933
+processing 100000
+ cursor:AoE2R0RMLTE4NjQtMTItMzEtYS1pMDAyNg==
+2933
+Cursor created
+processing 50000
+ cursor:*
+2787
+processing 100000
+ cursor:AoE2R0RMLTE4NjUtMTItMzAtYS1pMDAxNQ==
+2787
+Cursor created
+processing 50000
+ cursor:*
+3035
+processing 100000
+ cursor:AoE2R0RMLTE4NjYtMTItMjktYS1pMDAzNw==
+3035
+Cursor created
+processing 50000
+ cursor:*
+3292
+processing 100000
+ cursor:AoE2R0RMLTE4NjctMTItMzEtYS1pMDAxNg==
+3292
+Cursor created
+processing 50000
+ cursor:*
+3457
+processing 100000
+ cursor:AoE2R0RMLTE4NjgtMTItMzEtYS1pMDAyMA==
+3457
+Cursor created
+processing 50000
+ cursor:*
+3346
+processing 100000
+ cursor:AoE2R0RMLTE4NjktMTItMzEtYS1pMDA3Mg==
+3346
+Cursor created
+processing 50000
+ cursor:*
+3343
+processing 100000
+ cursor:AoE2R0RMLTE4NzAtMTItMzEtYS1pMDA2NA==
+3343
+Cursor created
+processing 50000
+ cursor:*
+3454
+processing 100000
+ cursor:AoE2R0RMLTE4NzEtMTItMzEtYS1pMDAxNw==
+3454
+Cursor created
+processing 50000
+ cursor:*
+3835
+processing 100000
+ cursor:AoE2R0RMLTE4NzItMTItMzEtYS1pMDA3Ng==
+3835
+Cursor created
+processing 50000
+ cursor:*
+4053
+processing 100000
+ cursor:AoE2R0RMLTE4NzMtMTItMzEtYS1pMDAxNw==
+4053
+Cursor created
+processing 50000
+ cursor:*
+3738
+processing 100000
+ cursor:AoE2R0RMLTE4NzQtMTItMzEtYS1pMDAxMw==
+3738
+Cursor created
+processing 50000
+ cursor:*
+4578
+processing 100000
+ cursor:AoE2R0RMLTE4NzUtMTItMzEtYS1pMDA1OA==
+4578
+Cursor created
+processing 50000
+ cursor:*
+2419
+processing 100000
+ cursor:AoE2R0RMLTE4NzYtMDYtMzAtYS1pMDA2MQ==
+2419
+Cursor created
+processing 50000
+ cursor:*
+4803
+processing 100000
+ cursor:AoE2R0RMLTE4NzctMTItMzEtYS1pMDA1NQ==
+4803
+Cursor created
+processing 50000
+ cursor:*
+5726
+processing 100000
+ cursor:AoE2R0RMLTE4NzgtMTItMzEtYS1pMDAzNA==
+5726
+Cursor created
+processing 50000
+ cursor:*
+5271
+processing 100000
+ cursor:AoE2R0RMLTE4NzktMTItMzEtYS1pMDAyMA==
+5271
+Cursor created
+processing 50000
+ cursor:*
+4805
+processing 100000
+ cursor:AoE2R0RMLTE4ODAtMTItMzEtYS1pMDAyMw==
+4805
+Cursor created
+processing 50000
+ cursor:*
+4438
+processing 100000
+ cursor:AoE2R0RMLTE4ODEtMTItMzAtYS1pMDAyMQ==
+4438
+Cursor created
+processing 50000
+ cursor:*
+4906
+processing 100000
+ cursor:AoE2R0RMLTE4ODItMTItMzAtYS1pMDAxOQ==
+4906
+Cursor created
+processing 50000
+ cursor:*
+5337
+processing 100000
+ cursor:AoE2R0RMLTE4ODMtMTItMzEtYS1pMDAyMA==
+5337
+Cursor created
+processing 50000
+ cursor:*
+5272
+processing 100000
+ cursor:AoE2R0RMLTE4ODQtMTItMzEtYS1pMDAyMg==
+5272
+Cursor created
+processing 50000
+ cursor:*
+4531
+processing 100000
+ cursor:AoE2R0RMLTE4ODUtMTItMzEtYS1pMDAxOA==
+4531
+Cursor created
+processing 50000
+ cursor:*
+4868
+processing 100000
+ cursor:AoE2R0RMLTE4ODYtMTItMzEtYS1pMDAyNg==
+4868
+Cursor created
+processing 50000
+ cursor:*
+5487
+processing 100000
+ cursor:AoE2R0RMLTE4ODctMTItMzEtYS1pMDAyMA==
+5487
+Cursor created
+processing 50000
+ cursor:*
+5499
+processing 100000
+ cursor:AoE2R0RMLTE4ODgtMTItMzEtYS1pMDAyNw==
+5499
+Cursor created
+processing 50000
+ cursor:*
+6968
+processing 100000
+ cursor:AoE2R0RMLTE4OTEtMTItMzEtYS1pMDA3OQ==
+6968
+Cursor created
+processing 50000
+ cursor:*
+6912
+processing 100000
+ cursor:AoE2R0RMLTE4OTItMTItMzEtYS1pMDAyNg==
+6912
+Cursor created
+processing 50000
+ cursor:*
+6253
+processing 100000
+ cursor:AoE2R0RMLTE4OTMtMTItMzAtYS1pMDA0Ng==
+6253
+Cursor created
+processing 50000
+ cursor:*
+6433
+processing 100000
+ cursor:AoE2R0RMLTE4OTQtMTItMzEtYS1pMDAzMQ==
+6433
+Cursor created
+processing 50000
+ cursor:*
+6463
+processing 100000
+ cursor:AoE2R0RMLTE4OTUtMTItMzEtYS1pMDAyNw==
+6463
+Cursor created
+processing 50000
+ cursor:*
+6336
+processing 100000
+ cursor:AoE2R0RMLTE4OTYtMTItMzEtYS1pMDA0NA==
+6336
+Cursor created
+processing 50000
+ cursor:*
+6275
+processing 100000
+ cursor:AoE2R0RMLTE4OTctMTItMzEtYS1pMDAyOQ==
+6275
+Cursor created
+processing 50000
+ cursor:*
+6184
+processing 100000
+ cursor:AoE2R0RMLTE4OTgtMTItMzEtYS1pMDAyNg==
+6184
+Cursor created
+processing 50000
+ cursor:*
+6738
+processing 100000
+ cursor:AoE2R0RMLTE4OTktMTItMzAtYS1pMDAzNQ==
+6738
+Cursor created
+processing 50000
+ cursor:*
+7232
+processing 100000
+ cursor:AoE2R0RMLTE5MDAtMTItMzEtYS1pMDAyOQ==
+7232
+Cursor created
+processing 50000
+ cursor:*
+7843
+processing 100000
+ cursor:AoE2R0RMLTE5MDEtMTItMzEtYS1pMDAzNw==
+7843
+Cursor created
+processing 50000
+ cursor:*
+7569
+processing 100000
+ cursor:AoE2R0RMLTE5MDItMTItMzEtYS1pMDAzOA==
+7569
+Cursor created
+processing 50000
+ cursor:*
+7905
+processing 100000
+ cursor:AoE2R0RMLTE5MDMtMTItMzEtYS1pMDAyNw==
+7905
+Cursor created
+processing 50000
+ cursor:*
+7842
+processing 100000
+ cursor:AoE2R0RMLTE5MDQtMTItMzEtYS1pMDAzNg==
+7842
+Cursor created
+processing 50000
+ cursor:*
+7991
+processing 100000
+ cursor:AoE2R0RMLTE5MDUtMTItMzAtYS1pMDA3NQ==
+7991
+Cursor created
+processing 50000
+ cursor:*
