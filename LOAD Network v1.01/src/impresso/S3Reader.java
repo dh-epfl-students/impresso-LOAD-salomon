@@ -105,6 +105,8 @@ public class S3Reader {
 	    S3Object fullObject = S3Client.getObject(object_request);
 		S3ObjectInputStream stream = fullObject.getObjectContent();
 		try (Scanner fileIn = new Scanner(new BZip2CompressorInputStream(fullObject.getObjectContent()))) {
+			long start_time = System.currentTimeMillis();
+
 			//First download the key
 			// Read the text input stream one line at a as a json object and parse this object into contentitems
 			if(VERBOSE)
@@ -123,6 +125,8 @@ public class S3Reader {
 
 				}
 			}
+			if(VERBOSE)
+				System.out.println("Annotated words queried, read and stored in " + (System.currentTimeMillis() - start_time));
 		}
         finally {
             // To ensure that the network connection doesn't remain open, close any open input streams.
@@ -149,6 +153,7 @@ public class S3Reader {
 	  	    	fin = new FileInputStream("GDL-mentions/GDL-1890-mentions.jsonl.bz2");
 			}
 	  	    try (Scanner fileIn = new Scanner(new  BZip2CompressorInputStream(TRANSFER_AVAILABLE ? S3fin : fin))) {
+	  	    	long start_time = System.currentTimeMillis();
 	  	    	//First download the key
 				// Read the text input stream one line at a as a json object and parse this object into contentitems
 				if (null != fileIn) {
@@ -159,6 +164,8 @@ public class S3Reader {
 							entityCache.put(jsonObj.getString("id"), jsonObj);
 					}
 				}
+				if(VERBOSE)
+					System.out.println("Entities queried, read and stored in " + (System.currentTimeMillis() - start_time));
 	  	    }
 	  	    finally {
 		            // To ensure that the network connection doesn't remain open, close any open input streams.

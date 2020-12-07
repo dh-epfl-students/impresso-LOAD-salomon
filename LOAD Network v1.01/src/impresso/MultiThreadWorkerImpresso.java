@@ -82,6 +82,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
         Integer newspaper_year_id;
 
         while ( (newspaper_year_id = hub.getContentItemID()) != null) {
+            long start_time = System.currentTimeMillis();
         	//Get the pageId from the hashmap
             if(DEBUG_PROMPT)
                 System.out.println(String.format("Thread %d: got newspaper year id %d",  threadNum, newspaper_year_id));
@@ -342,6 +343,8 @@ public class MultiThreadWorkerImpresso implements Runnable {
                 e.printStackTrace();
             }
             System.gc();
+            if(VERBOSE)
+                System.out.println("Thread " + threadNum + " - Article " + articleID + " nodes and edges created in " + (System.currentTimeMillis() - start_time));
         }
         
         // update the total statistics for summing up over all threads

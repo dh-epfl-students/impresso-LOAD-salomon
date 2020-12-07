@@ -1,28 +1,6 @@
 
-SETTING UP THE FOLDERS FOR THE ENVIRONMENT
-
-Created folder:../../../scratch/students/julien/Output/graph_output/temp/
-Setting up the folders: DONE
-===============================
-
-IMPORT THE DATA FROM IMPRESSO AND S3
-
-Data imported, entities extracted, edges created.
-
-WRITING NODES TO FILE (to free up space)
-
-
 Writing data to file
 Writing metadata
-
-SORT EDGE LIST
-
-
-AGGREGATE EDGES (remove parallel edges) SPLIT EDGES INTO FILES
-
-
-SORT EDGE FILES
-
 Sorting individual edgelist files
 Sorting edges forDAT
 Sorting edges forLOC
@@ -34,4 +12,4 @@ Sorting edges forSEN
 Allocating memory for degrees
 Rewriting Edges and counting degrees
 Processing edges forDAT
-Done. Runtime: 95
+Done. Runtime: 94
