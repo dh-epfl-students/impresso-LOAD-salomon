@@ -6432,3 +6432,5 @@ Thread 0 - Article GDL-1806-12-30-a-i0010 nodes and edges created in 54535
 Thread 13 - Article GDL-1806-12-26-a-i0001 nodes and edges created in 197419
 Thread 5 - Article GDL-1806-12-30-a-i0016 nodes and edges created in 45947
 Get all the annotated words for linguistic-processing/2020-03-11/GDL-1807.ling.annotation.jsonl.bz2
+Annotated words queried, read and stored in 648219
+Get all the mentioned entities for linguistic-processing/2020-03-11/GDL-1807.ling.annotation.jsonl.bz2
