@@ -34,7 +34,7 @@ public class SystemSettings {
     // number of threads that are used for network construction
     // since the program is bounded by the speed of the database, setting this above the number
     // of cores on your system has no beneficial effect.
-    public static int nThreads = CLUSTER ? 50 : 20;
+    public static int nThreads = CLUSTER ? 48 : 20;
     
     // mongoDB login settings. if your mongoDB has no authentication data, you can skip entering a password,
     // username and authentication DB and just set mongocred to NULL.
