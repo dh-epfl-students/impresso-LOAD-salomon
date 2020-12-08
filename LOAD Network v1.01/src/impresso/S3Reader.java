@@ -159,9 +159,14 @@ public class S3Reader {
 				if (null != fileIn) {
 					while (fileIn.hasNext()) {
 						System.gc();
-						JSONObject jsonObj = new JSONObject(fileIn.nextLine());
-						if(ids.contains(jsonObj.getString("id")))
-							entityCache.put(jsonObj.getString("id"), jsonObj);
+						String line = fileIn.nextLine();
+						try {
+							JSONObject jsonObj = new JSONObject(line);
+							if (ids.contains(jsonObj.getString("id")))
+								entityCache.put(jsonObj.getString("id"), jsonObj);
+						} catch (Exception e){
+							System.out.println(line);
+						}
 					}
 				}
 				if(VERBOSE)
