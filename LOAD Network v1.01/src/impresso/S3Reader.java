@@ -102,9 +102,13 @@ public class S3Reader {
 	
 	private static void populateCache(String newspaperKey, String entityKey, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache, Collection<String> ids) throws IOException {
 		GetObjectRequest object_request = new GetObjectRequest(bucketName, newspaperKey);
+		long start = System.nanoTime();
 	    S3Object fullObject = S3Client.getObject(object_request);
+	    System.out.println("Get object : " + (System.nanoTime() - start));
 		S3ObjectInputStream stream = fullObject.getObjectContent();
-		try (Scanner fileIn = new Scanner(new BZip2CompressorInputStream(fullObject.getObjectContent()))) {
+		int cnt = 0;
+		int errors = 0;
+		try (Scanner fileIn = new Scanner(new BZip2CompressorInputStream(stream))) {
 			long start_time = System.currentTimeMillis();
 
 			//First download the key
@@ -113,13 +117,16 @@ public class S3Reader {
 				System.out.println("Get all the annotated words for " + newspaperKey);
 			if (null != fileIn) {
 				while (fileIn.hasNext()) {
+					start = System.nanoTime();
 					System.gc();
 					String line = fileIn.nextLine();
 					try {
 						JSONObject jsonObj = new JSONObject(line);
+						cnt += 1;
 						if(ids.contains(jsonObj.getString("id")))
 							newspaperCache.put(jsonObj.getString("id"), jsonObj);
 					} catch (Exception e) {
+						errors += 1;
 						System.out.println(line);
 					}
 

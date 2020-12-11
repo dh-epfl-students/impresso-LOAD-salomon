@@ -17,7 +17,7 @@ public class SystemSettings {
      */
     
     // The program requires a working directory for writing temporary and final output
-    public static boolean CLUSTER = true;
+    public static boolean CLUSTER = false;
     public static boolean PRINT_TO_FILE = true;
     public static String folder = CLUSTER ? "../../../scratch/students/julien/Output/" : "Output/"; // e.g. /home/username/LOAD/
     
@@ -34,7 +34,7 @@ public class SystemSettings {
     // number of threads that are used for network construction
     // since the program is bounded by the speed of the database, setting this above the number
     // of cores on your system has no beneficial effect.
-    public static int nThreads = CLUSTER ? 48 : 20;
+    public static int nThreads = CLUSTER ? 48 : 10;
     
     // mongoDB login settings. if your mongoDB has no authentication data, you can skip entering a password,
     // username and authentication DB and just set mongocred to NULL.

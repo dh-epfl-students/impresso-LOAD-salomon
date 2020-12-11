@@ -82,12 +82,13 @@ public class MultiThreadWorkerImpresso implements Runnable {
         Integer newspaper_year_id;
 
         while ( (newspaper_year_id = hub.getContentItemID()) != null) {
-            long start_time = System.currentTimeMillis();
-        	//Get the pageId from the hashmap
+            long start_time = System.nanoTime();
+            long current_time;
+
+            //Get the pageId from the hashmap
             if(DEBUG_PROMPT)
                 System.out.println(String.format("Thread %d: got newspaper year id %d",  threadNum, newspaper_year_id));
         	String articleID = contentIdtoPageId.get(newspaper_year_id);
-
         	if(DEBUG_PROMPT)
         	    System.out.println("Page id :"  + articleID);
 
@@ -100,15 +101,20 @@ public class MultiThreadWorkerImpresso implements Runnable {
             try {
                 //For each id, create a content item
                 ImpressoContentItem contentItem = new ImpressoContentItem(articleID, "fr", prop);//solrReader.getContentItem(articleID);
+                System.out.println("Content item : " +(System.nanoTime() - start_time));
+
                 if(DEBUG_PROMPT)
                     System.out.println("Solr item created from pageID");
                 //Inject the tokens into the content item and create the sentences
                 contentItem = injectLingusticAnnotations(contentItem);
+                System.out.println("Inject : " +(System.nanoTime() - start_time));
+
                 if(DEBUG_PROMPT)
                     System.out.println("Linguistic annotations added to Impresso item");
 
                 //Sort all of the tokens so that they are in order of offset
                 contentItem.sortTokens();
+                System.out.println("Sort : " +(System.nanoTime() - start_time));
 
                 if(DEBUG_PROMPT) {
                     System.out.println("Tokens for item:");
@@ -117,6 +123,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
                 }
 
                 List<Token> tokens = contentItem.getTokens();
+                System.out.println("Get : " +(System.nanoTime() - start_time));
 
                 int sentence_id = 0; //Increments as the sentence increases
 
@@ -281,6 +288,8 @@ public class MultiThreadWorkerImpresso implements Runnable {
                 }
                 sentence_id ++;
             }
+                System.out.println("Create : " +(System.nanoTime() - start_time));
+
                 //System.out.println();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -290,7 +299,8 @@ public class MultiThreadWorkerImpresso implements Runnable {
             // sort all annotations on a page by sentence ID for easier pairwise comparison
             // in the following, it is assumed that annotations with smaller sentence ID come first
             Collections.sort(annotationsPage);
-                
+            System.out.println("Sort final :" + (System.nanoTime() - start_time));
+
             // turn list of annotations on the entire page into edges by pairwise comparison
             for (int i=0; i<annotationsPage.size(); i++) {
                 Annotation an1 = annotationsPage.get(i);
@@ -337,14 +347,17 @@ public class MultiThreadWorkerImpresso implements Runnable {
                     }
                 }
             }
+            System.out.println("Annotation : " +(System.nanoTime() - start_time));
+
             try {
                 hub.writeEdges(edges);
+                System.out.println("write : " +(System.nanoTime() - start_time));
             } catch (Exception e) {
                 e.printStackTrace();
             }
             System.gc();
             if(VERBOSE)
-                System.out.println("Thread " + threadNum + " - Article " + articleID + " nodes and edges created in " + (System.currentTimeMillis() - start_time));
+                System.out.println("Thread " + threadNum + " - Article " + articleID + " nodes and edges created in " + (System.nanoTime() - start_time));
         }
         
         // update the total statistics for summing up over all threads
