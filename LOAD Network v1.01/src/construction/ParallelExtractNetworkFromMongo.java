@@ -634,7 +634,7 @@ public class ParallelExtractNetworkFromMongo {
             // rewrite nodes and include degrees
             for (int i=0; i<nANNOTATIONS; i++) {
                 int emptyNameCount = 0;
-                System.out.print("Rewriting nodes for"  + setNames[i] +".");
+                System.out.print("Rewriting nodes for "  + setNames[i] +".");
                 String[] nodeNames = new String[setSizes[i]];
                 String inFile = tmpfolder +"tmp_" + vertexFileNames[i];
                 BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(inFile),"UTF-8"));

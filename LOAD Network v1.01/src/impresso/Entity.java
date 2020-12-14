@@ -12,16 +12,15 @@ public class Entity extends Token {
 		
 	}
 	public Entity(JSONObject entity, String language) {
-		this.type = entity.getString("type");
+		this.type = entity.getString("entity_type");
 		this.system_id = entity.getString("system_id");
 		this.entityId = entity.getString("entity_id");
 
 		setLanguage(language);
 		setOffset(entity.getInt("start_offset"));
-		setLemma(entity.getString("name"));
+		setLemma(entity.getString("mention"));
 		setSurface(entity.getString("surface"));
 	}
-	//super?
 
 	public String getSystemId() {
 		return system_id;

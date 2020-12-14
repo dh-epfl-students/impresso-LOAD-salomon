@@ -2,7 +2,6 @@ package impresso;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import com.amazonaws.services.s3.model.*;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -11,16 +10,8 @@ import org.json.JSONObject;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 import static settings.SystemSettings.*;
 
@@ -30,7 +21,7 @@ public class S3Reader {
 	private static String bucketName;
 	private static boolean mentions = true;
 
-	public S3Reader(String newspaperID, String year, Properties prop, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache, Collection<String> ids) throws IOException {
+	public S3Reader(String newspaperID, String year, Properties prop, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONArray> entityCache, Collection<String> ids) throws IOException {
 		bucketName = prop.getProperty("s3BucketName"); //Name of the bucket
         String prefix = prop.getProperty("s3Prefix"); //Name of prefix for S3
         String keySuffix = prop.getProperty("s3KeySuffix"); //Suffix of each BZIP2 
@@ -100,11 +91,9 @@ public class S3Reader {
 	}
 */
 	
-	private static void populateCache(String newspaperKey, String entityKey, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache, Collection<String> ids) throws IOException {
+	private static void populateCache(String newspaperKey, String entityKey, AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONArray> entityCache, Collection<String> ids) throws IOException {
 		GetObjectRequest object_request = new GetObjectRequest(bucketName, newspaperKey);
-		long start = System.nanoTime();
 	    S3Object fullObject = S3Client.getObject(object_request);
-	    System.out.println("Get object : " + (System.nanoTime() - start));
 		S3ObjectInputStream stream = fullObject.getObjectContent();
 		int cnt = 0;
 		int errors = 0;
@@ -117,7 +106,6 @@ public class S3Reader {
 				System.out.println("Get all the annotated words for " + newspaperKey);
 			if (null != fileIn) {
 				while (fileIn.hasNext()) {
-					start = System.nanoTime();
 					System.gc();
 					String line = fileIn.nextLine();
 					try {
@@ -146,20 +134,17 @@ public class S3Reader {
 		 * WHILE THE ENTITIES ARE BEING DUMPED TO THE S3 BUCKET
 		 * SHOULD NOT EXIST IN THE FINAL IMPLEMENTATION
 		 */
-		if(entityKey != null) {
+		if(TRANSFER_DUMP && entityKey != null) {
 			if(VERBOSE)
 				System.out.println("Get all the mentioned entities for " + newspaperKey);
 			mentions = false;
 			FileInputStream fin =  null;
 			S3ObjectInputStream S3fin = null;
-	  	    if(TRANSFER_AVAILABLE){
-				object_request = new GetObjectRequest("TRANSFER", entityKey);
-			    fullObject = S3Client.getObject(object_request);
-			    S3fin = fullObject.getObjectContent();
-	  	    } else {
-	  	    	fin = new FileInputStream("GDL-mentions/GDL-1890-mentions.jsonl.bz2");
-			}
-	  	    try (Scanner fileIn = new Scanner(new  BZip2CompressorInputStream(TRANSFER_AVAILABLE ? S3fin : fin))) {
+			object_request = new GetObjectRequest("TRANSFER", entityKey);
+			fullObject = S3Client.getObject(object_request);
+			S3fin = fullObject.getObjectContent();
+
+	  	    try (Scanner fileIn = new Scanner(new  BZip2CompressorInputStream(TRANSFER_DUMP ? S3fin : fin))) {
 	  	    	long start_time = System.currentTimeMillis();
 	  	    	//First download the key
 				// Read the text input stream one line at a as a json object and parse this object into contentitems
@@ -170,7 +155,7 @@ public class S3Reader {
 						try {
 							JSONObject jsonObj = new JSONObject(line);
 							if (ids.contains(jsonObj.getString("id")))
-								entityCache.put(jsonObj.getString("id"), jsonObj);
+								entityCache.put(jsonObj.getString("id"), ((JSONArray) jsonObj.get("mentions")));
 						} catch (Exception e){
 							System.out.println(line);
 						}
@@ -184,10 +169,8 @@ public class S3Reader {
 		            if (fullObject != null) {
 		                fullObject.close();
 		            }
+
 	  	    }
-
-
-
 		}
 		
     }

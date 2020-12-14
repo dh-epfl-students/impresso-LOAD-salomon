@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
+import org.apache.solr.common.SolrDocument;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -20,8 +22,7 @@ import com.google.common.cache.Cache;
 import settings.LOADmodelSettings;
 
 import static settings.LOADmodelSettings.SEN;
-import static settings.SystemSettings.DEBUG_PROMPT;
-import static settings.SystemSettings.VERBOSE;
+import static settings.SystemSettings.*;
 
 /**
  * Coordinates the work of LOAD graph construction workers on a by-document basis
@@ -44,9 +45,10 @@ public class MultiThreadHubImpresso {
     private Properties prop;
     
     private AmazonS3 S3Client;
-    
+    private SolrReader solrReader;
+
     private Cache<String, JSONObject> newspaperCache;
-    private Cache<String, JSONObject> entityCache;
+    private Cache<String, JSONArray> entityCache;
     
     // notifier variables
     private int nextpromille;
@@ -66,8 +68,7 @@ public class MultiThreadHubImpresso {
     private int negativeOffsetCount;
     
     public MultiThreadHubImpresso(int[][] pageIDs, ArrayList<TObjectIntHashMap<String>> valueToIdMaps, int[] currentIDs,
-                                  AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String,
-                                  JSONObject> entityCache, Properties prop, HashMap<Integer, String> contentIdtoPageId,
+                                  AmazonS3 S3Client, Cache<String, JSONObject> newspaperCache, Cache<String, JSONArray> entityCache, Properties prop, HashMap<Integer, String> contentIdtoPageId,
                                   BufferedWriter ew, int nThreads) {
         this.pageIDs = pageIDs;
         this.valueToIdMaps = valueToIdMaps;
@@ -79,7 +80,10 @@ public class MultiThreadHubImpresso {
         
         //S3Client
         this.S3Client = S3Client;
-        
+
+        //SolrReader
+        this.solrReader = new SolrReader(prop);
+
         //This Cache
         this.newspaperCache = newspaperCache;
         this.entityCache = entityCache;
@@ -109,7 +113,9 @@ public class MultiThreadHubImpresso {
     	String newspaperId = contentId.split("-")[0];
     	String year = contentId.split("-")[1];
     	try {
-			S3Reader reader = new S3Reader(newspaperId, year, prop, S3Client, newspaperCache, entityCache, contentIdtoInt.values());
+			S3Reader S3reader = new S3Reader(newspaperId, year, prop, S3Client, newspaperCache, entityCache, contentIdtoInt.values());
+			if(!TRANSFER_DUMP)
+                solrReader.populateCache(newspaperId, year, entityCache);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,30 +141,6 @@ public class MultiThreadHubImpresso {
             return pageIDs[currentYearID][currentPageID - 1];
         }
     }
-
-    // returns ID of next page or null if all pages are done
-  /*  public synchronized Integer getPageID_old() {
-        Integer selectedID;
-        System.out.println(pageIDs.length);
-
-        if(nextYearID < pageIDs.length) {
-            System.out.println("A1");
-        	nextPageID = 0;
-        	nextYearID ++;
-        	selectedID = pageIDs[nextYearID][nextPageID];
-        	//Function for reading in cache for next year
-        	addYearCache(selectedID);
-        }else if (nextPageID < pageIDs[nextYearID].length) {
-            System.out.println("A2");
-            selectedID= pageIDs[nextYearID][nextPageID];
-            nextPageID++;
-        }else {
-            System.out.println("A3");
-            selectedID = null;
-        }
-        return selectedID;
-    }
-    */
 
     // get a node id from a node-type value to id map or create one of it does not exist
     public int getAnnotationID(char type, String value) {

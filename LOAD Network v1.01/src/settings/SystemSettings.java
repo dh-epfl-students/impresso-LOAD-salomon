@@ -18,9 +18,9 @@ public class SystemSettings {
     
     // The program requires a working directory for writing temporary and final output
     public static boolean CLUSTER = false;
-    public static boolean PRINT_TO_FILE = true;
+    public static boolean PRINT_TO_FILE = false;
     public static String folder = CLUSTER ? "../../../scratch/students/julien/Output/" : "Output/"; // e.g. /home/username/LOAD/
-    
+    public static boolean BUILD_MONGO_DB = true;
     // The program requires a list of stopwords that are removed from the set of term (TER)
     // the file should contain one word per line
     public static String stopwordlist = folder + "stopwords_english.txt";
@@ -97,5 +97,5 @@ public class SystemSettings {
     public static int TIMEOUT = 1000000000;
 
     public static String PROP_PATH = "LOAD Network v1.01/resources/config.properties";
-    public static boolean TRANSFER_AVAILABLE = true;
+    public static boolean TRANSFER_DUMP = false;
 }
