@@ -10,8 +10,6 @@ import org.apache.solr.common.SolrDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import construction.Annotation;
-
 public class ImpressoContentItem {
 
 	private String title;

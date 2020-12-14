@@ -1,4 +1,4 @@
-package wikidatademo.tools;
+package wikidatademo.test;
 import wikidatademo.graph.*;
 
 import java.util.ArrayList;

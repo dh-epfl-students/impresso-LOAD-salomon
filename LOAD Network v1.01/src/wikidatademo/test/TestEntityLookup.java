@@ -1,4 +1,4 @@
-package wikidatademo.tools;
+package wikidatademo.test;
 
 
 

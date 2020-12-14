@@ -1,4 +1,4 @@
-package construction;
+package impresso;
 
 /**
  * Named Entity Annotation class for LOAD Graph construction

@@ -11,13 +11,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.apache.solr.common.SolrDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.common.cache.Cache;
-
-import construction.Annotation;
 
 import static com.mongodb.client.model.Filters.and;
 import static settings.SystemSettings.act;
