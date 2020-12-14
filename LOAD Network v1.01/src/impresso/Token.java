@@ -17,7 +17,7 @@ public class Token implements Comparable<Token>{
 	public Token(JSONObject entity, String tokLanguage){
 		this.language = tokLanguage;
 		this.offset = entity.getInt("start_offset");
-		this.lemma = entity.getString("name");
+		this.lemma = entity.getString("mention");
 		this.surface = entity.getString("surface");
 	}
 
@@ -43,6 +43,10 @@ public class Token implements Comparable<Token>{
 	
 	public void setOffset(int offset) {
 		this.offset = offset;
+		return;
+	}
+	public void setOffset(String offset) {
+		this.offset = Integer.valueOf(offset);
 		return;
 	}
 	

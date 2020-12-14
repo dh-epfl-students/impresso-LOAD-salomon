@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import org.apache.solr.common.SolrDocument;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,7 +35,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
     
     private MultiThreadHubImpresso hub;
     private Cache<String, JSONObject> newspaperCache;
-    private Cache<String, JSONObject> entityCache;
+    private Cache<String, JSONArray> entityCache;
     private HashMap<Integer, String> contentIdtoPageId;
     private Properties prop;
     private SolrReader solrReader;
@@ -49,7 +50,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
     private Integer threadNum;
 
     public MultiThreadWorkerImpresso(MultiThreadHubImpresso hub, Properties prop, SolrReader solrReader,
-                                     Cache<String, JSONObject> newspaperCache, Cache<String, JSONObject> entityCache,
+                                     Cache<String, JSONObject> newspaperCache, Cache<String, JSONArray> entityCache,
                                      HashMap<Integer, String> contentIdtoPageId, int threadNum) {
         this.hub = hub;
         this.prop = prop;
@@ -302,7 +303,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
             System.out.println("Sort final :" + (System.nanoTime() - start_time));
 
             // turn list of annotations on the entire page into edges by pairwise comparison
-            for (int i=0; i<annotationsPage.size(); i++) {
+            for (int i=0; i< annotationsPage.size(); i++) {
                 Annotation an1 = annotationsPage.get(i);
                     
                 // add pairwise edges between all annotations (but only in one direction)
@@ -368,10 +369,7 @@ public class MultiThreadWorkerImpresso implements Runnable {
     }
     
 	private ImpressoContentItem injectLingusticAnnotations(ImpressoContentItem contentItem) {
-        boolean inNews = false;
-        boolean inEnt = false;
 		String tempId = contentItem.getId();
-		//System.out.println(tempId);
 
 		JSONObject newspaperJson = newspaperCache.getIfPresent(tempId);
 		if(newspaperJson != null){
@@ -384,8 +382,6 @@ public class MultiThreadWorkerImpresso implements Runnable {
                 //This is where the injectTokens of a ImpressoContentItem
                 totalOffset += contentItem.injectTokens(sentence.getJSONArray("tok"), sentence.getString("lg"), true, totalOffset);
             }
-        } else {
-		    inNews = false;
         }
 
 		/*
@@ -393,18 +389,10 @@ public class MultiThreadWorkerImpresso implements Runnable {
 		 * SHOULD NOT EXIST IN THE FINAL IMPLEMENTATION
 		 */
 		
-		newspaperJson = entityCache.getIfPresent(tempId);
-		if(newspaperJson != null){
-            JSONArray mentions = newspaperJson.getJSONArray("mentions");
+		JSONArray mentions = entityCache.getIfPresent(tempId);
+		if(mentions != null){
             //This is where the injectAnnotations of a ImpressoContentItem
             contentItem.injectTokens(mentions, null, false, 0);
-        } else {
-		    inEnt = false;
-        }
-
-		if(inEnt != inNews){
-		    System.out.println("News :"  + inNews);
-		    System.out.println("Entities :"  + inEnt);
         }
 
 		return contentItem;

@@ -16,6 +16,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.solr.common.SolrDocument;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.amazonaws.ClientConfiguration;
@@ -33,6 +35,7 @@ import com.google.common.cache.CacheBuilder;
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TObjectIntHashMap;
+import wikidatademo.dbcopy.MoveCompleteLOADNetworkToMongoDB;
 
 /**
  * Creation of a LOAD network from a document collection with named entity annotations stored in a Solr DB 
@@ -298,7 +301,7 @@ public class ParallelExtractNetworkFromImpresso {
                 System.out.println("S3 client created");
 
             //Instantiating SolrReader
-            SolrReader solrReader = new SolrReader(prop, SOLR_ARTICLES);
+            SolrReader solrReader = new SolrReader(prop);
             if(VERBOSE)
                 System.out.println("Solr reader created");
 
@@ -329,7 +332,7 @@ public class ParallelExtractNetworkFromImpresso {
 
             //Caches of tokens and entities created with size limits
         	Cache<String, JSONObject> newspaperCache = CacheBuilder.newBuilder().maximumSize(MAX_CACHE_SIZE).build(); //NOTE: Add max if necessary
-        	Cache<String, JSONObject> entityCache = CacheBuilder.newBuilder().maximumSize(MAX_CACHE_SIZE).build();
+        	Cache<String, JSONArray> entityCache = CacheBuilder.newBuilder().maximumSize(MAX_CACHE_SIZE).build();
 
         	if(VERBOSE) {
                 System.out.println("Newspaper cache and Entity cache created");
@@ -812,8 +815,13 @@ public class ParallelExtractNetworkFromImpresso {
             // compute degrees, then finalize nodes and edges
             enfm.finalizeNodesAndEdges();
             long end_time = System.currentTimeMillis();
-            System.out.println("Done. Runtime: " + (end_time - start_time));
-            
+            System.out.println("Done. Runtime: " + (end_time - start_time) + "\n");
+
+            if(BUILD_MONGO_DB) {
+                System.out.println("BUILDING GRAPH TO MONGODB");
+                MoveCompleteLOADNetworkToMongoDB.loadGraphToDB();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

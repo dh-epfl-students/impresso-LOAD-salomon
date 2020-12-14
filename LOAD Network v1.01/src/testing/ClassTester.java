@@ -43,7 +43,7 @@ public class ClassTester {
 			e1.printStackTrace();
 		}
 			
-		SolrReader reader = new SolrReader(prop, SOLR_ARTICLES);
+		SolrReader reader = new SolrReader(prop);
 		
 		//reader.getEntityId("aida-0001-54-Italy");
 		List<String> luxwortIds = reader.getContentItemIDs("GDL","1500",  true);
