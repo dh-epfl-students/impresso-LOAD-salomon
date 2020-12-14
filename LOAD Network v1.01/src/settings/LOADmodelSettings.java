@@ -34,7 +34,15 @@ public class LOADmodelSettings{
     public static final int MAX_YEAR = 2018;
     public static final int SENTENCE_SIZE = 7;
     // type abbreviations (in an ordering that corresponds to the IDs assigned above)
-    public static String[] setNames = {"DAT", "LOC", "PERS", "ORG", "TER", "PAG", "SEN"};
+    public static String dateEnt = "DAT";
+    public static String locEnt = "LOC";
+    public static String actEnt = "PERS";
+    public static String orgEnt = "ORG";
+    public static String term = "TER";
+    public static String page = "PAG";
+    public static String sentence = "SEN";
+
+    public static String[] setNames = {dateEnt, locEnt, actEnt, orgEnt, term, page, sentence};
     public static boolean NODES_AS_IDS = true;
     public static String SOLR_ARTICLES = "articles";
     public static String SOLR_ENTITIES = "entities";

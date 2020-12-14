@@ -24,7 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import settings.SystemSettings;
 
-import static settings.LOADmodelSettings.idInfoSepChar;
+import static settings.LOADmodelSettings.*;
 import static settings.SystemSettings.DEBUG_PROMPT;
 import static settings.SystemSettings.VERBOSE;
 
@@ -200,7 +200,7 @@ public class SolrReader {
 									JSONObject entity = new JSONObject();
 									entity.put("mention", p);
 									entity.put("entity_id", entityInfo[0]);
-									entity.put("entity_type", "PERS");
+									entity.put("entity_type", actEnt);
 									entity.put("start_offset", entityInfo[1]);//entity.put("offset", Integer.parseInt(entities_offsets[i].split(idInfoSepChar)[0]));
 									entity.put("system_id", entityInfo[2]);
 									entity.put("surface", entityInfo[3]);
@@ -220,7 +220,7 @@ public class SolrReader {
 									JSONObject entity = new JSONObject();
 									entity.put("mention", l);
 									entity.put("entity_id", entityInfo[0]);
-									entity.put("entity_type", "LOC");
+									entity.put("entity_type", locEnt);
 									entity.put("start_offset", entityInfo[1]); //entity.put("offset", Integer.parseInt(entities_offsets[i].split(idInfoSepChar)[0]));
 									entity.put("system_id", entityInfo[2]);
 									entity.put("surface", entityInfo[3]);
