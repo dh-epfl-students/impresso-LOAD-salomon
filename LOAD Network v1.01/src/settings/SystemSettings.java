@@ -18,7 +18,7 @@ public class SystemSettings {
     
     // The program requires a working directory for writing temporary and final output
     public static boolean CLUSTER = true;
-    public static boolean PRINT_TO_FILE = true;
+    public static boolean PRINT_TO_FILE = CLUSTER;
     public static String folder = CLUSTER ? "../../../scratch/students/julien/Output/" : "Output/"; // e.g. /home/username/LOAD/
     public static boolean BUILD_MONGO_DB = false;
     // The program requires a list of stopwords that are removed from the set of term (TER)
