@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.text.StringEscapeUtils;
 import com.google.common.cache.Cache;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -19,6 +18,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient.Builder;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.json.JSONArray;
@@ -251,7 +251,7 @@ public class SolrReader {
 
 	public String[] getEntityInfoFromMention(String mention, String articleId){
 		SolrQuery solrQuery = new SolrQuery();
-		String query = "m_name_text:" + StringEscapeUtils.escapeHtml4(mention) + " AND ci_id_s:" + articleId;
+		String query = "m_name_text:" + ClientUtils.escapeQueryChars(mention) + " AND ci_id_s:" + articleId;
 		solrQuery.setQuery(query);
 		solrQuery.set("fl", new String[]{"e_id_s", "beg_offset_i", "nerc_sysid_s", "m_surface_s"});
 		solrQuery.setRows(1);
