@@ -79,6 +79,9 @@ ex:
 * "GDL, luxwort" "1900,1902, 1905" "1870,1871"
 * "GDL"
 
+### Load the graph on mongodb when the graph is already created
+Load the *.txt* graph files into the *Output/graph_output* folder. Run the main class in **wikidatademo.dbcopy.MoveCompleteLOADNetworkToMongoDB**.
+
 #### Program in the cluster
 To run the code in the cluster, set the **CLUSTER** boolean to *true* and create a jar file from the working version of the code. Once the jar file is loaded in the cluster, run it using the commands:
 * screen -S impresso-LOAD
