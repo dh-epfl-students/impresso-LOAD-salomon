@@ -1,4 +1,5 @@
 package wikidatademo.test;
+import settings.WebInterfaceSettings;
 import wikidatademo.graph.*;
 
 import java.util.ArrayList;
@@ -8,25 +9,26 @@ public class TestLOADGraph {
 	public static void main(String[] args) {
 		
 		try {
-			LOADGraphAbstr g = new LOADGraphImplDatabase();
+			WebInterfaceSettings settings = new WebInterfaceSettings(new WebInterfaceSettings.Builder().build());
+			LOADGraphAbstr g = new LOADGraphImplDatabase(settings);
 	
 			System.out.println("Testing entity retrieval by label");
-			ArrayList<EntityInfoItem> l1 = g.getEntitiesByLabel("France", 6);
+			ArrayList<EntityInfoItem> l1 = g.getEntitiesByLabel("France", 6, "dummyuser");
 			for (EntityInfoItem eii : l1) {
 				System.out.println(eii);
 			}
 			System.out.println();
 
-			ArrayList<EntityInfoItem> l2 = g.getEntitiesByLabel("Australie", 10);
+			ArrayList<EntityInfoItem> l2 = g.getEntitiesByLabel("Australie", 10, "dummyuser");
 			for (EntityInfoItem eii : l2) {
 				System.out.println(eii);
 			}
 			System.out.println();
 
-			EntityInfoItem t1 = g.getTermByLabel("union");
+			EntityInfoItem t1 = g.getTermByLabel("union", "dummyuser");
 			System.out.println(t1 + "\n");
 
-			EntityInfoItem t2 = g.getTermByLabel("general");
+			EntityInfoItem t2 = g.getTermByLabel("general", "dummyuser");
 			System.out.println(t2 + "\n");
 
 			System.out.println("\nTesting PAG ranking function");
@@ -34,9 +36,9 @@ public class TestLOADGraph {
 			queryPAG.add(new EntityQueryItem(0, "LOC")); // "Lausanne"
 			queryPAG.add(new EntityQueryItem(457, "TER")); // add term "union"
 //
-			ArrayList<EntityInfoItem> rPAG = g.pageQuery(queryPAG, 8); // get (up to) 12 page that related to douglas adams
-			for (EntityInfoItem eii : rPAG) {
-				System.out.println(eii.toStringFormatPAG());
+			ArrayList<PageInfoItem> rPAG = g.pageQuery(queryPAG, 8, "dummyuser"); // get (up to) 12 page that related to douglas adams
+			for (PageInfoItem eii : rPAG) {
+				System.out.println(eii.toString());
 			}
 
 			System.out.println("\nTesting SEN ranking function");
@@ -44,16 +46,16 @@ public class TestLOADGraph {
 			querySEN.add(new EntityQueryItem(0, "PERS")); // add M. Gladstone
 			querySEN.add(new EntityQueryItem(13, "LOC")); // add Germany
 			
-			ArrayList<EntityInfoItem> rSEN = g.sentenceQuery(querySEN, 5); // get (up to) 12 sentences that related to douglas adams
-			for (EntityInfoItem eii : rSEN) {
-				System.out.println(eii.toStringFormatSEN());
+			ArrayList<SentenceInfoItem> rSEN = g.sentenceQuery(querySEN, 5, "dummyuser"); // get (up to) 12 sentences that related to douglas adams
+			for (SentenceInfoItem eii : rSEN) {
+				System.out.println(eii.toString());
 			}
 //			
 			System.out.println("\nTesting ENTITY ranking function");
 			ArrayList<EntityQueryItem> queryENT = new ArrayList<EntityQueryItem>();
 			queryENT.add(new EntityQueryItem(10, "PERS")); // add Frederic Passy
 //			
-			ArrayList<EntityInfoItem> rENT = g.entityQuery(queryENT, "LOC", 10); // get (up to) 12 locations that related to Edouard Rod
+			ArrayList<EntityInfoItem> rENT = g.entityQuery(queryENT, "LOC", 10, "dummyuser"); // get (up to) 12 locations that related to Edouard Rod
 			for (EntityInfoItem eii : rENT) {
 				System.out.println(eii.toString());
 			}
@@ -63,7 +65,7 @@ public class TestLOADGraph {
 			queryENT2.add(new EntityQueryItem(15682, "PERS")); // add douglas adams (he has ID 15682 and is an actor)
 			queryENT2.add(new EntityQueryItem(133, "ORG")); // add the BBC (has ID 133 and is an organization)
 //			
-			ArrayList<EntityInfoItem> rENT2 = g.entityQuery(queryENT2, "LOC", 10); // get (up to) 10 terms that related to query entities
+			ArrayList<EntityInfoItem> rENT2 = g.entityQuery(queryENT2, "LOC", 10, "dummyuser"); // get (up to) 10 terms that related to query entities
 			for (EntityInfoItem eii : rENT2) {
 				System.out.println(eii.toString());
 			}
@@ -79,7 +81,7 @@ public class TestLOADGraph {
 			querySG.add(new EntityQueryItem(1448, "TER"));
 			querySG.add(new EntityQueryItem(115, "TER"));
 
-			SubgraphItem sg = g.subgraphQuery(querySG);
+			SubgraphItem sg = g.subgraphQuery(querySG, "dummyuser");
 			sg.printGraph();
 			
 			g.close();

@@ -12,13 +12,10 @@ import static settings.LOADmodelSettings.nANNOTATIONS;
 import static settings.LOADmodelSettings.setNames;
 import static settings.SystemSettings.PROP_PATH;
 import static settings.SystemSettings.VERBOSE;
-import static settings.WebInterfaceSettings.*;
+import static settings.WebInterfaceStaticSettings.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,8 +38,6 @@ import com.mongodb.client.model.IndexOptions;
  * (c) 2016 Andreas Spitz (spitz@informatik.uni-heidelberg.de)
  */
 public class MoveCompleteLOADNetworkToMongoDB {
-	//INPUT FOLDER
-	private static boolean OLD_ENTITY_FORMAT = true;
 //	// TARGET mongoDB login settings
 	public static boolean LOCAL_TARGET = true;
 	public static String target_MongoAdress = "127.0.0.1";//"metis.ifi.uni-heidelberg.de";//"<mongo server adress>";
@@ -329,7 +324,7 @@ public class MoveCompleteLOADNetworkToMongoDB {
 
 	}
 	
-	public static void readNodesAndWriteEntities(MongoCollection<Document> cOUT_Entities) {
+	public static void readNodesAndWriteEntities(MongoCollection<Document> cOUT_Entities, MongoCollection<Document> cOUT_Lookup) {
 		System.out.println("Writing entity information");
 		try {
 			// read vertex information for dates
@@ -354,7 +349,6 @@ public class MoveCompleteLOADNetworkToMongoDB {
 				e1.printStackTrace();
 			}
 			SolrReader entityReader = new SolrReader(prop);
-			
 			while ((line = br.readLine()) != null) {
 			
 				String[] splitline = line.split(sepChar);
@@ -371,12 +365,14 @@ public class MoveCompleteLOADNetworkToMongoDB {
             	insertList.add(node);
             	if (insertList.size() == bulkSize) {
             		cOUT_Entities.insertMany(insertList);
-            		insertList.clear();
+					cOUT_Lookup.insertMany(insertList);
+					insertList.clear();
             		System.out.print("\r Reading nodes of type DAT: " + index + " done");
             	}
 			}
 			if (!insertList.isEmpty()) {
 				cOUT_Entities.insertMany(insertList);
+				cOUT_Lookup.insertMany(insertList);
 				insertList.clear();
 			}
 			br.close();
@@ -386,9 +382,10 @@ public class MoveCompleteLOADNetworkToMongoDB {
             // read vertex information for non-date entities
 			for (int i=1; i <= ORG; i++) {
 				filename = outfolder + vertexFileNames[i];
-				System.out.print(" Reading nodes of type " + setNames[i]);
+				System.out.println(" Reading nodes of type " + setNames[i]);
 				index = 0;
 				insertList = new ArrayList<Document>(bulkSize);
+				ArrayList<Document> insertListLookup = new ArrayList<Document>(bulkSize);
 				nodeType = setNames[i];
 				
 				br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
@@ -404,23 +401,58 @@ public class MoveCompleteLOADNetworkToMongoDB {
 												  .append(ci_Entity_senDegree, sendeg);
 					try{
 						String[] info = entityReader.getEntityInfo(entityId).split(idInfoSepChar);
+						String label = info[1];
 						node.append(ci_Entity_description, info[0]);
-						node.append(ci_Entity_label, info[1]);
+						node.append(ci_Entity_label, label);
+
+						insertList.add(node);
+
+						// add multiple possible entity labels to the lookup table
+						HashSet<String> cleanlabels = new HashSet<String>();
+						cleanlabels.add(label);
+						String cleanLabel = label.replaceAll("\\p{Punct}+", "").trim();
+						cleanlabels.add(cleanLabel);
+						String[] cleanlabelparts = cleanLabel.split(" ");
+						for (String s : cleanlabelparts) {
+							s = s.trim();
+							if (s.length() >= minLabelComponentLength) {
+								cleanlabels.add(s);
+							}
+						}
+
+						for (String l : cleanlabels) {
+							Document looknode = new Document().append(ci_Entity_id,index)
+									.append(ci_Entity_type, nodeType)
+									.append(ci_Entity_senDegree, sendeg)
+									.append(ci_Entity_label, l)
+									.append(ci_Entity_fullLabel, label);
+							insertListLookup.add(looknode);
+						}
+						if (insertListLookup.size() >= bulkSize) {
+							cOUT_Lookup.insertMany(insertListLookup);
+							insertListLookup.clear();
+						}
+						index++;
 					}catch (Exception e){
-						System.out.println("Problem: no entity info available");
+						if(VERBOSE)
+							System.out.println("Problem: no entity info available for line:" + line);
 						System.out.println(e);
 					}
-					index++;
-                	insertList.add(node);
-                	if (insertList.size() == bulkSize) {
+
+					if (insertList.size() == bulkSize) {
                 		cOUT_Entities.insertMany(insertList);
                 		insertList.clear();
                 		System.out.print("\r Reading nodes of type " + setNames[i] + ": " + index + " done");
                 	}
+
 				}
 				if (!insertList.isEmpty()) {
 					cOUT_Entities.insertMany(insertList);
 					insertList.clear();
+				}
+				if (!insertListLookup.isEmpty()) {
+					cOUT_Lookup.insertMany(insertListLookup);
+					insertListLookup.clear();
 				}
 				br.close();
 				System.out.println("\r Reading nodes of type " + setNames[i] + ": finished              ");
@@ -682,6 +714,8 @@ public class MoveCompleteLOADNetworkToMongoDB {
 		MongoCollection<Document> cOUT_PAG = load_db.getCollection(target_MongoCollection_Pages);
 		MongoCollection<Document> cOUT_TER = load_db.getCollection(target_MongoCollection_Terms);
 		MongoCollection<Document> cOUT_ENT = load_db.getCollection(target_MongoCollection_Entities);
+		MongoCollection<Document> cOUT_LOOK = load_db.getCollection(target_MongoCollection_EntityLookup);
+
 
 		// remove existing collections
 		if(VERBOSE)
@@ -722,7 +756,7 @@ public class MoveCompleteLOADNetworkToMongoDB {
 		// read entities from file and write to MongoDB
 		if(VERBOSE)
 			System.out.println("Writing entities");
-		readNodesAndWriteEntities(cOUT_ENT);
+		readNodesAndWriteEntities(cOUT_ENT, cOUT_LOOK);
 		
 		// read edges from file and write to MongoDB
 		//readEdgesAndWriteEdgeList(cOUT_Edges);
@@ -761,6 +795,12 @@ public class MoveCompleteLOADNetworkToMongoDB {
 		IndexOptions options = new IndexOptions();
 		options.defaultLanguage("none");
 		cOUT_ENT.createIndex(new Document(ci_Entity_label, "text").append(ci_Entity_senDegree, -1), options);
+
+		if(VERBOSE)
+			System.out.println("Creating indexes for Lookup");
+		IndexOptions optionsInd = new IndexOptions();
+		optionsInd.defaultLanguage("none");
+		cOUT_LOOK.createIndex(new Document(ci_Entity_label, "text").append(ci_Entity_senDegree, -1), options);
 
 		target_mongoClient.close();
 

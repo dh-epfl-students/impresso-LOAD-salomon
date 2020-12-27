@@ -278,7 +278,7 @@ public class SolrReader {
 
 	public String getEntityInfo(String entityId) {
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setQuery("e_id_s:" + entityId);
+		solrQuery.setQuery("e_id_s:" + ClientUtils.escapeQueryChars(entityId));
 		solrQuery.set("fl", new String[]{"*"});
 		solrQuery.setRows(1);
 
@@ -295,6 +295,43 @@ public class SolrReader {
 			var7.printStackTrace();
 		}
 		return null;
+	}
+
+	public static String getArticleTitle(String articleId){
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setQuery("id:" + articleId);
+		solrQuery.set("fl", new String[]{"*"});
+		solrQuery.setRows(1);
+		String title = "";
+		try {
+			QueryRequest queryRequest = new QueryRequest(solrQuery);
+			queryRequest.setBasicAuthCredentials(solrUserName, System.getenv("SOLR_PASSWORD"));
+			SolrDocument solrResponse = ((QueryResponse) queryRequest.process(contentItemsClient)).getResults().get(0);
+			title = ((String) solrResponse.getFieldValue("title_txt_fr"));
+		} catch (SolrServerException var6) {
+			var6.printStackTrace();
+		} catch (IOException var7) {
+			var7.printStackTrace();
+		}
+		return title;
+	}
+	public static String getSentenceText(String articleId, int minOffset, int maxOffset){
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setQuery("id:" + articleId);
+		solrQuery.set("fl", new String[]{"*"});
+		solrQuery.setRows(1);
+		String sentence = "";
+		try {
+			QueryRequest queryRequest = new QueryRequest(solrQuery);
+			queryRequest.setBasicAuthCredentials(solrUserName, System.getenv("SOLR_PASSWORD"));
+			SolrDocument solrResponse = ((QueryResponse) queryRequest.process(contentItemsClient)).getResults().get(0);
+			sentence = ((String) solrResponse.getFieldValue("content_txt_fr")).substring(minOffset, maxOffset);
+		} catch (SolrServerException var6) {
+			var6.printStackTrace();
+		} catch (IOException var7) {
+			var7.printStackTrace();
+		}
+		return sentence;
 	}
 
 	/*public static String[] parseString(String s, String type){
