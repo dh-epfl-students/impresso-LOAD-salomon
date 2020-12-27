@@ -69,7 +69,7 @@ A few classes to test if the queriers (S3 + Solr) function properly.
 
 ## Run the code
 
-### Run the code
+### Run the graph creation code
 
 To run the code it is required to give some arguments.
 args: 
@@ -79,7 +79,7 @@ ex:
 * "GDL, luxwort" "1900,1902, 1905" "1870,1871"
 * "GDL"
 
-### Program in the cluster
+#### Program in the cluster
 To run the code in the cluster, set the **CLUSTER** boolean to *true* and create a jar file from the working version of the code. Once the jar file is loaded in the cluster, run it using the commands:
 * screen -S impresso-LOAD
 * nice -5 java -jar [*path_to_jar*]impresso-LOAD-salomon.jar [args]
@@ -96,5 +96,24 @@ python grapher/grapher.py
 #### Play with Output
 
 Output is in scratch/students/julien/Output
+
+## EVELIN interface
+
+The EVELIN interface code exists outside of this project. You must include a jar file containing this project into the EVELIN IMPRESSO project to run the interface.
+Include the jar file of this project into the *libs* folder of the EVELIN IMPRESSO project, and rename it **EVELIN_backend.jar**.
+As well, you must install this jar as a Maven dependency:
+*mvn install:install-file –Dfile=libs/EVELIN_backend.jar -DgroupId=evelin -DartifactId=evelin -Dversion=1.0 -Dpackaging=jar*
+
+(To install Maven check on this website: https://maven.apache.org/install.html. On MacOs you can use *brew install maven* on your terminal.)
+
+Once the dependencies are installed, you can run the project with the following steps:
+- Build the project
+- *mvn package*
+- *mvn exec:java -Dexec.mainClass=controller.Controller -Dexec.args=settings.properties*
+- Go to *localhost:1234* on any web browser and enjoy the usage of EVELIN interface.
+
+
+
+
 
 
