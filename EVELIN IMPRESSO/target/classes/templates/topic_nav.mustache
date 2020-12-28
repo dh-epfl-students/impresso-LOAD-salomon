@@ -1,0 +1,160 @@
+<!-- Search bar  -->
+
+<nav class="navbar navbar-default">
+
+
+    <div class="container-fluid" style="padding-top: 25px;background-color: #e7e7e7;">
+        <!-- Brand and toggle get grouped for better mobile display -->
+
+        <!-- Input group for search  -->
+        <select multiple type="text" name="query" placeholder="Enter query entities..." class="form-control"
+                autocomplete="off" id="entity-search"></select>
+        <!--<input id="searchbox" autocomplete="off" type="text" class="form-control " data-provide="typeahead">-->
+        <div class="bs-example btn-holder" role="group">
+            <div class="row">
+                <div class="col-sm-6">
+                    <!---Person btn--->
+                    <span class="btn-group">
+                          <a href="/findmatch" id="btn_per" data-value="PERS" class="search-btn-group">  <button
+                                  id="graph_per" type="button" data-toggle="tooltip" data-placement="bottom"
+                                  title="Search for Actor" class="btn btn-person inner"> <img width="25px"
+                                                                                              src="js/img/person-white.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---ORG btn--->
+                    <span class="btn-group">
+                          <a href="/findmatch" id="btn_org" data-value="ORG" class="search-btn-group">  <button
+                                  id="graph_org" type="button" data-toggle="tooltip" data-placement="bottom"
+                                  title="Search for Organisation" class="btn btn-org inner"> <img width="25px"
+                                                                                                  src="js/img/org-white.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---DAT btn--->
+                    <span class="btn-group">
+                          <a href="/findmatch" id="btn_dat" data-value="DAT" class="search-btn-group">  <button
+                                  id="graph_dat" type="button" data-toggle="tooltip" data-placement="bottom"
+                                  title="Search for Date" class="btn btn-dat inner"> <img width="25px"
+                                                                                          src="js/img/date-white.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---LOC btn--->
+                    <span class="btn-group">
+                          <a href="/findmatch" id="btn_loc" data-value="LOC" class="search-btn-group">  <button
+                                  id="graph_loc" type="button" data-toggle="tooltip" data-placement="bottom"
+                                  title="Search for Location" class="btn btn-loc inner"> <img width="25px"
+                                                                                              src="js/img/loc-white.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---TER btn--->
+                    <span class="btn-group">
+                          <a href="/findmatch" id="btn_ter" data-value="TER" class="search-btn-group">  <button
+                                  id="graph_ter" type="button" data-toggle="tooltip" data-placement="bottom"
+                                  title="Search for Term" class="btn btn-ter inner"><img width="25px"
+                                                                                         src="js/img/term-white.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---SEN btn--->
+                    <span class="btn-group">
+                          <a href="/findmatch" id="btn_sen" data-value="SEN" class="search-btn-group">  <button
+                                  id="graph_sen" type="button" data-toggle="tooltip" data-placement="bottom"
+                                  title="Search for Sentence" class="btn btn-sen inner"> <img width="25px"
+                                                                                              src="js/img/sentence-white.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---PAG btn--->
+                    <span class="btn-group">
+                          <a href="/findmatch" id="btn_pag" data-value="PAG" class="search-btn-group">  <button
+                                  id="graph_pag" type="button" data-toggle="tooltip" data-placement="bottom"
+                                  title="Search for Page" class="btn btn-pag inner"> <img width="25px"
+                                                                                          src="js/img/page-white.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---Graph btn--->
+                    <span class="btn-group">
+                          <a href="/findgraph" id="btn_graph">  <button id="graph_btn" type="button"
+                                                                        class="btn btn-warning inner"
+                                                                        data-toggle="tooltip" data-placement="bottom"
+                                                                        title="Search for Graph"><img width="25px"
+                                                                                                      src="js/img/network.png"></img></button>
+                                             </a>
+                    </span>
+                    <!---Topic btn--->
+                    <span class="btn-group">
+                          <a href="/findtopic" id="btn_topic_final">  <button id="topic_btn_final_b" type="button"
+                                                                        class="btn btn-topic inner"
+                                                                        data-toggle="tooltip" data-placement="bottom"
+                                                                        title="Search for Topics"><img width="25px"
+                                                                                                       src="js/img/topic.png"></img></button>
+                                             </a>
+                    </span>
+                </div>
+
+                <!---calenders--->
+                <div class="col-sm-6 " style="float: right;">
+
+                    <div class="col-sm-3" style="margin-top:3px">
+
+                        <div class="input-group date" data-provide="datepicker">
+                            <input id ="fromDate" type="text" class="form-control  min-max_input">
+                            <div class=" input-group-btn-vertical input-group-addon " style="padding: 6.5px;border: 1px solid #ccc;">
+                                From
+                                <!--<span class="glyphicon glyphicon-th"></span>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3" style="margin-top:3px;">
+
+
+                        <div class="input-group date" data-provide="datepicker">
+                            <input id ="toDate" type="text" class="form-control  min-max_input" >
+                            <div class=" input-group-btn-vertical input-group-addon " style="padding: 6.5px;border: 1px solid #ccc;">
+                                To
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!---Edges btn--->
+                    <div class="col-sm-3 btn-group" style="padding: 0px;min-width:150px;">
+                        <div class="col-sm-4">
+                            <p style="padding-top: 8px">
+                                Edges:
+                            </p>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="input-group spinner edge btn-scroller">
+                                <input id="num_edges" type="text" class="form-control min-max_input" value="2">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn " type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn r" type="button"><i class="fa fa-caret-down"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!---Terms btn--->
+                    <div class="col-sm-3 btn-group"  style="padding: 0px;min-width:150px;" >
+                        <div class="col-sm-4">
+                            <p style="padding-top: 8px;">
+                                Terms:
+                            </p>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="input-group spinner term btn-scroller">
+                                <input id="num_terms" type="text" class="form-control min-max_input" value="2">
+                                <div class="input-group-btn-vertical">
+                                    <button class="btn btn-scroller" type="button"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn btn-scroller" type="button"><i class="fa fa-caret-down"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</nav>

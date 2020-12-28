@@ -1,0 +1,46 @@
+<!--Overview and Header -->
+
+<h3>Overview</h3>
+
+<p>EVELIN supports queries on an underlying entity graph that contains
+<font color="#591a1a"><b>locations</b></font>,
+<font color="#4d405b"><b>organizations</b></font>,
+<font color="#1a4c7f"><b>actors</b></font> (persons),
+<font color="#1a6159"><b>dates</b></font>,
+<font color="#797979"><b>terms</b></font> (all remaining words),
+<font color="#31a354"><b>sentences</b></font> and <font color="#d95f0e"><b>pages</b></font> (documents) from the plain
+text of the English Wikipedia. Thus, it allows queries to Wikipedia content for entity (and word) co-mentions.</p>
+
+<!-- Inner Parts -->
+
+<h3>Getting started</h3>
+
+<p>To enter a query, simply type the name of a query entity in the search box. A suggestion menu will pop up from which
+you can select the entity and add it to your query. If you hit enter without selecting an entity (or if no suggestions
+pop up), your input is used as a term (a plain word without entity type) instead. Queries can consist of an arbitrary
+number of location, organization, actors, dates, and terms. To start the query, click on one of the buttons below the
+search bar:</p>
+
+<h4>Search for <font color="#1a4c7f">ACTors</font>, <font color="#4d405b">ORGanizations</font>, <font color="#1a6159">DATes</font>
+or <font color="#591a1a">LOCations</font></h4><p>
+Finds and ranks related entities of the selected type according to your input. Output entities are linked to <a
+        href="https://www.wikidata.org/">Wikidata</a>.</p>
+
+<h4>Search for <font color="#797979">TERms</font></h4><p>
+Finds and ranks terms that best describe your input entities as a combination. Note that the resulting terms are stemmed
+(the ending is removed to group related terms together).</p>
+
+<h4>Search for <font color="#31a354">SENtences</font></h4><p>
+This finds single sentences that contain (ideally) all of your query entities and ranks them based on their relevance
+for your input.</p>
+
+<h4>Search for <font color="#d95f0e">PAGes</font></h4><p>
+Finds Wikipedia pages that are most descriptive for your combination of input entities.</p>
+
+<h4>Graph Search</h4><p>
+Returns a subgraph of the network that shows the most relevant entities surrounding your input entities.</p>
+
+<h4>Growing a query / adding more query entities:</h4><p>
+Since queries may contain an arbitrary number of entites or terms, you can grow your queries. To do this, either enter
+new entities as before, or double click on any entity in the result ranking to add it to the query.</p>
+
