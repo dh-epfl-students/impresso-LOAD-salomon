@@ -1,0 +1,5 @@
+YEAR 1996 (max)
+Get all the mentionned entities for GDL in 1996
+Cursor created
+processing 50000
+ cursor:*
