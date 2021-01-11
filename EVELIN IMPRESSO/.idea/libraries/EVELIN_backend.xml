@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="EVELIN_backend">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/EVELIN_backend.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

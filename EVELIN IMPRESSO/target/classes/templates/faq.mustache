@@ -1,0 +1,30 @@
+<!-- FAQ -->
+<h3>FAQ</h3>
+
+        <!-- Question and Answer -->
+
+<h4><b>Q:</b> The entity that I am trying to enter is not suggested as a pop up</h4>
+<b
+style="font-weight: 600">A:</b> To recognize input entities, we are currently using the canonical English Wikidata label only. As a result, some entity names require the full spelling. For example, "George Bush" will not find either of the US presidents. However, "George W." or "George H. W." will work. We're working on including alternative spellings and better autocompletion. In the meantime, please try alternative spellings. If the entity absolutely won't pop up, you can use the the canonical spelling from <a
+href="https://www.wikidata.org/">Wikidata</a>, which is guaranteed to work.</p>
+
+        <!-- Question and Answer -->
+
+<h4><b>Q:</b> This organization is misclassified as a location (a.k.a. why is the Federal Bureau of Investigation a
+place?)</h4>
+<b
+style="font-weight: 600">A:</b> This is an issue with the underlying data, in which entities were classified based on their Wikidata entries. Since many organizations have headquarter coordinates assigned directly to the organization, they are technically considered to be places. This will be fixed in the next release of the data.
+
+        <!-- Question and Answer -->
+
+<h4><b>Q:</b> Why is my graph search so slow?</h4>
+<b
+style="font-weight: 600">A:</b> The currently implemented subgraph extraction is experimental. Since the underlying graph contains millions of nodes and billions of edges, the retrieval of the relevant neighbourhood is potentially slow if you select well-connected query entities. We are working on an improved implementation.
+
+        <!-- Question and Answer -->
+
+<h4><b>Q:</b> I think something is not working as intended?</h4>
+<b
+style="font-weight: 600">A:</b> That's possible. No system is ever entirely bug free, but we're always eager to work in this direction. Please <a
+href="mailto:spitz@informatik.uni-heidelberg.de">let us
+know</a> what went wrong (and at which time) so that we can check our logs to locate and fix the problem.

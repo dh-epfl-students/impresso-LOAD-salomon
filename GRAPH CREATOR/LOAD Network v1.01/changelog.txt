@@ -1,0 +1,5 @@
+Version 1.01
+Updated program to Java 8 to improve parallel sorting of edges during construction.
+
+Version 1.0
+Original public release of code.

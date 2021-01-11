@@ -1,0 +1,11 @@
+{"edges":[{"source":"1","target":"2","id":"4385","attributes":{"Weight":"1.0"},"size":1.0}
+,{"source":"3","target":"2","id":"5487","attributes":{"Weight":"1.0"},"size":1.0},
+  {"source":"2","target":"4","id":"10555","attributes":{"Weight":"1.0"},"size":1.0},
+  {"source":"1","target":"5","id":"2090","attributes":{"Weight":"1.0"},"size":1.0},
+  {"source":"1","target":"3","id":"10163","attributes":{"Weight":"1.0"},"size":1.0},
+  {"source":"2","target":"5","id":"4011","attributes":{"Weight":"1.0"},"size":1.0}],
+  "nodes":[{"label":"Ha Dae-sung","id":"1","image":"js/img/org.png"},
+    {"label":"Maxi Pereira","id":"2","image":"js/img/org.png"},
+    {"label":"Manabu Saito","id":"3","image":"js/img/org.png"},
+    {"label":"Augusto Fernández","id":"4","image":"js/img/org.png"},
+    {"label":"Edinson Cavani","id":"5","image":"js/img/org.png"}]}
