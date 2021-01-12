@@ -21,6 +21,8 @@ This program is licensed under the terms of the MIT license.
 
 In this part, the main aspects of the code will be described, with some notes on future improvements that could be made.
 
+![GRAPH CREATOR pipeline](https://github.com/dhlab-epfl-students/impresso-LOAD-salomon/blob/master/Semester%20project%20Midterm%20(9).png)
+
 ### Construction
 
 This folder contains code from the original LOAD network, created by Andreas Spitz. It is a good point of reference for how the LOAD network is constructed and is only there to compare with the rest of the code. 
