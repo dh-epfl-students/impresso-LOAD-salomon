@@ -25,7 +25,7 @@ The main folders in the GitHub repository are: **GRAPH CREATOR** and **EVELIN IM
 
 ### GRAPH CREATOR code
 
-![GRAPH CREATOR pipeline](https://github.com/dhlab-epfl-students/impresso-LOAD-salomon/blob/master/Semester%20project%20Midterm%20(9).png)
+![GRAPH CREATOR pipeline](https://github.com/dhlab-epfl-students/impresso-LOAD-salomon/blob/master/GRAPH%20CREATOR/GRAPH%20CREATOR%20pipeline.png)
 
 This folder contains code from the original LOAD network, created by Andreas Spitz. It is a good point of reference for how the LOAD network is constructed and is only there to compare with the rest of the code. 
 
