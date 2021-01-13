@@ -21,21 +21,23 @@ This program is licensed under the terms of the MIT license.
 
 In this part, the main aspects of the code will be described, with some notes on future improvements that could be made.
 
-![GRAPH CREATOR pipeline](https://github.com/dhlab-epfl-students/impresso-LOAD-salomon/blob/master/Semester%20project%20Midterm%20(9).png)
+The main folders in the GitHub repository are: **GRAPH CREATOR** and **EVELIN IMPRESSO**. These two folders are 2 Java projects that work together.
 
-### Construction
+### GRAPH CREATOR code
+
+![GRAPH CREATOR pipeline](https://github.com/dhlab-epfl-students/impresso-LOAD-salomon/blob/master/Semester%20project%20Midterm%20(9).png)
 
 This folder contains code from the original LOAD network, created by Andreas Spitz. It is a good point of reference for how the LOAD network is constructed and is only there to compare with the rest of the code. 
 
-### External sort
+#### External sort
 
 Utility classes that are used to efficiently merge and sort the different edges files created.
 
-### Graph Query
+#### Graph Query
 
 This folder contains Java classes that can be used to debug a LOAD graph once it has been created. The *main* in the *GraphQueryInterface* Java file, starts a console that answers queries on the graph.
 
-### Impresso
+#### Impresso
 
 This folder contains the main classes that can create the impresso-LOAD graph.
 
@@ -52,21 +54,38 @@ The **MultiThreadHubImpresso** is a hub used to manage the parallelization of th
 The **MultiThreadWorkerImpresso** class represent one thread managed by the hub described above. Each worker work and parallel. For each articleId, a worker takes its annotated words, and entities stored in Caches and create their nodes and edges in the graph.
 In the workers, the bottleneck in terms of running time is the writing of the annotations edges (from line 302 to 347). There should be a way to optimize this aspect of the graph creation, and it should be explored in the future.
 
-### Settings
+#### Settings
 
 Contains static variables used throughout the code.
 
-### Wikidata demo
+#### Wikidata demo
 
 This folder contains different classes used to take the created graph, and load it into a MongoDB for it to be usable by the EVELIN interface. 
 If the boolean **BUILD_MONGO_DB** is set to *true* then the loading of the graph onto a mongodb is activated when running **ParallelExtractNetworkFromImpresso**.
 
 Once the graph is loaded into a mongo db, the wikidatademo.test folder contains a few tests to verify if the graph is well contstructed.
 
-### Testing
+#### Testing
 A few classes to test if the queriers (S3 + Solr) function properly.
 
-### Tools
+### EVELIN IMPRESSO
+
+This codebase is the backent to the EVELIN interface.
+
+## EVELIN interface
+
+The EVELIN interface code exists outside of this project. You must include a jar file containing the GRAPH CREATOR project to run the interface.
+Include the jar file into the *libs* folder of the EVELIN IMPRESSO project, and rename it **EVELIN_backend.jar**.
+As well, you must install this jar as a Maven dependency:
+*mvn install:install-file –Dfile=libs/EVELIN_backend.jar -DgroupId=evelin -DartifactId=evelin -Dversion=1.0 -Dpackaging=jar*
+
+(To install Maven check on this website: https://maven.apache.org/install.html. On MacOs you can use *brew install maven* on your terminal.)
+
+Once the dependencies are installed, you can run the project with the following steps:
+- Build the project
+- *mvn package*
+- *mvn exec:java -Dexec.mainClass=controller.Controller -Dexec.args=settings.properties*
+- Go to *localhost:1234* on any web browser and enjoy the usage of EVELIN interface.
 
 
 ## Run the code
@@ -102,20 +121,6 @@ python grapher/grapher.py
 
 Output is in scratch/students/julien/Output
 
-## EVELIN interface
-
-The EVELIN interface code exists outside of this project. You must include a jar file containing this project into the EVELIN IMPRESSO project to run the interface.
-Include the jar file of this project into the *libs* folder of the EVELIN IMPRESSO project, and rename it **EVELIN_backend.jar**.
-As well, you must install this jar as a Maven dependency:
-*mvn install:install-file –Dfile=libs/EVELIN_backend.jar -DgroupId=evelin -DartifactId=evelin -Dversion=1.0 -Dpackaging=jar*
-
-(To install Maven check on this website: https://maven.apache.org/install.html. On MacOs you can use *brew install maven* on your terminal.)
-
-Once the dependencies are installed, you can run the project with the following steps:
-- Build the project
-- *mvn package*
-- *mvn exec:java -Dexec.mainClass=controller.Controller -Dexec.args=settings.properties*
-- Go to *localhost:1234* on any web browser and enjoy the usage of EVELIN interface.
 
 
 
