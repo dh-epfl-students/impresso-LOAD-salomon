@@ -25,7 +25,7 @@ The main folders in the GitHub repository are: **GRAPH CREATOR** and **EVELIN IM
 
 ### GRAPH CREATOR code
 
-![GRAPH CREATOR pipeline](https://github.com/dhlab-epfl-students/impresso-LOAD-salomon/blob/master/Semester%20project%20Midterm%20(9).png)
+![GRAPH CREATOR pipeline](https://github.com/dhlab-epfl-students/impresso-LOAD-salomon/blob/master/GRAPH%20CREATOR/GRAPH%20CREATOR%20pipeline.png)
 
 This folder contains code from the original LOAD network, created by Andreas Spitz. It is a good point of reference for how the LOAD network is constructed and is only there to compare with the rest of the code. 
 
@@ -69,25 +69,11 @@ Once the graph is loaded into a mongo db, the wikidatademo.test folder contains 
 #### Testing
 A few classes to test if the queriers (S3 + Solr) function properly.
 
-### EVELIN IMPRESSO
+### EVELIN IMPRESSO code
 
-This codebase is the backent to the EVELIN interface.
-
-## EVELIN interface
-
-The EVELIN interface code exists outside of this project. You must include a jar file containing the GRAPH CREATOR project to run the interface.
-Include the jar file into the *libs* folder of the EVELIN IMPRESSO project, and rename it **EVELIN_backend.jar**.
-As well, you must install this jar as a Maven dependency:
+This codebase is the backend to the EVELIN interface. If a modification is made to the GRAPH CREATOR codebase, you must include a jar file containing the latest version of the project. Include the jar file into the *libs* folder of the EVELIN IMPRESSO project, and rename it **EVELIN_backend.jar**. As well, you must install this jar as a Maven dependency:
 *mvn install:install-file –Dfile=libs/EVELIN_backend.jar -DgroupId=evelin -DartifactId=evelin -Dversion=1.0 -Dpackaging=jar*
-
 (To install Maven check on this website: https://maven.apache.org/install.html. On MacOs you can use *brew install maven* on your terminal.)
-
-Once the dependencies are installed, you can run the project with the following steps:
-- Build the project
-- *mvn package*
-- *mvn exec:java -Dexec.mainClass=controller.Controller -Dexec.args=settings.properties*
-- Go to *localhost:1234* on any web browser and enjoy the usage of EVELIN interface.
-
 
 ## Run the code
 
@@ -101,8 +87,20 @@ ex:
 * "GDL, luxwort" "1900,1902, 1905" "1870,1871"
 * "GDL"
 
+Before running the code, set the **BUILD_MONGO_DB** variable to *true* in the *SystemSettings* file if you want the graph to be loaded to MongoDB once the graph is finished. Else you can do it independently afterwards.
+
 ### Load the graph on mongodb when the graph is already created
 Load the *.txt* graph files into the *Output/graph_output* folder. Run the main class in **wikidatademo.dbcopy.MoveCompleteLOADNetworkToMongoDB**.
+
+
+#### EVELIN interface
+Once the dependencies are installed, you can run the project with the following steps:
+- Build the project
+- *mvn package*
+- *mvn exec:java -Dexec.mainClass=controller.Controller -Dexec.args=settings.properties*
+- Go to *localhost:1234* on any web browser and enjoy the usage of EVELIN interface.
+(To install Maven check on this website: https://maven.apache.org/install.html. On MacOs you can use *brew install maven* on your terminal.)
+
 
 #### Program in the cluster
 To run the code in the cluster, set the **CLUSTER** boolean to *true* and create a jar file from the working version of the code. Once the jar file is loaded in the cluster, run it using the commands:
